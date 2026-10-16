@@ -1,0 +1,7 @@
+node_modules/
+09_Esporta_FIT/fit/
+03_Versione_PC/HUD-Analisi.html
+.DS_Store
+*.bak*
+hud-dati.json
+hud-profilo*.json

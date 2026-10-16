@@ -1,0 +1,5 @@
+{
+  "//": "Per VS Code: autocompletamento delle API di Scriptable (Request, FileManager, WebView…) sui file di src/. Non cambia l'app.",
+  "compilerOptions": { "target": "ES2022", "checkJs": false, "types": ["scriptable-ios"], "lib": ["ES2022"] },
+  "include": ["src/*.js"]
+}

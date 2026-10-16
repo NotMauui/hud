@@ -1,0 +1,1538 @@
+{
+ "reale|riposo|-|senza pesate": {
+  "tipo": "riposo",
+  "kcal": 2500,
+  "deficit": 360,
+  "P": 180,
+  "C": 275,
+  "G": 75
+ },
+ "reale|riposo|-|-0.4 kg/sett": {
+  "tipo": "riposo",
+  "kcal": 2500,
+  "deficit": 360,
+  "P": 180,
+  "C": 275,
+  "G": 75
+ },
+ "reale|riposo|-|-1.2 kg/sett": {
+  "tipo": "riposo",
+  "kcal": 2500,
+  "deficit": 360,
+  "P": 180,
+  "C": 275,
+  "G": 75
+ },
+ "reale|riposo|-|0.1 kg/sett": {
+  "tipo": "riposo",
+  "kcal": 2500,
+  "deficit": 360,
+  "P": 180,
+  "C": 275,
+  "G": 75
+ },
+ "reale|riposo|vigilia|senza pesate": {
+  "tipo": "riposo",
+  "kcal": 2860,
+  "deficit": 0,
+  "P": 180,
+  "C": 365,
+  "G": 75
+ },
+ "reale|riposo|vigilia|-0.4 kg/sett": {
+  "tipo": "riposo",
+  "kcal": 2860,
+  "deficit": 0,
+  "P": 180,
+  "C": 365,
+  "G": 75
+ },
+ "reale|riposo|vigilia|-1.2 kg/sett": {
+  "tipo": "riposo",
+  "kcal": 2860,
+  "deficit": 0,
+  "P": 180,
+  "C": 365,
+  "G": 75
+ },
+ "reale|riposo|vigilia|0.1 kg/sett": {
+  "tipo": "riposo",
+  "kcal": 2860,
+  "deficit": 0,
+  "P": 180,
+  "C": 365,
+  "G": 75
+ },
+ "reale|medio|-|senza pesate": {
+  "tipo": "medio",
+  "kcal": 2680,
+  "deficit": 726,
+  "P": 180,
+  "C": 320,
+  "G": 75
+ },
+ "reale|medio|-|-0.4 kg/sett": {
+  "tipo": "medio",
+  "kcal": 2680,
+  "deficit": 726,
+  "P": 180,
+  "C": 320,
+  "G": 75
+ },
+ "reale|medio|-|-1.2 kg/sett": {
+  "tipo": "medio",
+  "kcal": 2920,
+  "deficit": 486,
+  "P": 180,
+  "C": 380,
+  "G": 75
+ },
+ "reale|medio|-|0.1 kg/sett": {
+  "tipo": "medio",
+  "kcal": 2580,
+  "deficit": 826,
+  "P": 180,
+  "C": 295,
+  "G": 75
+ },
+ "reale|medio|vigilia|senza pesate": {
+  "tipo": "medio",
+  "kcal": 2860,
+  "deficit": 546,
+  "P": 180,
+  "C": 365,
+  "G": 75
+ },
+ "reale|medio|vigilia|-0.4 kg/sett": {
+  "tipo": "medio",
+  "kcal": 2860,
+  "deficit": 546,
+  "P": 180,
+  "C": 365,
+  "G": 75
+ },
+ "reale|medio|vigilia|-1.2 kg/sett": {
+  "tipo": "medio",
+  "kcal": 2920,
+  "deficit": 486,
+  "P": 180,
+  "C": 380,
+  "G": 75
+ },
+ "reale|medio|vigilia|0.1 kg/sett": {
+  "tipo": "medio",
+  "kcal": 2860,
+  "deficit": 546,
+  "P": 180,
+  "C": 365,
+  "G": 75
+ },
+ "reale|nuoto_palestra|-|senza pesate": {
+  "tipo": "medio",
+  "kcal": 3000,
+  "deficit": 723,
+  "P": 180,
+  "C": 400,
+  "G": 75
+ },
+ "reale|nuoto_palestra|-|-0.4 kg/sett": {
+  "tipo": "medio",
+  "kcal": 3000,
+  "deficit": 723,
+  "P": 180,
+  "C": 400,
+  "G": 75
+ },
+ "reale|nuoto_palestra|-|-1.2 kg/sett": {
+  "tipo": "medio",
+  "kcal": 3220,
+  "deficit": 503,
+  "P": 180,
+  "C": 410,
+  "G": 95
+ },
+ "reale|nuoto_palestra|-|0.1 kg/sett": {
+  "tipo": "medio",
+  "kcal": 2840,
+  "deficit": 883,
+  "P": 180,
+  "C": 360,
+  "G": 75
+ },
+ "reale|nuoto_palestra|vigilia|senza pesate": {
+  "tipo": "medio",
+  "kcal": 3000,
+  "deficit": 723,
+  "P": 180,
+  "C": 400,
+  "G": 75
+ },
+ "reale|nuoto_palestra|vigilia|-0.4 kg/sett": {
+  "tipo": "medio",
+  "kcal": 3000,
+  "deficit": 723,
+  "P": 180,
+  "C": 400,
+  "G": 75
+ },
+ "reale|nuoto_palestra|vigilia|-1.2 kg/sett": {
+  "tipo": "medio",
+  "kcal": 3240,
+  "deficit": 483,
+  "P": 180,
+  "C": 460,
+  "G": 75
+ },
+ "reale|nuoto_palestra|vigilia|0.1 kg/sett": {
+  "tipo": "medio",
+  "kcal": 2860,
+  "deficit": 863,
+  "P": 180,
+  "C": 365,
+  "G": 75
+ },
+ "reale|duro|-|senza pesate": {
+  "tipo": "duro",
+  "kcal": 3620,
+  "deficit": 149,
+  "P": 180,
+  "C": 545,
+  "G": 80
+ },
+ "reale|duro|-|-0.4 kg/sett": {
+  "tipo": "duro",
+  "kcal": 3620,
+  "deficit": 149,
+  "P": 180,
+  "C": 545,
+  "G": 80
+ },
+ "reale|duro|-|-1.2 kg/sett": {
+  "tipo": "duro",
+  "kcal": 3670,
+  "deficit": 99,
+  "P": 180,
+  "C": 545,
+  "G": 85
+ },
+ "reale|duro|-|0.1 kg/sett": {
+  "tipo": "duro",
+  "kcal": 3620,
+  "deficit": 149,
+  "P": 180,
+  "C": 545,
+  "G": 80
+ },
+ "reale|duro|vigilia|senza pesate": {
+  "tipo": "duro",
+  "kcal": 4070,
+  "deficit": 0,
+  "P": 180,
+  "C": 635,
+  "G": 90
+ },
+ "reale|duro|vigilia|-0.4 kg/sett": {
+  "tipo": "duro",
+  "kcal": 4070,
+  "deficit": 0,
+  "P": 180,
+  "C": 635,
+  "G": 90
+ },
+ "reale|duro|vigilia|-1.2 kg/sett": {
+  "tipo": "duro",
+  "kcal": 4070,
+  "deficit": 0,
+  "P": 180,
+  "C": 635,
+  "G": 90
+ },
+ "reale|duro|vigilia|0.1 kg/sett": {
+  "tipo": "duro",
+  "kcal": 4070,
+  "deficit": 0,
+  "P": 180,
+  "C": 635,
+  "G": 90
+ },
+ "reale|lungo_corsa|-|senza pesate": {
+  "tipo": "lungo",
+  "kcal": 4070,
+  "deficit": 0,
+  "P": 180,
+  "C": 635,
+  "G": 90
+ },
+ "reale|lungo_corsa|-|-0.4 kg/sett": {
+  "tipo": "lungo",
+  "kcal": 4070,
+  "deficit": 0,
+  "P": 180,
+  "C": 635,
+  "G": 90
+ },
+ "reale|lungo_corsa|-|-1.2 kg/sett": {
+  "tipo": "lungo",
+  "kcal": 4070,
+  "deficit": 0,
+  "P": 180,
+  "C": 635,
+  "G": 90
+ },
+ "reale|lungo_corsa|-|0.1 kg/sett": {
+  "tipo": "lungo",
+  "kcal": 4070,
+  "deficit": 0,
+  "P": 180,
+  "C": 635,
+  "G": 90
+ },
+ "reale|lungo_corsa|vigilia|senza pesate": {
+  "tipo": "lungo",
+  "kcal": 4070,
+  "deficit": 0,
+  "P": 180,
+  "C": 635,
+  "G": 90
+ },
+ "reale|lungo_corsa|vigilia|-0.4 kg/sett": {
+  "tipo": "lungo",
+  "kcal": 4070,
+  "deficit": 0,
+  "P": 180,
+  "C": 635,
+  "G": 90
+ },
+ "reale|lungo_corsa|vigilia|-1.2 kg/sett": {
+  "tipo": "lungo",
+  "kcal": 4070,
+  "deficit": 0,
+  "P": 180,
+  "C": 635,
+  "G": 90
+ },
+ "reale|lungo_corsa|vigilia|0.1 kg/sett": {
+  "tipo": "lungo",
+  "kcal": 4070,
+  "deficit": 0,
+  "P": 180,
+  "C": 635,
+  "G": 90
+ },
+ "reale|lungo_bici|-|senza pesate": {
+  "tipo": "lungo",
+  "kcal": 4210,
+  "deficit": 150,
+  "P": 180,
+  "C": 635,
+  "G": 105
+ },
+ "reale|lungo_bici|-|-0.4 kg/sett": {
+  "tipo": "lungo",
+  "kcal": 4210,
+  "deficit": 150,
+  "P": 180,
+  "C": 635,
+  "G": 105
+ },
+ "reale|lungo_bici|-|-1.2 kg/sett": {
+  "tipo": "lungo",
+  "kcal": 4340,
+  "deficit": 0,
+  "P": 180,
+  "C": 635,
+  "G": 120
+ },
+ "reale|lungo_bici|-|0.1 kg/sett": {
+  "tipo": "lungo",
+  "kcal": 4070,
+  "deficit": 290,
+  "P": 180,
+  "C": 635,
+  "G": 90
+ },
+ "reale|lungo_bici|vigilia|senza pesate": {
+  "tipo": "lungo",
+  "kcal": 4210,
+  "deficit": 150,
+  "P": 180,
+  "C": 635,
+  "G": 105
+ },
+ "reale|lungo_bici|vigilia|-0.4 kg/sett": {
+  "tipo": "lungo",
+  "kcal": 4210,
+  "deficit": 150,
+  "P": 180,
+  "C": 635,
+  "G": 105
+ },
+ "reale|lungo_bici|vigilia|-1.2 kg/sett": {
+  "tipo": "lungo",
+  "kcal": 4340,
+  "deficit": 0,
+  "P": 180,
+  "C": 635,
+  "G": 120
+ },
+ "reale|lungo_bici|vigilia|0.1 kg/sett": {
+  "tipo": "lungo",
+  "kcal": 4070,
+  "deficit": 290,
+  "P": 180,
+  "C": 635,
+  "G": 90
+ },
+ "donna|riposo|-|senza pesate": {
+  "tipo": "riposo",
+  "kcal": 1570,
+  "deficit": 250,
+  "P": 115,
+  "C": 175,
+  "G": 45
+ },
+ "donna|riposo|-|-0.4 kg/sett": {
+  "tipo": "riposo",
+  "kcal": 1570,
+  "deficit": 250,
+  "P": 115,
+  "C": 175,
+  "G": 45
+ },
+ "donna|riposo|-|-1.2 kg/sett": {
+  "tipo": "riposo",
+  "kcal": 1610,
+  "deficit": 210,
+  "P": 115,
+  "C": 175,
+  "G": 50
+ },
+ "donna|riposo|-|0.1 kg/sett": {
+  "tipo": "riposo",
+  "kcal": 1570,
+  "deficit": 250,
+  "P": 115,
+  "C": 175,
+  "G": 45
+ },
+ "donna|riposo|vigilia|senza pesate": {
+  "tipo": "riposo",
+  "kcal": 1790,
+  "deficit": 0,
+  "P": 115,
+  "C": 230,
+  "G": 45
+ },
+ "donna|riposo|vigilia|-0.4 kg/sett": {
+  "tipo": "riposo",
+  "kcal": 1790,
+  "deficit": 0,
+  "P": 115,
+  "C": 230,
+  "G": 45
+ },
+ "donna|riposo|vigilia|-1.2 kg/sett": {
+  "tipo": "riposo",
+  "kcal": 1790,
+  "deficit": 0,
+  "P": 115,
+  "C": 230,
+  "G": 45
+ },
+ "donna|riposo|vigilia|0.1 kg/sett": {
+  "tipo": "riposo",
+  "kcal": 1790,
+  "deficit": 0,
+  "P": 115,
+  "C": 230,
+  "G": 45
+ },
+ "donna|medio|-|senza pesate": {
+  "tipo": "medio",
+  "kcal": 1690,
+  "deficit": 478,
+  "P": 115,
+  "C": 205,
+  "G": 45
+ },
+ "donna|medio|-|-0.4 kg/sett": {
+  "tipo": "medio",
+  "kcal": 1690,
+  "deficit": 478,
+  "P": 115,
+  "C": 205,
+  "G": 45
+ },
+ "donna|medio|-|-1.2 kg/sett": {
+  "tipo": "medio",
+  "kcal": 1950,
+  "deficit": 218,
+  "P": 115,
+  "C": 260,
+  "G": 50
+ },
+ "donna|medio|-|0.1 kg/sett": {
+  "tipo": "medio",
+  "kcal": 1670,
+  "deficit": 498,
+  "P": 115,
+  "C": 200,
+  "G": 45
+ },
+ "donna|medio|vigilia|senza pesate": {
+  "tipo": "medio",
+  "kcal": 1810,
+  "deficit": 358,
+  "P": 115,
+  "C": 235,
+  "G": 45
+ },
+ "donna|medio|vigilia|-0.4 kg/sett": {
+  "tipo": "medio",
+  "kcal": 1810,
+  "deficit": 358,
+  "P": 115,
+  "C": 235,
+  "G": 45
+ },
+ "donna|medio|vigilia|-1.2 kg/sett": {
+  "tipo": "medio",
+  "kcal": 1930,
+  "deficit": 238,
+  "P": 115,
+  "C": 265,
+  "G": 45
+ },
+ "donna|medio|vigilia|0.1 kg/sett": {
+  "tipo": "medio",
+  "kcal": 1810,
+  "deficit": 358,
+  "P": 115,
+  "C": 235,
+  "G": 45
+ },
+ "donna|nuoto_palestra|-|senza pesate": {
+  "tipo": "medio",
+  "kcal": 1890,
+  "deficit": 480,
+  "P": 115,
+  "C": 255,
+  "G": 45
+ },
+ "donna|nuoto_palestra|-|-0.4 kg/sett": {
+  "tipo": "medio",
+  "kcal": 1890,
+  "deficit": 480,
+  "P": 115,
+  "C": 255,
+  "G": 45
+ },
+ "donna|nuoto_palestra|-|-1.2 kg/sett": {
+  "tipo": "medio",
+  "kcal": 2130,
+  "deficit": 240,
+  "P": 115,
+  "C": 260,
+  "G": 70
+ },
+ "donna|nuoto_palestra|-|0.1 kg/sett": {
+  "tipo": "medio",
+  "kcal": 1870,
+  "deficit": 500,
+  "P": 115,
+  "C": 250,
+  "G": 45
+ },
+ "donna|nuoto_palestra|vigilia|senza pesate": {
+  "tipo": "medio",
+  "kcal": 1890,
+  "deficit": 480,
+  "P": 115,
+  "C": 255,
+  "G": 45
+ },
+ "donna|nuoto_palestra|vigilia|-0.4 kg/sett": {
+  "tipo": "medio",
+  "kcal": 1890,
+  "deficit": 480,
+  "P": 115,
+  "C": 255,
+  "G": 45
+ },
+ "donna|nuoto_palestra|vigilia|-1.2 kg/sett": {
+  "tipo": "medio",
+  "kcal": 2170,
+  "deficit": 200,
+  "P": 115,
+  "C": 315,
+  "G": 50
+ },
+ "donna|nuoto_palestra|vigilia|0.1 kg/sett": {
+  "tipo": "medio",
+  "kcal": 1870,
+  "deficit": 500,
+  "P": 115,
+  "C": 250,
+  "G": 45
+ },
+ "donna|duro|-|senza pesate": {
+  "tipo": "duro",
+  "kcal": 2310,
+  "deficit": 90,
+  "P": 115,
+  "C": 350,
+  "G": 50
+ },
+ "donna|duro|-|-0.4 kg/sett": {
+  "tipo": "duro",
+  "kcal": 2310,
+  "deficit": 90,
+  "P": 115,
+  "C": 350,
+  "G": 50
+ },
+ "donna|duro|-|-1.2 kg/sett": {
+  "tipo": "duro",
+  "kcal": 2400,
+  "deficit": 0,
+  "P": 115,
+  "C": 350,
+  "G": 60
+ },
+ "donna|duro|-|0.1 kg/sett": {
+  "tipo": "duro",
+  "kcal": 2310,
+  "deficit": 90,
+  "P": 115,
+  "C": 350,
+  "G": 50
+ },
+ "donna|duro|vigilia|senza pesate": {
+  "tipo": "duro",
+  "kcal": 2620,
+  "deficit": 0,
+  "P": 115,
+  "C": 405,
+  "G": 60
+ },
+ "donna|duro|vigilia|-0.4 kg/sett": {
+  "tipo": "duro",
+  "kcal": 2620,
+  "deficit": 0,
+  "P": 115,
+  "C": 405,
+  "G": 60
+ },
+ "donna|duro|vigilia|-1.2 kg/sett": {
+  "tipo": "duro",
+  "kcal": 2620,
+  "deficit": 0,
+  "P": 115,
+  "C": 405,
+  "G": 60
+ },
+ "donna|duro|vigilia|0.1 kg/sett": {
+  "tipo": "duro",
+  "kcal": 2620,
+  "deficit": 0,
+  "P": 115,
+  "C": 405,
+  "G": 60
+ },
+ "donna|lungo_corsa|-|senza pesate": {
+  "tipo": "lungo",
+  "kcal": 2620,
+  "deficit": 0,
+  "P": 115,
+  "C": 405,
+  "G": 60
+ },
+ "donna|lungo_corsa|-|-0.4 kg/sett": {
+  "tipo": "lungo",
+  "kcal": 2620,
+  "deficit": 0,
+  "P": 115,
+  "C": 405,
+  "G": 60
+ },
+ "donna|lungo_corsa|-|-1.2 kg/sett": {
+  "tipo": "lungo",
+  "kcal": 2620,
+  "deficit": 0,
+  "P": 115,
+  "C": 405,
+  "G": 60
+ },
+ "donna|lungo_corsa|-|0.1 kg/sett": {
+  "tipo": "lungo",
+  "kcal": 2620,
+  "deficit": 0,
+  "P": 115,
+  "C": 405,
+  "G": 60
+ },
+ "donna|lungo_corsa|vigilia|senza pesate": {
+  "tipo": "lungo",
+  "kcal": 2620,
+  "deficit": 0,
+  "P": 115,
+  "C": 405,
+  "G": 60
+ },
+ "donna|lungo_corsa|vigilia|-0.4 kg/sett": {
+  "tipo": "lungo",
+  "kcal": 2620,
+  "deficit": 0,
+  "P": 115,
+  "C": 405,
+  "G": 60
+ },
+ "donna|lungo_corsa|vigilia|-1.2 kg/sett": {
+  "tipo": "lungo",
+  "kcal": 2620,
+  "deficit": 0,
+  "P": 115,
+  "C": 405,
+  "G": 60
+ },
+ "donna|lungo_corsa|vigilia|0.1 kg/sett": {
+  "tipo": "lungo",
+  "kcal": 2620,
+  "deficit": 0,
+  "P": 115,
+  "C": 405,
+  "G": 60
+ },
+ "donna|lungo_bici|-|senza pesate": {
+  "tipo": "lungo",
+  "kcal": 2670,
+  "deficit": 106,
+  "P": 115,
+  "C": 405,
+  "G": 65
+ },
+ "donna|lungo_bici|-|-0.4 kg/sett": {
+  "tipo": "lungo",
+  "kcal": 2670,
+  "deficit": 106,
+  "P": 115,
+  "C": 405,
+  "G": 65
+ },
+ "donna|lungo_bici|-|-1.2 kg/sett": {
+  "tipo": "lungo",
+  "kcal": 2760,
+  "deficit": 0,
+  "P": 115,
+  "C": 405,
+  "G": 75
+ },
+ "donna|lungo_bici|-|0.1 kg/sett": {
+  "tipo": "lungo",
+  "kcal": 2620,
+  "deficit": 156,
+  "P": 115,
+  "C": 405,
+  "G": 60
+ },
+ "donna|lungo_bici|vigilia|senza pesate": {
+  "tipo": "lungo",
+  "kcal": 2670,
+  "deficit": 106,
+  "P": 115,
+  "C": 405,
+  "G": 65
+ },
+ "donna|lungo_bici|vigilia|-0.4 kg/sett": {
+  "tipo": "lungo",
+  "kcal": 2670,
+  "deficit": 106,
+  "P": 115,
+  "C": 405,
+  "G": 65
+ },
+ "donna|lungo_bici|vigilia|-1.2 kg/sett": {
+  "tipo": "lungo",
+  "kcal": 2760,
+  "deficit": 0,
+  "P": 115,
+  "C": 405,
+  "G": 75
+ },
+ "donna|lungo_bici|vigilia|0.1 kg/sett": {
+  "tipo": "lungo",
+  "kcal": 2620,
+  "deficit": 156,
+  "P": 115,
+  "C": 405,
+  "G": 60
+ },
+ "leggero|riposo|-|senza pesate": {
+  "tipo": "riposo",
+  "kcal": 2210,
+  "deficit": 0,
+  "P": 115,
+  "C": 290,
+  "G": 65
+ },
+ "leggero|riposo|-|-0.4 kg/sett": {
+  "tipo": "riposo",
+  "kcal": 2210,
+  "deficit": 0,
+  "P": 115,
+  "C": 290,
+  "G": 65
+ },
+ "leggero|riposo|-|-1.2 kg/sett": {
+  "tipo": "riposo",
+  "kcal": 2210,
+  "deficit": 0,
+  "P": 115,
+  "C": 290,
+  "G": 65
+ },
+ "leggero|riposo|-|0.1 kg/sett": {
+  "tipo": "riposo",
+  "kcal": 2210,
+  "deficit": 0,
+  "P": 115,
+  "C": 290,
+  "G": 65
+ },
+ "leggero|riposo|vigilia|senza pesate": {
+  "tipo": "riposo",
+  "kcal": 2210,
+  "deficit": 0,
+  "P": 115,
+  "C": 290,
+  "G": 65
+ },
+ "leggero|riposo|vigilia|-0.4 kg/sett": {
+  "tipo": "riposo",
+  "kcal": 2210,
+  "deficit": 0,
+  "P": 115,
+  "C": 290,
+  "G": 65
+ },
+ "leggero|riposo|vigilia|-1.2 kg/sett": {
+  "tipo": "riposo",
+  "kcal": 2210,
+  "deficit": 0,
+  "P": 115,
+  "C": 290,
+  "G": 65
+ },
+ "leggero|riposo|vigilia|0.1 kg/sett": {
+  "tipo": "riposo",
+  "kcal": 2210,
+  "deficit": 0,
+  "P": 115,
+  "C": 290,
+  "G": 65
+ },
+ "leggero|medio|-|senza pesate": {
+  "tipo": "medio",
+  "kcal": 2590,
+  "deficit": 0,
+  "P": 115,
+  "C": 385,
+  "G": 65
+ },
+ "leggero|medio|-|-0.4 kg/sett": {
+  "tipo": "medio",
+  "kcal": 2590,
+  "deficit": 0,
+  "P": 115,
+  "C": 385,
+  "G": 65
+ },
+ "leggero|medio|-|-1.2 kg/sett": {
+  "tipo": "medio",
+  "kcal": 2590,
+  "deficit": 0,
+  "P": 115,
+  "C": 385,
+  "G": 65
+ },
+ "leggero|medio|-|0.1 kg/sett": {
+  "tipo": "medio",
+  "kcal": 2590,
+  "deficit": 0,
+  "P": 115,
+  "C": 385,
+  "G": 65
+ },
+ "leggero|medio|vigilia|senza pesate": {
+  "tipo": "medio",
+  "kcal": 2590,
+  "deficit": 0,
+  "P": 115,
+  "C": 385,
+  "G": 65
+ },
+ "leggero|medio|vigilia|-0.4 kg/sett": {
+  "tipo": "medio",
+  "kcal": 2590,
+  "deficit": 0,
+  "P": 115,
+  "C": 385,
+  "G": 65
+ },
+ "leggero|medio|vigilia|-1.2 kg/sett": {
+  "tipo": "medio",
+  "kcal": 2590,
+  "deficit": 0,
+  "P": 115,
+  "C": 385,
+  "G": 65
+ },
+ "leggero|medio|vigilia|0.1 kg/sett": {
+  "tipo": "medio",
+  "kcal": 2590,
+  "deficit": 0,
+  "P": 115,
+  "C": 385,
+  "G": 65
+ },
+ "leggero|nuoto_palestra|-|senza pesate": {
+  "tipo": "medio",
+  "kcal": 2810,
+  "deficit": 0,
+  "P": 115,
+  "C": 440,
+  "G": 65
+ },
+ "leggero|nuoto_palestra|-|-0.4 kg/sett": {
+  "tipo": "medio",
+  "kcal": 2810,
+  "deficit": 0,
+  "P": 115,
+  "C": 440,
+  "G": 65
+ },
+ "leggero|nuoto_palestra|-|-1.2 kg/sett": {
+  "tipo": "medio",
+  "kcal": 2810,
+  "deficit": 0,
+  "P": 115,
+  "C": 440,
+  "G": 65
+ },
+ "leggero|nuoto_palestra|-|0.1 kg/sett": {
+  "tipo": "medio",
+  "kcal": 2810,
+  "deficit": 0,
+  "P": 115,
+  "C": 440,
+  "G": 65
+ },
+ "leggero|nuoto_palestra|vigilia|senza pesate": {
+  "tipo": "medio",
+  "kcal": 2810,
+  "deficit": 0,
+  "P": 115,
+  "C": 440,
+  "G": 65
+ },
+ "leggero|nuoto_palestra|vigilia|-0.4 kg/sett": {
+  "tipo": "medio",
+  "kcal": 2810,
+  "deficit": 0,
+  "P": 115,
+  "C": 440,
+  "G": 65
+ },
+ "leggero|nuoto_palestra|vigilia|-1.2 kg/sett": {
+  "tipo": "medio",
+  "kcal": 2810,
+  "deficit": 0,
+  "P": 115,
+  "C": 440,
+  "G": 65
+ },
+ "leggero|nuoto_palestra|vigilia|0.1 kg/sett": {
+  "tipo": "medio",
+  "kcal": 2810,
+  "deficit": 0,
+  "P": 115,
+  "C": 440,
+  "G": 65
+ },
+ "leggero|duro|-|senza pesate": {
+  "tipo": "duro",
+  "kcal": 2850,
+  "deficit": 0,
+  "P": 115,
+  "C": 450,
+  "G": 65
+ },
+ "leggero|duro|-|-0.4 kg/sett": {
+  "tipo": "duro",
+  "kcal": 2850,
+  "deficit": 0,
+  "P": 115,
+  "C": 450,
+  "G": 65
+ },
+ "leggero|duro|-|-1.2 kg/sett": {
+  "tipo": "duro",
+  "kcal": 2850,
+  "deficit": 0,
+  "P": 115,
+  "C": 450,
+  "G": 65
+ },
+ "leggero|duro|-|0.1 kg/sett": {
+  "tipo": "duro",
+  "kcal": 2850,
+  "deficit": 0,
+  "P": 115,
+  "C": 450,
+  "G": 65
+ },
+ "leggero|duro|vigilia|senza pesate": {
+  "tipo": "duro",
+  "kcal": 2870,
+  "deficit": 0,
+  "P": 115,
+  "C": 455,
+  "G": 65
+ },
+ "leggero|duro|vigilia|-0.4 kg/sett": {
+  "tipo": "duro",
+  "kcal": 2870,
+  "deficit": 0,
+  "P": 115,
+  "C": 455,
+  "G": 65
+ },
+ "leggero|duro|vigilia|-1.2 kg/sett": {
+  "tipo": "duro",
+  "kcal": 2870,
+  "deficit": 0,
+  "P": 115,
+  "C": 455,
+  "G": 65
+ },
+ "leggero|duro|vigilia|0.1 kg/sett": {
+  "tipo": "duro",
+  "kcal": 2870,
+  "deficit": 0,
+  "P": 115,
+  "C": 455,
+  "G": 65
+ },
+ "leggero|lungo_corsa|-|senza pesate": {
+  "tipo": "lungo",
+  "kcal": 3070,
+  "deficit": 0,
+  "P": 115,
+  "C": 495,
+  "G": 70
+ },
+ "leggero|lungo_corsa|-|-0.4 kg/sett": {
+  "tipo": "lungo",
+  "kcal": 3070,
+  "deficit": 0,
+  "P": 115,
+  "C": 495,
+  "G": 70
+ },
+ "leggero|lungo_corsa|-|-1.2 kg/sett": {
+  "tipo": "lungo",
+  "kcal": 3070,
+  "deficit": 0,
+  "P": 115,
+  "C": 495,
+  "G": 70
+ },
+ "leggero|lungo_corsa|-|0.1 kg/sett": {
+  "tipo": "lungo",
+  "kcal": 3070,
+  "deficit": 0,
+  "P": 115,
+  "C": 495,
+  "G": 70
+ },
+ "leggero|lungo_corsa|vigilia|senza pesate": {
+  "tipo": "lungo",
+  "kcal": 3070,
+  "deficit": 0,
+  "P": 115,
+  "C": 495,
+  "G": 70
+ },
+ "leggero|lungo_corsa|vigilia|-0.4 kg/sett": {
+  "tipo": "lungo",
+  "kcal": 3070,
+  "deficit": 0,
+  "P": 115,
+  "C": 495,
+  "G": 70
+ },
+ "leggero|lungo_corsa|vigilia|-1.2 kg/sett": {
+  "tipo": "lungo",
+  "kcal": 3070,
+  "deficit": 0,
+  "P": 115,
+  "C": 495,
+  "G": 70
+ },
+ "leggero|lungo_corsa|vigilia|0.1 kg/sett": {
+  "tipo": "lungo",
+  "kcal": 3070,
+  "deficit": 0,
+  "P": 115,
+  "C": 495,
+  "G": 70
+ },
+ "leggero|lungo_bici|-|senza pesate": {
+  "tipo": "lungo",
+  "kcal": 3230,
+  "deficit": 0,
+  "P": 115,
+  "C": 535,
+  "G": 70
+ },
+ "leggero|lungo_bici|-|-0.4 kg/sett": {
+  "tipo": "lungo",
+  "kcal": 3230,
+  "deficit": 0,
+  "P": 115,
+  "C": 535,
+  "G": 70
+ },
+ "leggero|lungo_bici|-|-1.2 kg/sett": {
+  "tipo": "lungo",
+  "kcal": 3230,
+  "deficit": 0,
+  "P": 115,
+  "C": 535,
+  "G": 70
+ },
+ "leggero|lungo_bici|-|0.1 kg/sett": {
+  "tipo": "lungo",
+  "kcal": 3230,
+  "deficit": 0,
+  "P": 115,
+  "C": 535,
+  "G": 70
+ },
+ "leggero|lungo_bici|vigilia|senza pesate": {
+  "tipo": "lungo",
+  "kcal": 3230,
+  "deficit": 0,
+  "P": 115,
+  "C": 535,
+  "G": 70
+ },
+ "leggero|lungo_bici|vigilia|-0.4 kg/sett": {
+  "tipo": "lungo",
+  "kcal": 3230,
+  "deficit": 0,
+  "P": 115,
+  "C": 535,
+  "G": 70
+ },
+ "leggero|lungo_bici|vigilia|-1.2 kg/sett": {
+  "tipo": "lungo",
+  "kcal": 3230,
+  "deficit": 0,
+  "P": 115,
+  "C": 535,
+  "G": 70
+ },
+ "leggero|lungo_bici|vigilia|0.1 kg/sett": {
+  "tipo": "lungo",
+  "kcal": 3230,
+  "deficit": 0,
+  "P": 115,
+  "C": 535,
+  "G": 70
+ },
+ "pesante|riposo|-|senza pesate": {
+  "tipo": "riposo",
+  "kcal": 3010,
+  "deficit": 0,
+  "P": 220,
+  "C": 330,
+  "G": 90
+ },
+ "pesante|riposo|-|-0.4 kg/sett": {
+  "tipo": "riposo",
+  "kcal": 3010,
+  "deficit": 0,
+  "P": 220,
+  "C": 330,
+  "G": 90
+ },
+ "pesante|riposo|-|-1.2 kg/sett": {
+  "tipo": "riposo",
+  "kcal": 3010,
+  "deficit": 0,
+  "P": 220,
+  "C": 330,
+  "G": 90
+ },
+ "pesante|riposo|-|0.1 kg/sett": {
+  "tipo": "riposo",
+  "kcal": 3010,
+  "deficit": 0,
+  "P": 220,
+  "C": 330,
+  "G": 90
+ },
+ "pesante|riposo|vigilia|senza pesate": {
+  "tipo": "riposo",
+  "kcal": 3450,
+  "deficit": 0,
+  "P": 220,
+  "C": 440,
+  "G": 90
+ },
+ "pesante|riposo|vigilia|-0.4 kg/sett": {
+  "tipo": "riposo",
+  "kcal": 3450,
+  "deficit": 0,
+  "P": 220,
+  "C": 440,
+  "G": 90
+ },
+ "pesante|riposo|vigilia|-1.2 kg/sett": {
+  "tipo": "riposo",
+  "kcal": 3450,
+  "deficit": 0,
+  "P": 220,
+  "C": 440,
+  "G": 90
+ },
+ "pesante|riposo|vigilia|0.1 kg/sett": {
+  "tipo": "riposo",
+  "kcal": 3450,
+  "deficit": 0,
+  "P": 220,
+  "C": 440,
+  "G": 90
+ },
+ "pesante|medio|-|senza pesate": {
+  "tipo": "medio",
+  "kcal": 3010,
+  "deficit": 543,
+  "P": 220,
+  "C": 330,
+  "G": 90
+ },
+ "pesante|medio|-|-0.4 kg/sett": {
+  "tipo": "medio",
+  "kcal": 3010,
+  "deficit": 543,
+  "P": 220,
+  "C": 330,
+  "G": 90
+ },
+ "pesante|medio|-|-1.2 kg/sett": {
+  "tipo": "medio",
+  "kcal": 3010,
+  "deficit": 543,
+  "P": 220,
+  "C": 330,
+  "G": 90
+ },
+ "pesante|medio|-|0.1 kg/sett": {
+  "tipo": "medio",
+  "kcal": 3010,
+  "deficit": 543,
+  "P": 220,
+  "C": 330,
+  "G": 90
+ },
+ "pesante|medio|vigilia|senza pesate": {
+  "tipo": "medio",
+  "kcal": 3450,
+  "deficit": 103,
+  "P": 220,
+  "C": 440,
+  "G": 90
+ },
+ "pesante|medio|vigilia|-0.4 kg/sett": {
+  "tipo": "medio",
+  "kcal": 3450,
+  "deficit": 103,
+  "P": 220,
+  "C": 440,
+  "G": 90
+ },
+ "pesante|medio|vigilia|-1.2 kg/sett": {
+  "tipo": "medio",
+  "kcal": 3450,
+  "deficit": 103,
+  "P": 220,
+  "C": 440,
+  "G": 90
+ },
+ "pesante|medio|vigilia|0.1 kg/sett": {
+  "tipo": "medio",
+  "kcal": 3450,
+  "deficit": 103,
+  "P": 220,
+  "C": 440,
+  "G": 90
+ },
+ "pesante|nuoto_palestra|-|senza pesate": {
+  "tipo": "medio",
+  "kcal": 3070,
+  "deficit": 890,
+  "P": 220,
+  "C": 345,
+  "G": 90
+ },
+ "pesante|nuoto_palestra|-|-0.4 kg/sett": {
+  "tipo": "medio",
+  "kcal": 3070,
+  "deficit": 890,
+  "P": 220,
+  "C": 345,
+  "G": 90
+ },
+ "pesante|nuoto_palestra|-|-1.2 kg/sett": {
+  "tipo": "medio",
+  "kcal": 3330,
+  "deficit": 630,
+  "P": 220,
+  "C": 410,
+  "G": 90
+ },
+ "pesante|nuoto_palestra|-|0.1 kg/sett": {
+  "tipo": "medio",
+  "kcal": 3030,
+  "deficit": 930,
+  "P": 220,
+  "C": 335,
+  "G": 90
+ },
+ "pesante|nuoto_palestra|vigilia|senza pesate": {
+  "tipo": "medio",
+  "kcal": 3450,
+  "deficit": 510,
+  "P": 220,
+  "C": 440,
+  "G": 90
+ },
+ "pesante|nuoto_palestra|vigilia|-0.4 kg/sett": {
+  "tipo": "medio",
+  "kcal": 3450,
+  "deficit": 510,
+  "P": 220,
+  "C": 440,
+  "G": 90
+ },
+ "pesante|nuoto_palestra|vigilia|-1.2 kg/sett": {
+  "tipo": "medio",
+  "kcal": 3450,
+  "deficit": 510,
+  "P": 220,
+  "C": 440,
+  "G": 90
+ },
+ "pesante|nuoto_palestra|vigilia|0.1 kg/sett": {
+  "tipo": "medio",
+  "kcal": 3450,
+  "deficit": 510,
+  "P": 220,
+  "C": 440,
+  "G": 90
+ },
+ "pesante|duro|-|senza pesate": {
+  "tipo": "duro",
+  "kcal": 4420,
+  "deficit": 0,
+  "P": 220,
+  "C": 660,
+  "G": 100
+ },
+ "pesante|duro|-|-0.4 kg/sett": {
+  "tipo": "duro",
+  "kcal": 4420,
+  "deficit": 0,
+  "P": 220,
+  "C": 660,
+  "G": 100
+ },
+ "pesante|duro|-|-1.2 kg/sett": {
+  "tipo": "duro",
+  "kcal": 4420,
+  "deficit": 0,
+  "P": 220,
+  "C": 660,
+  "G": 100
+ },
+ "pesante|duro|-|0.1 kg/sett": {
+  "tipo": "duro",
+  "kcal": 4420,
+  "deficit": 0,
+  "P": 220,
+  "C": 660,
+  "G": 100
+ },
+ "pesante|duro|vigilia|senza pesate": {
+  "tipo": "duro",
+  "kcal": 4950,
+  "deficit": 0,
+  "P": 220,
+  "C": 770,
+  "G": 110
+ },
+ "pesante|duro|vigilia|-0.4 kg/sett": {
+  "tipo": "duro",
+  "kcal": 4950,
+  "deficit": 0,
+  "P": 220,
+  "C": 770,
+  "G": 110
+ },
+ "pesante|duro|vigilia|-1.2 kg/sett": {
+  "tipo": "duro",
+  "kcal": 4950,
+  "deficit": 0,
+  "P": 220,
+  "C": 770,
+  "G": 110
+ },
+ "pesante|duro|vigilia|0.1 kg/sett": {
+  "tipo": "duro",
+  "kcal": 4950,
+  "deficit": 0,
+  "P": 220,
+  "C": 770,
+  "G": 110
+ },
+ "pesante|lungo_corsa|-|senza pesate": {
+  "tipo": "lungo",
+  "kcal": 4950,
+  "deficit": 0,
+  "P": 220,
+  "C": 770,
+  "G": 110
+ },
+ "pesante|lungo_corsa|-|-0.4 kg/sett": {
+  "tipo": "lungo",
+  "kcal": 4950,
+  "deficit": 0,
+  "P": 220,
+  "C": 770,
+  "G": 110
+ },
+ "pesante|lungo_corsa|-|-1.2 kg/sett": {
+  "tipo": "lungo",
+  "kcal": 4950,
+  "deficit": 0,
+  "P": 220,
+  "C": 770,
+  "G": 110
+ },
+ "pesante|lungo_corsa|-|0.1 kg/sett": {
+  "tipo": "lungo",
+  "kcal": 4950,
+  "deficit": 0,
+  "P": 220,
+  "C": 770,
+  "G": 110
+ },
+ "pesante|lungo_corsa|vigilia|senza pesate": {
+  "tipo": "lungo",
+  "kcal": 4950,
+  "deficit": 0,
+  "P": 220,
+  "C": 770,
+  "G": 110
+ },
+ "pesante|lungo_corsa|vigilia|-0.4 kg/sett": {
+  "tipo": "lungo",
+  "kcal": 4950,
+  "deficit": 0,
+  "P": 220,
+  "C": 770,
+  "G": 110
+ },
+ "pesante|lungo_corsa|vigilia|-1.2 kg/sett": {
+  "tipo": "lungo",
+  "kcal": 4950,
+  "deficit": 0,
+  "P": 220,
+  "C": 770,
+  "G": 110
+ },
+ "pesante|lungo_corsa|vigilia|0.1 kg/sett": {
+  "tipo": "lungo",
+  "kcal": 4950,
+  "deficit": 0,
+  "P": 220,
+  "C": 770,
+  "G": 110
+ },
+ "pesante|lungo_bici|-|senza pesate": {
+  "tipo": "lungo",
+  "kcal": 4950,
+  "deficit": 0,
+  "P": 220,
+  "C": 770,
+  "G": 110
+ },
+ "pesante|lungo_bici|-|-0.4 kg/sett": {
+  "tipo": "lungo",
+  "kcal": 4950,
+  "deficit": 0,
+  "P": 220,
+  "C": 770,
+  "G": 110
+ },
+ "pesante|lungo_bici|-|-1.2 kg/sett": {
+  "tipo": "lungo",
+  "kcal": 4950,
+  "deficit": 0,
+  "P": 220,
+  "C": 770,
+  "G": 110
+ },
+ "pesante|lungo_bici|-|0.1 kg/sett": {
+  "tipo": "lungo",
+  "kcal": 4950,
+  "deficit": 0,
+  "P": 220,
+  "C": 770,
+  "G": 110
+ },
+ "pesante|lungo_bici|vigilia|senza pesate": {
+  "tipo": "lungo",
+  "kcal": 4950,
+  "deficit": 0,
+  "P": 220,
+  "C": 770,
+  "G": 110
+ },
+ "pesante|lungo_bici|vigilia|-0.4 kg/sett": {
+  "tipo": "lungo",
+  "kcal": 4950,
+  "deficit": 0,
+  "P": 220,
+  "C": 770,
+  "G": 110
+ },
+ "pesante|lungo_bici|vigilia|-1.2 kg/sett": {
+  "tipo": "lungo",
+  "kcal": 4950,
+  "deficit": 0,
+  "P": 220,
+  "C": 770,
+  "G": 110
+ },
+ "pesante|lungo_bici|vigilia|0.1 kg/sett": {
+  "tipo": "lungo",
+  "kcal": 4950,
+  "deficit": 0,
+  "P": 220,
+  "C": 770,
+  "G": 110
+ }
+}

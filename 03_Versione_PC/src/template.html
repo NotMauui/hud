@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HUD · Analisi</title>
+<style>
+:root{color-scheme:dark;--bg:#000;--card:#1c1c1e;--card2:#2c2c2e;--ink:#f5f5f7;--muted:#98989d;--line:#38383a;--grid:#2c2c2e;
+--s-nuoto:#3987e5;--s-bici:#e5484d;--s-corsa:#c98500;--s-forza:#199e70;--violet:#9085e9;--good:#30d158;--warn:#ff9f0a;--bad:#ff453a;--zone-fresh:#64d2ff;--zone-trans:#ffd60a}
+@media (prefers-color-scheme:light){:root:where(:not([data-theme="dark"])){color-scheme:light;--bg:#f5f5f7;--card:#fff;--card2:#f2f2f7;--ink:#1d1d1f;--muted:#6e6e73;--line:#e5e5ea;--grid:#ececf0;
+--s-nuoto:#2a78d6;--s-bici:#d93d42;--s-corsa:#b37600;--s-forza:#138a60;--violet:#4a3aa7;--good:#1f9d45;--warn:#c76b00;--bad:#d70015}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 -apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",sans-serif;-webkit-font-smoothing:antialiased}
+body.drag::after{content:"Rilascia hud-dati.json";position:fixed;inset:16px;border:2px dashed var(--s-nuoto);border-radius:24px;display:flex;align-items:center;justify-content:center;font-size:22px;background:rgba(0,0,0,.6);color:#fff}
+header{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:.5px solid var(--line)}
+.hwrap{max-width:1360px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.brand{font-size:20px;font-weight:700;letter-spacing:-.02em}.brand span{color:var(--muted);font-weight:500}
+.meta{color:var(--muted);font-size:13px;display:flex;gap:10px;flex-wrap:wrap}
+.pill{background:var(--card2);border-radius:999px;padding:3px 10px}
+.actions{margin-left:auto;display:flex;gap:8px}
+button{font:inherit;border:0;border-radius:10px;padding:8px 14px;background:var(--card2);color:var(--ink);cursor:pointer}
+button.pri{background:var(--s-nuoto);color:#fff;font-weight:600}
+nav{max-width:1360px;margin:0 auto;padding:0 24px 10px;display:flex;gap:18px;font-size:13px}
+nav a{color:var(--muted);text-decoration:none}nav a:hover{color:var(--ink)}
+main{max-width:1360px;margin:0 auto;padding:20px 24px 80px;display:flex;flex-direction:column;gap:28px}
+#msg{color:var(--warn)}#msg:empty{display:none}
+.kpis{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:10px}
+.kpi{background:var(--card);border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.kpi span{font-size:12px;color:var(--muted)}.kpi b{font-size:24px;letter-spacing:-.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.kpi small{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.verdict{font-size:16px;color:var(--ink);opacity:.9}
+.alerts{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px}.alerts:empty{display:none}
+.alert{background:var(--card);border-radius:14px;padding:12px 14px;border-left:4px solid var(--muted);font-size:13px}.alert b{display:block;font-size:14px;margin-bottom:2px}
+.alert.rosso{border-color:var(--bad)}.alert.giallo{border-color:var(--warn)}.alert.info{border-color:var(--zone-fresh)}
+h2{font-size:22px;letter-spacing:-.01em;margin:0 0 -14px}
+.row{display:grid;gap:16px}.r21{grid-template-columns:2fr 1fr}.r11{grid-template-columns:1fr 1fr}.r111{grid-template-columns:1fr 1fr 1fr}
+.card{background:var(--card);border-radius:20px;padding:16px 18px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.card h3{margin:0;font-size:15px;display:flex;justify-content:space-between;gap:10px;align-items:baseline}.card h3 small{font-weight:400;color:var(--muted);font-size:12px}
+.chart{width:100%;min-height:120px}
+.legend{display:flex;gap:14px;font-size:12px;color:var(--muted);flex-wrap:wrap}.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.legend i.dash{background:repeating-linear-gradient(90deg,var(--muted) 0 4px,transparent 4px 7px);height:3px}
+.txt{font-size:13px;color:var(--muted)}.txt b{color:var(--ink)}
+svg text.ax{fill:var(--muted);font-size:11px}svg line.grid{stroke:var(--grid)}svg line.ref{stroke:var(--muted);stroke-dasharray:4 4}
+svg line.today{stroke:var(--bad);stroke-width:1;opacity:.7}svg line.cross{stroke:var(--ink);opacity:.5}
+#tip{position:fixed;z-index:20;display:none;background:var(--card2);color:var(--ink);border-radius:10px;padding:8px 10px;font-size:12px;box-shadow:0 6px 24px rgba(0,0,0,.35);pointer-events:none;min-width:150px}
+#tip b{display:block;margin-bottom:4px}#tip div{display:flex;gap:6px;align-items:center}#tip div span{margin-left:auto;font-weight:600;padding-left:12px}#tip i{width:8px;height:8px;border-radius:2px;display:inline-block}
+#tip .tt{border-top:.5px solid var(--line);margin-top:3px;padding-top:3px}
+.empty{color:var(--muted);padding:30px 0;text-align:center}
+.pr{display:grid;grid-template-columns:200px 1fr 54px;gap:10px;align-items:center;font-size:13px}.pr b{text-align:right}
+.pb{position:relative;height:10px;background:var(--card2);border-radius:5px}.pz{position:absolute;left:50%;top:-3px;bottom:-3px;width:1px;background:var(--muted)}.pv{position:absolute;top:0;bottom:0;border-radius:5px}
+.note{font-size:12px;color:var(--muted);margin-top:6px}
+table{width:100%;border-collapse:collapse;font-size:13px}th{text-align:left;color:var(--muted);font-weight:500;font-size:12px;padding:6px 8px;border-bottom:.5px solid var(--line);position:sticky;top:0;background:var(--card)}
+td{padding:7px 8px;border-bottom:.5px solid var(--line);vertical-align:top}td.n{text-align:right;font-variant-numeric:tabular-nums}tr.today td{background:color-mix(in srgb,var(--bad) 10%,transparent)}
+.tbl{max-height:520px;overflow:auto}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px}
+.sp{display:inline-block;border-left:3px solid var(--c);padding:1px 8px;margin:1px 4px 1px 0;background:var(--card2);border-radius:4px}
+.flag{display:inline-block;font-size:11px;padding:1px 7px;border-radius:999px;background:color-mix(in srgb,var(--warn) 18%,transparent);color:var(--warn)}
+.muted{color:var(--muted)}
+select{font:inherit;background:var(--card2);color:var(--ink);border:0;border-radius:8px;padding:4px 8px}
+dialog{background:var(--card);color:var(--ink);border:0;border-radius:18px;padding:20px;max-width:440px}dialog::backdrop{background:rgba(0,0,0,.5)}
+dialog input{width:100%;font:inherit;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--ink);margin:10px 0}
+@media (max-width:1200px){.kpis{grid-template-columns:repeat(5,1fr)}}
+@media (max-width:900px){.r21,.r11,.r111{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}.actions{margin-left:0}}
+</style>
+</head>
+<body>
+<header>
+  <div class="hwrap">
+    <div class="brand">HUD <span>· Analisi</span></div>
+    <div class="meta"><span id="today"></span><span class="pill" id="src"></span><span id="race"></span></div>
+    <div class="actions">
+      <button id="btnLive" class="pri">Aggiorna da Intervals</button>
+      <button id="btnFile">Carica file</button>
+      <button id="btnDemo">Demo</button>
+      <button id="btnKey" aria-label="Chiave API">Chiave</button>
+      <input type="file" id="fileIn" accept=".json,application/json" hidden>
+    </div>
+  </div>
+  <nav><a href="#s-oggi">Oggi</a><a href="#s-carico">Carico e forma</a><a href="#s-volume">Volume</a><a href="#s-recupero">Recupero</a><a href="#s-corsa">Corsa</a><a href="#s-predittori">Predittori</a><a href="#s-settimana">Settimana</a><a href="#s-attivita">Attività</a></nav>
+</header>
+<main>
+  <div id="msg"></div>
+  <section id="s-oggi" style="display:flex;flex-direction:column;gap:12px">
+    <div class="kpis" id="kpis"></div>
+    <div class="verdict" id="verdict"></div>
+    <div class="alerts" id="alerts"></div>
+  </section>
+
+  <h2 id="s-carico">Carico e forma</h2>
+  <div class="row r21">
+    <div class="card"><h3>Fitness e fatica <small><select id="fitRange" aria-label="Periodo"><option value="42">6 settimane</option><option value="90">3 mesi</option><option value="180" selected>6 mesi</option><option value="365">1 anno</option></select></small></h3>
+      <div id="chFit" class="chart"></div><div id="chForm" class="chart"></div>
+      <div class="legend"><span><i style="background:var(--s-nuoto)"></i>Fitness (CTL)</span><span><i style="background:var(--violet)"></i>Fatica (ATL)</span><span><i style="background:var(--ink)"></i>Forma (TSB) sulle zone</span><span><i class="dash"></i>Proiezione dal piano</span><span><i style="background:var(--bad)"></i>Oggi</span></div></div>
+    <div class="card"><h3 id="trajTitle">Verso l'obiettivo</h3><div id="chTraj" class="chart"></div><div class="txt" id="trajTxt"></div>
+      <div class="legend"><span><i style="background:var(--s-nuoto)"></i>Fitness</span><span><i class="dash"></i>Traiettoria</span></div></div>
+  </div>
+
+  <h2 id="s-volume">Volume e intensità</h2>
+  <div class="row r21">
+    <div class="card"><h3>Ore settimanali per sport <small>ultime 26 settimane · la settimana in corso è sfumata</small></h3><div id="chVol" class="chart"></div>
+      <div class="legend"><span><i style="background:var(--s-nuoto)"></i>Nuoto</span><span><i style="background:var(--s-bici)"></i>Bici</span><span><i style="background:var(--s-corsa)"></i>Corsa</span><span><i style="background:var(--s-forza)"></i>Forza</span></div></div>
+    <div class="card"><h3>Facile e intenso <small>12 settimane</small></h3><div id="chInt" class="chart"></div><div class="txt" id="intTxt"></div>
+      <div class="legend"><span><i style="background:var(--s-nuoto)"></i>Facile</span><span><i style="background:var(--s-bici)"></i>Intenso</span></div></div>
+  </div>
+
+  <h2 id="s-recupero">Recupero</h2>
+  <div class="row r111">
+    <div class="card"><h3>HRV <small>90 giorni · banda = tua media ± 1 dev. std.</small></h3><div id="chHrv" class="chart"></div></div>
+    <div class="card"><h3>FC a riposo <small>90 giorni</small></h3><div id="chRhr" class="chart"></div></div>
+    <div class="card"><h3>Sonno <small>60 notti</small></h3><div id="chSleep" class="chart"></div></div>
+  </div>
+  <div class="row r11">
+    <div class="card"><h3>Peso <small>90 giorni</small></h3><div id="chWeight" class="chart"></div><div class="txt" id="weightTxt"></div></div>
+    <div class="card"><h3>Questa settimana</h3><div class="tbl" style="max-height:none"><table><thead><tr><th>Giorno</th><th>Sedute</th><th>Esecuzione</th></tr></thead><tbody id="weekTbl"></tbody></table></div><div class="txt" id="reviewTxt"></div></div>
+  </div>
+
+  <h2 id="s-corsa">Corsa</h2>
+  <div class="row r11">
+    <div class="card"><h3>Durabilità · passo a 145 bpm <small>più in alto = più veloce</small></h3><div id="chDur" class="chart"></div><div class="txt" id="durTxt"></div>
+      <div class="legend"><span><i style="background:var(--s-corsa);border-radius:50%"></i>All'aperto</span><span><i style="background:var(--muted);border-radius:50%"></i>Tapis</span><span><i style="background:var(--s-corsa);height:3px"></i>Mediana 4 settimane</span></div></div>
+    <div class="card"><h3>Impatto della corsa <small>12 settimane · linea = media delle 4 precedenti</small></h3><div id="chImp" class="chart"></div>
+      <div class="txt">Km pesati per dislivello e intensità. Sopra ×1,3 rispetto alla media il carico sui tessuti sale troppo in fretta.</div></div>
+  </div>
+
+  <h2 id="s-predittori">Cosa ti predice</h2>
+  <div class="row r11">
+    <div class="card"><h3>Segnali del mattino</h3><div id="predList"></div></div>
+    <div class="card"><h3 id="predTitle">Segnale più forte</h3><div id="chPred" class="chart"></div></div>
+  </div>
+
+  <h2 id="s-settimana" style="display:none"></h2>
+  <h2 id="s-attivita">Attività</h2>
+  <div class="card"><h3>Ultime 60 attività <small>avvisi solo sulle qualità di corsa</small></h3>
+    <div class="tbl"><table><thead><tr><th>Data</th><th>Sport</th><th>Nome</th><th>Durata</th><th>km</th><th>TSS</th><th>FC media</th><th>Passo a 145</th><th>Decoupling</th><th>Avvisi</th></tr></thead><tbody id="actTbl"></tbody></table></div></div>
+</main>
+
+<dialog id="keyDlg"><form method="dialog">
+  <b>Chiave API di Intervals.icu</b>
+  <div class="txt">Intervals › Settings › Developer Settings. Resta solo in questo browser.</div>
+  <input id="keyIn" type="password" autocomplete="off" placeholder="Incolla la chiave">
+  <div style="display:flex;gap:8px;justify-content:flex-end"><button id="keyDel">Cancella</button><button id="keySave" class="pri">Salva e aggiorna</button></div>
+</form></dialog>
+
+<script>
+/*__ENGINE__*/
+</script>
+<script>
+/*__APP__*/
+</script>
+</body>
+</html>
