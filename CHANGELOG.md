@@ -1,5 +1,13 @@
 # Novità
 
+## 1.7 · ottobre 2026
+- HRV letta come tendenza di 7 giorni contro la tua fascia normale (non la singola notte).
+- Soglie: il passo cambia su Intervals solo con una conferma; velocità critica dalle prove brevi; CSS da più distanze.
+- Nuoto: bracciate per vasca, metri per bracciata, SWOLF e la sua tendenza in Progressi.
+- Segnala un problema su GitHub e diagnostica dei tempi di apertura nelle Impostazioni.
+- README e guida rapida in inglese.
+- Video 3D degli esercizi: figura anatomica con i muscoli che si accendono (rosso lavorano, rosa aiutano, azzurro si allungano) e l'elenco dei muscoli in ogni scheda. Primi 4: squat, ponte, plank, gatto-mucca.
+
 ## 1.6 · ottobre 2026
 - L'impronta diventa la firma dell'app: chiude ogni immagine condivisa, sempre nello stesso punto.
 - Condivisione rifatta: 4 immagini (Attività, Giornata, Settimana, Gara), 3 fondi (Nero, Bianco, Sticker), un solo carattere (SF Pro), video dell'impronta che si riempie.

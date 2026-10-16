@@ -228,9 +228,19 @@ async function shareLoop(wv, ctx) {
         const m = new Mail();
         m.toRecipients = CONFIG.feedbackEmail ? [CONFIG.feedbackEmail] : [];
         m.subject = `${CONFIG.nomeApp} · commento (versione ${VERSIONE})`;
-        m.body = `Scrivi qui cosa ti piace, cosa non funziona o cosa manca:\n\n\n\n—\nVersione ${VERSIONE} · ${PROF && PROF.nome ? PROF.nome : "tester"} · ${ymd(new Date())}`;
+        m.body = `Scrivi qui cosa ti piace, cosa non funziona o cosa manca:\n\n\n\n—\nVersione ${VERSIONE} · ${PROF && PROF.nome ? PROF.nome : "tester"} · ${ymd(new Date())}\n${infoDispositivo()}\nIn allegato il registro dell'ultima apertura e i tempi (nessuna chiave, nessun dato di salute).`;
+        try { m.addDataAttachment(Data.fromString(diagnosticaTesto()), "text/plain", "hud-diagnostica.txt"); } catch (e) {}
         await m.send();
       } catch (e) { await js(`window.__toast(${JSON.stringify(CONFIG.feedbackEmail ? "Mail non disponibile: scrivi a " + CONFIG.feedbackEmail : "Mail non disponibile su questo iPhone")})`); }
+      continue;
+    }
+    if (kind === "segnala") {
+      // Segnalazione pubblica su GitHub: solo versione, iOS, modello e tempi, mai dati personali o di salute
+      try {
+        const t = leggiTempi().slice(-3).map((x) => `${x.t.slice(0, 16)} ${x.dove}: ${x.fasi.map((f) => f[0] + " " + f[1] + " ms").join(", ")}`).join("\n");
+        const body = `**Cosa è successo**\n\n\n**Cosa ti aspettavi**\n\n\n---\nVersione ${VERSIONE} · ${infoDispositivo()}\nTempi delle ultime aperture:\n${t || "—"}`;
+        Safari.open(`${CONFIG.repository}/issues/new?title=${encodeURIComponent("")}&body=${encodeURIComponent(body)}`);
+      } catch (e) { await js(`window.__toast(${JSON.stringify("Non riesco ad aprire GitHub")})`); }
       continue;
     }
     if (kind === "photo") {

@@ -36,6 +36,10 @@ function stimaSoglie(raw, now, att) {
     return g;
   }).filter(Boolean);
 
+  // retta distanza–tempo dei migliori sforzi (minimi quadrati): pendenza = velocità critica, intercetta = riserva (D')
+  const retta = (P) => { const n = P.length, mt = P.reduce((s, p) => s + p.t, 0) / n, md = P.reduce((s, p) => s + p.d, 0) / n;
+    const stt = P.reduce((s, p) => s + (p.t - mt) ** 2, 0), std = P.reduce((s, p) => s + (p.t - mt) * (p.d - md), 0), sdd = P.reduce((s, p) => s + (p.d - md) ** 2, 0);
+    const v = stt ? std / stt : 0; return { v, d0: md - v * mt, r2: stt && sdd ? (std * std) / (stt * sdd) : 0 }; };
   const fcAtt = S_N(AC.max_hr) || S_N(AB.max_hr);
   const med = (v) => { const x = v.filter(Boolean).sort((p, q) => p - q); return x.length ? x[Math.floor(x.length / 2)] : null; };
   // sforzo davvero duro: lo dicono Intervals (intensità, gara), il nome, il tempo in zona 4+ o i battiti rispetto alla FC massima.
@@ -92,10 +96,23 @@ function stimaSoglie(raw, now, att) {
       const v = S_N(a.gap) || S_N(a.average_speed);
       return v && v > 1.8 && v < 6.5 ? { v: v * Math.pow(min(a) / 60, 0.06), a, alta: a.average_heartrate >= 0.97 * LT && min(a) >= 20 } : null;
     }).filter(Boolean).sort((x, y) => y.v - x.v);
+    // velocità critica: le migliori uscite dure intere (3–60') su durate diverse, almeno 3 e con la più lunga doppia della più corta
+    const vc = (() => {
+      const P = di("corsa", 120).filter((a) => !indoor(a) && duro(a) && min(a) >= 3 && min(a) <= 60 && S_N(a.distance)).map((a) => ({ t: S_N(a.moving_time), d: a.distance, a }));
+      if (P.length < 3 || Math.max(...P.map((p) => p.t)) < 2 * Math.min(...P.map((p) => p.t))) return null;
+      const r = retta(P); return r.v > 1.8 && r.v < 6.5 && r.d0 > 20 && r.d0 < 500 && r.r2 >= 0.98 ? { v: r.v, d0: r.d0, n: P.length } : null;
+    })();
     if (duri.length) {
       const b = duri[0];
-      passo = val(pAtt ? Math.min(b.v, pAtt * 1.08) : b.v, "attivita", b.alta ? "alta" : "media", `${Math.round(min(b.a))}' a ${S_PACE(1000 / (S_N(b.a.gap) || b.a.average_speed))}/km${S_N(b.a.gap) ? " (corretto per la pendenza)" : ""} e ${Math.round(b.a.average_heartrate)} bpm (${S_DATA(b.a)})`);
+      // conferma: un secondo sforzo entro il 4% del migliore. Senza, il valore resta sulla pagina ma su Intervals non cambia
+      const conferma = duri.length >= 2 && duri[1].v >= 0.96 * b.v;
+      passo = val(pAtt ? Math.min(b.v, pAtt * 1.08) : b.v, "attivita", b.alta ? "alta" : "media", `${Math.round(min(b.a))}' a ${S_PACE(1000 / (S_N(b.a.gap) || b.a.average_speed))}/km${S_N(b.a.gap) ? " (corretto per la pendenza)" : ""} e ${Math.round(b.a.average_heartrate)} bpm (${S_DATA(b.a)})${conferma ? "" : pAtt ? ": da confermare con un secondo sforzo simile" : ""}`);
+      passo.confermato = conferma;
       if (pAtt && passo.v <= pAtt * 1.03) passo = null; // non più veloce del valore impostato: resta quello
+    } else if (vc && (!pAtt || vc.v * 0.97 > pAtt * 1.03)) {
+      // la soglia (circa un'ora) è un po' più lenta della velocità critica
+      passo = val(pAtt ? Math.min(vc.v * 0.97, pAtt * 1.08) : vc.v * 0.97, "attivita", "media", `Velocità critica da ${vc.n} sforzi duri (${S_PACE(1000 / vc.v)}/km), portata a un'ora`);
+      passo.confermato = true;
     } else if (!pAtt) {
       const pts = di("corsa", 60).filter((a) => !indoor(a) && min(a) >= 20 && S_N(a.average_heartrate) && a.average_heartrate >= 0.7 * LT && a.average_heartrate < 0.95 * LT)
         .map((a) => ({ x: a.average_heartrate, y: S_N(a.gap) || S_N(a.average_speed) })).filter((p) => p.y && p.y > 1.8 && p.y < 6.5);
@@ -119,6 +136,16 @@ function stimaSoglie(raw, now, att) {
     const ev = a.paired_event_id ? ((raw && raw.events) || []).find((e) => e && e.id === a.paired_event_id) : null;
     if (/css|test/i.test((a.name || "") + " " + ((ev && ev.name) || "")) && r4 && r2 && 4 * r4.passo > 2 * r2.passo && (!css || css.data < a.start_date_local))
       css = { s: Math.round((4 * r4.passo - 2 * r2.passo) / 2), aff: "alta", perche: `Test 400 + 200 del ${S_DATA(a)}`, data: a.start_date_local };
+  }
+  if (!css) {
+    // più distanze nuotate a tutta (sedute di test, gara o "a tutta"): la retta distanza–tempo dà il CSS come pendenza
+    const best = {};
+    for (const a of nuoti) if (/css|test|gara|race|tutta|max|crono|time ?trial|\btt\b/i.test(a.name || "")) for (const g of giri(a)) if (g.m >= 100 && g.m <= 1500 && g.passo >= 50) { const t = (g.passo * g.m) / 100; if (!best[g.m] || t < best[g.m].t) best[g.m] = { t, d: g.m, a }; }
+    const P = Object.values(best);
+    if (P.length >= 3 && P.some((p) => p.d >= 400)) {
+      const r = retta(P), s100 = r.v > 0 ? 100 / r.v : 0;
+      if (s100 >= 50 && s100 <= 240 && r.d0 >= 0 && r.d0 < 80 && r.r2 >= 0.99) css = { s: Math.round(s100), aff: P.length >= 4 ? "alta" : "media", perche: `Da ${P.length} distanze nuotate a tutta (${P.map((p) => p.d).sort((x, y) => x - y).join(", ")} m)`, data: P.map((p) => p.a.start_date_local).sort().pop() };
+    }
   }
   if (!css) {
     const rip = [];
@@ -154,7 +181,7 @@ function stimaSoglie(raw, now, att) {
   //  tranne il passo dalla retta passo–battiti quando su Intervals manca del tutto)
   if (out.fcMax && out.fcMax.fonte === "attivita") { cambio("Run", "max_hr", fcAtt, out.fcMax.v, `FC massima ${out.fcMax.v} bpm`); cambio("Ride", "max_hr", S_N(AB.max_hr), out.fcMax.v, null); }
   if (out.corsa.lthr && out.corsa.lthr.fonte === "attivita") cambio("Run", "lthr", S_N(AC.lthr), out.corsa.lthr.v, `soglia FC di corsa ${out.corsa.lthr.v} bpm`);
-  if (out.corsa.passo && (out.corsa.passo.fonte === "attivita" || (out.corsa.passo.fonte === "stima" && !pAtt))) cambio("Run", "threshold_pace", pAtt, out.corsa.passo.v, `passo soglia ${S_PACE(1000 / out.corsa.passo.v)}/km`);
+  if (out.corsa.passo && ((out.corsa.passo.fonte === "attivita" && (out.corsa.passo.confermato || !pAtt)) || (out.corsa.passo.fonte === "stima" && !pAtt))) cambio("Run", "threshold_pace", pAtt, out.corsa.passo.v, `passo soglia ${S_PACE(1000 / out.corsa.passo.v)}/km`);
   if (out.bici.lthr && out.bici.lthr.fonte === "attivita") cambio("Ride", "lthr", S_N(AB.lthr), out.bici.lthr.v, `soglia FC in bici ${out.bici.lthr.v} bpm`);
   if (out.bici.ftp && out.bici.ftp.fonte !== "intervals") cambio("Ride", "ftp", ftpAtt, out.bici.ftp.v, `FTP ${out.bici.ftp.v} W`);
   if (out.nuoto.css && out.nuoto.css.fonte !== "intervals") cambio("Swim", "threshold_pace", cssAtt, out.nuoto.css.v, `CSS ${S_PACE(100 / out.nuoto.css.v)}/100 m`);

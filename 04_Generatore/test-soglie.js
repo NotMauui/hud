@@ -52,6 +52,16 @@ const casi = [
     (r) => [r.cambi.some((c) => c.campo === "threshold_pace" && c.a < 7)]],
   ["La soglia sale al massimo di 8 bpm per volta", { activities: [corsa(5, 40, 190, pace("4:30"), { name: "Gara 10k", race: true }), corsa(9, 45, 189, pace("4:35"), { name: "Test 30" })] }, { corsa: { lthr: 170, max_hr: 200, threshold_pace: pace("5:00") } },
     (r) => [r.cambi.some((c) => c.campo === "lthr" && c.a === 178)]],
+  // 1.7: conferma prima di cambiare un valore già impostato, velocità critica, CSS da più distanze
+  ["Un solo sforzo più veloce: il passo impostato non cambia finché non c'è conferma", { activities: [corsa(5, 40, 178, pace("4:40")), ...facili(3, 9, 150)] }, { corsa: { lthr: 180, max_hr: 198, threshold_pace: pace("5:00") } },
+    (r) => [!r.cambi.some((c) => c.campo === "threshold_pace"), r.corsa.passo && r.corsa.passo.confermato === false]],
+  ["Due sforzi simili più veloci: il passo si aggiorna", { activities: [corsa(5, 40, 178, pace("4:40")), corsa(12, 42, 179, pace("4:42"))] }, { corsa: { lthr: 180, max_hr: 198, threshold_pace: pace("5:00") } },
+    (r) => [r.cambi.some((c) => c.campo === "threshold_pace" && 1000 / c.a < 290)]],
+  ["Solo prove brevi a tutta (4', 8', 14'): passo dalla velocità critica", { activities: [[4, 1110], [8, 2070], [14, 3510]].map(([m, d], i) => corsa(3 + i * 6, m, 184, d / (m * 60), { distance: d, name: "Prova " + m })) }, { corsa: { lthr: 180, max_hr: 198, threshold_pace: null } },
+    (r) => [r.cambi.some((c) => c.campo === "threshold_pace" && Math.abs(1000 / c.a - 258) <= 4)]],
+  ["CSS da quattro distanze a tutta", { activities: [[100, 75], [200, 158], [400, 325], [800, 664]].map(([d, t], i) => ({ start_date_local: g(3 + i * 5), type: "Swim", name: "Test " + d, moving_time: t + 600, distance: d + 600, interval_summary: ["1x " + d + "m " + Math.floor(t * 100 / d / 60) + ":" + String(Math.round(t * 100 / d) % 60).padStart(2, "0")] })) }, { nuoto: { threshold_pace: 100 / 120 } },
+    (r) => [r.nuoto.css && Math.abs(100 / r.nuoto.css.v - 84) <= 2, r.nuoto.css.aff === "alta", r.cambi.some((c) => c.tipo === "Swim")]],
+
 ];
 
 let ok = 0, ko = 0;

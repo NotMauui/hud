@@ -12,7 +12,7 @@
 //  creato dalla configurazione al primo avvio: qui sotto ci sono solo valori generici.
 // ============================================================
 
-const VERSIONE = "1.6";
+const VERSIONE = "1.7";
 
 // ------------------------------------------------------------
 //  CONFIGURAZIONE — valori di partenza uguali per tutti
@@ -22,6 +22,7 @@ const CONFIG = {
   sport: ["nuoto", "bici", "corsa"], // gli sport della persona, dal profilo
   soglieAutomatiche: true, // le soglie stimate dalle attività vanno su Intervals da sole, tranne quelle fissate nel profilo
   soglieFissate: [],
+  repository: "https://github.com/NotMauui/hud", // dove si segnalano i problemi (Impostazioni › Segnala un problema)
   feedbackEmail: "", // dove arrivano i commenti dei tester (vuoto: la mail si apre senza destinatario)
 
   // Obiettivo: arriva dal profilo ({ nome, data, tipo, ctlGara }) oppure null.

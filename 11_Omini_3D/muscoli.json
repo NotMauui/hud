@@ -1,0 +1,965 @@
+{
+ "versione": 1,
+ "muscoli": {
+  "quadricipite": "Quadricipite",
+  "grande_gluteo": "Grande gluteo",
+  "medio_gluteo": "Medio gluteo",
+  "femorali": "Femorali",
+  "adduttori": "Adduttori",
+  "flessori_anca": "Flessori dell'anca",
+  "gastrocnemio": "Gastrocnemio",
+  "soleo": "Soleo",
+  "tibiale": "Tibiale anteriore",
+  "retto_addome": "Retto dell'addome",
+  "obliqui": "Obliqui",
+  "erettori": "Erettori della schiena",
+  "gran_dorsale": "Gran dorsale",
+  "trapezio": "Trapezio",
+  "romboidi": "Romboidi e trapezio medio",
+  "pettorale": "Grande pettorale",
+  "deltoide_ant": "Deltoide anteriore",
+  "deltoide_lat": "Deltoide laterale",
+  "deltoide_post": "Deltoide posteriore",
+  "cuffia": "Cuffia dei rotatori",
+  "dentato": "Dentato anteriore",
+  "bicipite": "Bicipite",
+  "tricipite": "Tricipite",
+  "avambraccio": "Avambraccio"
+ },
+ "esercizi": {
+  "squat": {
+   "nome": "Squat a corpo libero",
+   "lavora": [
+    "quadricipite",
+    "grande_gluteo"
+   ],
+   "aiuta": [
+    "adduttori",
+    "femorali",
+    "erettori",
+    "soleo"
+   ],
+   "allunga": [],
+   "fase": "su",
+   "vista": "tre_quarti",
+   "fedb": "Bodyweight_Squat"
+  },
+  "goblet": {
+   "nome": "Goblet squat",
+   "lavora": [
+    "quadricipite",
+    "grande_gluteo"
+   ],
+   "aiuta": [
+    "adduttori",
+    "erettori",
+    "retto_addome",
+    "deltoide_ant",
+    "bicipite"
+   ],
+   "allunga": [],
+   "fase": "su",
+   "vista": "tre_quarti",
+   "fedb": "Goblet_Squat"
+  },
+  "squatbil": {
+   "nome": "Squat con bilanciere",
+   "lavora": [
+    "quadricipite",
+    "grande_gluteo"
+   ],
+   "aiuta": [
+    "adduttori",
+    "femorali",
+    "erettori",
+    "trapezio",
+    "retto_addome"
+   ],
+   "allunga": [],
+   "fase": "su",
+   "vista": "tre_quarti",
+   "fedb": "Barbell_Squat"
+  },
+  "legpress": {
+   "nome": "Leg press",
+   "lavora": [
+    "quadricipite",
+    "grande_gluteo"
+   ],
+   "aiuta": [
+    "adduttori",
+    "femorali"
+   ],
+   "allunga": [],
+   "fase": "su",
+   "vista": "lato",
+   "fedb": "Leg_Press"
+  },
+  "affondo": {
+   "nome": "Affondi in camminata",
+   "lavora": [
+    "quadricipite",
+    "grande_gluteo"
+   ],
+   "aiuta": [
+    "medio_gluteo",
+    "adduttori",
+    "femorali",
+    "gastrocnemio"
+   ],
+   "allunga": [
+    "flessori_anca"
+   ],
+   "fase": "su",
+   "vista": "lato",
+   "fedb": "Bodyweight_Walking_Lunge"
+  },
+  "affondoman": {
+   "nome": "Affondo indietro con manubri",
+   "lavora": [
+    "quadricipite",
+    "grande_gluteo"
+   ],
+   "aiuta": [
+    "medio_gluteo",
+    "adduttori",
+    "avambraccio"
+   ],
+   "allunga": [
+    "flessori_anca"
+   ],
+   "fase": "su",
+   "vista": "lato",
+   "fedb": "Dumbbell_Rear_Lunge"
+  },
+  "bulgaro": {
+   "nome": "Split squat con manubri",
+   "lavora": [
+    "quadricipite",
+    "grande_gluteo"
+   ],
+   "aiuta": [
+    "medio_gluteo",
+    "adduttori"
+   ],
+   "allunga": [
+    "flessori_anca"
+   ],
+   "fase": "su",
+   "vista": "lato",
+   "fedb": "Split_Squat_with_Dumbbells"
+  },
+  "stepup": {
+   "nome": "Step-up con manubri",
+   "lavora": [
+    "quadricipite",
+    "grande_gluteo"
+   ],
+   "aiuta": [
+    "medio_gluteo",
+    "gastrocnemio",
+    "avambraccio"
+   ],
+   "allunga": [],
+   "fase": "su",
+   "vista": "tre_quarti",
+   "fedb": "Dumbbell_Step_Ups"
+  },
+  "stepupl": {
+   "nome": "Step-up con ginocchio alto",
+   "lavora": [
+    "grande_gluteo",
+    "quadricipite"
+   ],
+   "aiuta": [
+    "flessori_anca",
+    "medio_gluteo",
+    "gastrocnemio"
+   ],
+   "allunga": [],
+   "fase": "su",
+   "vista": "tre_quarti",
+   "fedb": "Step-up_with_Knee_Raise"
+  },
+  "rdl": {
+   "nome": "Stacco rumeno",
+   "lavora": [
+    "femorali",
+    "grande_gluteo"
+   ],
+   "aiuta": [
+    "erettori",
+    "adduttori",
+    "avambraccio",
+    "trapezio"
+   ],
+   "allunga": [],
+   "fase": "su",
+   "vista": "lato",
+   "fedb": "Romanian_Deadlift"
+  },
+  "rdl1": {
+   "nome": "Stacco su una gamba",
+   "lavora": [
+    "femorali",
+    "grande_gluteo"
+   ],
+   "aiuta": [
+    "medio_gluteo",
+    "erettori",
+    "obliqui"
+   ],
+   "allunga": [],
+   "fase": "su",
+   "vista": "lato",
+   "fedb": "Kettlebell_One-Legged_Deadlift"
+  },
+  "ponte": {
+   "nome": "Ponte glutei",
+   "lavora": [
+    "grande_gluteo"
+   ],
+   "aiuta": [
+    "femorali",
+    "erettori"
+   ],
+   "allunga": [
+    "flessori_anca"
+   ],
+   "fase": "su",
+   "vista": "lato",
+   "fedb": "Butt_Lift_Bridge"
+  },
+  "ponte1": {
+   "nome": "Ponte su una gamba",
+   "lavora": [
+    "grande_gluteo"
+   ],
+   "aiuta": [
+    "medio_gluteo",
+    "femorali",
+    "obliqui"
+   ],
+   "allunga": [
+    "flessori_anca"
+   ],
+   "fase": "su",
+   "vista": "lato",
+   "fedb": "Single_Leg_Glute_Bridge"
+  },
+  "hipthrust": {
+   "nome": "Hip thrust",
+   "lavora": [
+    "grande_gluteo"
+   ],
+   "aiuta": [
+    "femorali",
+    "quadricipite",
+    "adduttori"
+   ],
+   "allunga": [],
+   "fase": "su",
+   "vista": "lato",
+   "fedb": "Barbell_Hip_Thrust"
+  },
+  "polpacci": {
+   "nome": "Sollevamenti sulle punte",
+   "lavora": [
+    "gastrocnemio",
+    "soleo"
+   ],
+   "aiuta": [
+    "tibiale"
+   ],
+   "allunga": [],
+   "fase": "su",
+   "vista": "dietro",
+   "fedb": "Standing_Dumbbell_Calf_Raise"
+  },
+  "polpaccim": {
+   "nome": "Sollevamenti sulle punte con manubri",
+   "lavora": [
+    "gastrocnemio",
+    "soleo"
+   ],
+   "aiuta": [
+    "avambraccio",
+    "trapezio"
+   ],
+   "allunga": [],
+   "fase": "su",
+   "vista": "dietro",
+   "fedb": "Standing_Dumbbell_Calf_Raise"
+  },
+  "polpaccip": {
+   "nome": "Polpacci alla macchina",
+   "lavora": [
+    "gastrocnemio",
+    "soleo"
+   ],
+   "aiuta": [
+    "trapezio"
+   ],
+   "allunga": [],
+   "fase": "su",
+   "vista": "dietro",
+   "fedb": "Standing_Calf_Raises"
+  },
+  "legcurl": {
+   "nome": "Leg curl",
+   "lavora": [
+    "femorali"
+   ],
+   "aiuta": [
+    "gastrocnemio"
+   ],
+   "allunga": [],
+   "fase": "su",
+   "vista": "lato",
+   "fedb": "Lying_Leg_Curls"
+  },
+  "mostro": {
+   "nome": "Camminata laterale con elastico",
+   "lavora": [
+    "medio_gluteo"
+   ],
+   "aiuta": [
+    "grande_gluteo",
+    "quadricipite"
+   ],
+   "allunga": [],
+   "fase": "ciclo",
+   "vista": "fronte",
+   "fedb": "Monster_Walk"
+  },
+  "adduttori": {
+   "nome": "Adduttori con elastico",
+   "lavora": [
+    "adduttori"
+   ],
+   "aiuta": [
+    "flessori_anca",
+    "obliqui"
+   ],
+   "allunga": [],
+   "fase": "su",
+   "vista": "fronte",
+   "fedb": "Band_Hip_Adductions"
+  },
+  "swing": {
+   "nome": "Swing con kettlebell",
+   "lavora": [
+    "grande_gluteo",
+    "femorali"
+   ],
+   "aiuta": [
+    "erettori",
+    "retto_addome",
+    "deltoide_ant",
+    "avambraccio"
+   ],
+   "allunga": [],
+   "fase": "su",
+   "vista": "lato",
+   "fedb": "One-Arm_Kettlebell_Swings"
+  },
+  "squatjump": {
+   "nome": "Squat jump",
+   "lavora": [
+    "quadricipite",
+    "grande_gluteo",
+    "gastrocnemio"
+   ],
+   "aiuta": [
+    "femorali",
+    "soleo"
+   ],
+   "allunga": [],
+   "fase": "su",
+   "vista": "tre_quarti",
+   "fedb": "Freehand_Jump_Squat"
+  },
+  "skip": {
+   "nome": "Skip veloce",
+   "lavora": [
+    "flessori_anca",
+    "gastrocnemio"
+   ],
+   "aiuta": [
+    "quadricipite",
+    "soleo",
+    "retto_addome"
+   ],
+   "allunga": [],
+   "fase": "ciclo",
+   "vista": "lato",
+   "fedb": "Fast_Skipping"
+  },
+  "balzilat": {
+   "nome": "Balzi laterali",
+   "lavora": [
+    "medio_gluteo",
+    "quadricipite"
+   ],
+   "aiuta": [
+    "grande_gluteo",
+    "adduttori",
+    "gastrocnemio"
+   ],
+   "allunga": [],
+   "fase": "su",
+   "vista": "fronte",
+   "fedb": "Lateral_Bound"
+  },
+  "plank": {
+   "nome": "Plank",
+   "lavora": [
+    "retto_addome",
+    "obliqui"
+   ],
+   "aiuta": [
+    "deltoide_ant",
+    "pettorale",
+    "quadricipite",
+    "dentato"
+   ],
+   "allunga": [],
+   "fase": "tenuta",
+   "vista": "lato",
+   "fedb": "Plank"
+  },
+  "plankl": {
+   "nome": "Plank laterale",
+   "lavora": [
+    "obliqui",
+    "medio_gluteo"
+   ],
+   "aiuta": [
+    "retto_addome",
+    "deltoide_lat",
+    "erettori"
+   ],
+   "allunga": [],
+   "fase": "tenuta",
+   "vista": "fronte",
+   "fedb": "Side_Bridge"
+  },
+  "deadbug": {
+   "nome": "Dead bug",
+   "lavora": [
+    "retto_addome",
+    "obliqui"
+   ],
+   "aiuta": [
+    "flessori_anca"
+   ],
+   "allunga": [],
+   "fase": "ciclo",
+   "vista": "tre_quarti",
+   "fedb": "Dead_Bug"
+  },
+  "superman": {
+   "nome": "Superman",
+   "lavora": [
+    "erettori",
+    "grande_gluteo"
+   ],
+   "aiuta": [
+    "femorali",
+    "deltoide_post",
+    "romboidi"
+   ],
+   "allunga": [],
+   "fase": "su",
+   "vista": "lato",
+   "fedb": "Superman"
+  },
+  "pallof": {
+   "nome": "Pallof press",
+   "lavora": [
+    "obliqui",
+    "retto_addome"
+   ],
+   "aiuta": [
+    "pettorale",
+    "deltoide_ant",
+    "tricipite"
+   ],
+   "allunga": [],
+   "fase": "tenuta",
+   "vista": "fronte",
+   "fedb": "Pallof_Press"
+  },
+  "russian": {
+   "nome": "Russian twist",
+   "lavora": [
+    "obliqui",
+    "retto_addome"
+   ],
+   "aiuta": [
+    "flessori_anca"
+   ],
+   "allunga": [],
+   "fase": "ciclo",
+   "vista": "fronte",
+   "fedb": "Russian_Twist"
+  },
+  "mountain": {
+   "nome": "Mountain climber",
+   "lavora": [
+    "retto_addome",
+    "flessori_anca"
+   ],
+   "aiuta": [
+    "deltoide_ant",
+    "pettorale",
+    "quadricipite"
+   ],
+   "allunga": [],
+   "fase": "ciclo",
+   "vista": "lato",
+   "fedb": "Mountain_Climbers"
+  },
+  "piegamenti": {
+   "nome": "Piegamenti",
+   "lavora": [
+    "pettorale",
+    "tricipite"
+   ],
+   "aiuta": [
+    "deltoide_ant",
+    "dentato",
+    "retto_addome"
+   ],
+   "allunga": [],
+   "fase": "su",
+   "vista": "lato",
+   "fedb": "Pushups"
+  },
+  "panca": {
+   "nome": "Panca piana",
+   "lavora": [
+    "pettorale",
+    "tricipite"
+   ],
+   "aiuta": [
+    "deltoide_ant"
+   ],
+   "allunga": [],
+   "fase": "su",
+   "vista": "lato",
+   "fedb": "Barbell_Bench_Press_-_Medium_Grip"
+  },
+  "spinte": {
+   "nome": "Spinte sopra la testa",
+   "lavora": [
+    "deltoide_ant",
+    "deltoide_lat"
+   ],
+   "aiuta": [
+    "tricipite",
+    "trapezio",
+    "dentato"
+   ],
+   "allunga": [],
+   "fase": "su",
+   "vista": "fronte",
+   "fedb": "Dumbbell_Shoulder_Press"
+  },
+  "rematore": {
+   "nome": "Rematore con manubri",
+   "lavora": [
+    "gran_dorsale",
+    "romboidi"
+   ],
+   "aiuta": [
+    "deltoide_post",
+    "bicipite",
+    "erettori",
+    "avambraccio"
+   ],
+   "allunga": [],
+   "fase": "su",
+   "vista": "lato",
+   "fedb": "Bent_Over_Two-Dumbbell_Row"
+  },
+  "rematorebil": {
+   "nome": "Rematore con bilanciere",
+   "lavora": [
+    "gran_dorsale",
+    "romboidi"
+   ],
+   "aiuta": [
+    "deltoide_post",
+    "bicipite",
+    "erettori",
+    "avambraccio"
+   ],
+   "allunga": [],
+   "fase": "su",
+   "vista": "lato",
+   "fedb": "Bent_Over_Barbell_Row"
+  },
+  "lat": {
+   "nome": "Lat machine",
+   "lavora": [
+    "gran_dorsale"
+   ],
+   "aiuta": [
+    "bicipite",
+    "romboidi",
+    "deltoide_post",
+    "avambraccio"
+   ],
+   "allunga": [],
+   "fase": "giu",
+   "vista": "dietro",
+   "fedb": "Wide-Grip_Lat_Pulldown"
+  },
+  "trazioni": {
+   "nome": "Trazioni",
+   "lavora": [
+    "gran_dorsale",
+    "bicipite"
+   ],
+   "aiuta": [
+    "romboidi",
+    "avambraccio",
+    "retto_addome"
+   ],
+   "allunga": [],
+   "fase": "su",
+   "vista": "dietro",
+   "fedb": "Chin-Up"
+  },
+  "facepull": {
+   "nome": "Face pull",
+   "lavora": [
+    "deltoide_post",
+    "romboidi"
+   ],
+   "aiuta": [
+    "cuffia",
+    "trapezio"
+   ],
+   "allunga": [],
+   "fase": "su",
+   "vista": "dietro",
+   "fedb": "Face_Pull"
+  },
+  "rotest": {
+   "nome": "Rotazione esterna con elastico",
+   "lavora": [
+    "cuffia"
+   ],
+   "aiuta": [
+    "deltoide_post"
+   ],
+   "allunga": [],
+   "fase": "su",
+   "vista": "dietro",
+   "fedb": "External_Rotation_with_Band"
+  },
+  "apertura": {
+   "nome": "Apertura con elastico",
+   "lavora": [
+    "deltoide_post",
+    "romboidi"
+   ],
+   "aiuta": [
+    "cuffia",
+    "trapezio"
+   ],
+   "allunga": [
+    "pettorale"
+   ],
+   "fase": "su",
+   "vista": "dietro",
+   "fedb": "Band_Pull_Apart"
+  },
+  "alzatepost": {
+   "nome": "Alzate posteriori",
+   "lavora": [
+    "deltoide_post"
+   ],
+   "aiuta": [
+    "romboidi",
+    "cuffia",
+    "trapezio"
+   ],
+   "allunga": [],
+   "fase": "su",
+   "vista": "dietro",
+   "fedb": "Seated_Bent-Over_Rear_Delt_Raise"
+  },
+  "contadino": {
+   "nome": "Camminata del contadino",
+   "lavora": [
+    "avambraccio",
+    "trapezio"
+   ],
+   "aiuta": [
+    "obliqui",
+    "retto_addome",
+    "erettori",
+    "grande_gluteo",
+    "quadricipite"
+   ],
+   "allunga": [],
+   "fase": "ciclo",
+   "vista": "fronte",
+   "fedb": "Farmers_Walk"
+  },
+  "gattomucca": {
+   "nome": "Gatto-mucca",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "erettori",
+    "retto_addome",
+    "trapezio"
+   ],
+   "fase": "respiro",
+   "vista": "lato",
+   "fedb": "Cat_Stretch"
+  },
+  "wgs": {
+   "nome": "Affondo con rotazione",
+   "lavora": [],
+   "aiuta": [
+    "quadricipite"
+   ],
+   "allunga": [
+    "flessori_anca",
+    "femorali",
+    "adduttori",
+    "pettorale"
+   ],
+   "fase": "respiro",
+   "vista": "tre_quarti",
+   "fedb": "Worlds_Greatest_Stretch"
+  },
+  "flessori": {
+   "nome": "Flessori dell’anca in ginocchio",
+   "lavora": [
+    "grande_gluteo"
+   ],
+   "aiuta": [],
+   "allunga": [
+    "flessori_anca",
+    "quadricipite"
+   ],
+   "fase": "respiro",
+   "vista": "lato",
+   "fedb": "Kneeling_Hip_Flexor"
+  },
+  "caviglie": {
+   "nome": "Cerchi con le caviglie",
+   "lavora": [
+    "tibiale"
+   ],
+   "aiuta": [
+    "gastrocnemio",
+    "soleo"
+   ],
+   "allunga": [],
+   "fase": "ciclo",
+   "vista": "lato",
+   "fedb": "Ankle_Circles"
+  },
+  "polpaccimuro": {
+   "nome": "Polpacci al muro",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "gastrocnemio",
+    "soleo"
+   ],
+   "fase": "respiro",
+   "vista": "lato",
+   "fedb": "Calf_Stretch_Hands_Against_Wall"
+  },
+  "femorali": {
+   "nome": "Allungamento dei femorali",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "femorali"
+   ],
+   "fase": "respiro",
+   "vista": "lato",
+   "fedb": "Hamstring_Stretch"
+  },
+  "quad": {
+   "nome": "Quadricipite in piedi",
+   "lavora": [],
+   "aiuta": [
+    "medio_gluteo"
+   ],
+   "allunga": [
+    "quadricipite",
+    "flessori_anca"
+   ],
+   "fase": "respiro",
+   "vista": "lato",
+   "fedb": "Standing_Elevated_Quad_Stretch"
+  },
+  "bambino": {
+   "nome": "Posizione del bambino",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "gran_dorsale",
+    "erettori",
+    "grande_gluteo"
+   ],
+   "fase": "respiro",
+   "vista": "lato",
+   "fedb": "Childs_Pose"
+  },
+  "ginpetto": {
+   "nome": "Ginocchio al petto",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "grande_gluteo",
+    "erettori",
+    "femorali"
+   ],
+   "fase": "respiro",
+   "vista": "lato",
+   "fedb": "One_Knee_To_Chest"
+  },
+  "torsione": {
+   "nome": "Torsione della schiena",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "obliqui",
+    "erettori",
+    "gran_dorsale",
+    "grande_gluteo"
+   ],
+   "fase": "respiro",
+   "vista": "tre_quarti",
+   "fedb": "Spinal_Stretch"
+  },
+  "groiners": {
+   "nome": "Groiners",
+   "lavora": [],
+   "aiuta": [
+    "deltoide_ant",
+    "pettorale"
+   ],
+   "allunga": [
+    "adduttori",
+    "flessori_anca"
+   ],
+   "fase": "respiro",
+   "vista": "tre_quarti",
+   "fedb": "Groiners"
+  },
+  "inchworm": {
+   "nome": "Inchworm",
+   "lavora": [
+    "retto_addome",
+    "deltoide_ant"
+   ],
+   "aiuta": [
+    "pettorale",
+    "tricipite"
+   ],
+   "allunga": [
+    "femorali",
+    "gastrocnemio"
+   ],
+   "fase": "ciclo",
+   "vista": "lato",
+   "fedb": "Inchworm"
+  },
+  "cerchibraccia": {
+   "nome": "Cerchi con le braccia",
+   "lavora": [
+    "deltoide_lat",
+    "deltoide_ant",
+    "deltoide_post"
+   ],
+   "aiuta": [
+    "cuffia",
+    "trapezio"
+   ],
+   "allunga": [],
+   "fase": "ciclo",
+   "vista": "fronte",
+   "fedb": "Arm_Circles"
+  },
+  "petto": {
+   "nome": "Apertura del petto",
+   "lavora": [
+    "romboidi",
+    "deltoide_post"
+   ],
+   "aiuta": [],
+   "allunga": [
+    "pettorale",
+    "deltoide_ant"
+   ],
+   "fase": "respiro",
+   "vista": "fronte",
+   "fedb": "Dynamic_Chest_Stretch"
+  },
+  "cerchianca": {
+   "nome": "Cerchi con l’anca",
+   "lavora": [
+    "flessori_anca",
+    "medio_gluteo"
+   ],
+   "aiuta": [
+    "adduttori",
+    "grande_gluteo"
+   ],
+   "allunga": [],
+   "fase": "ciclo",
+   "vista": "fronte",
+   "fedb": "Standing_Hip_Circles"
+  },
+  "calciata": {
+   "nome": "Calciata",
+   "lavora": [
+    "femorali"
+   ],
+   "aiuta": [
+    "gastrocnemio",
+    "soleo",
+    "quadricipite"
+   ],
+   "allunga": [],
+   "fase": "ciclo",
+   "vista": "lato",
+   "fedb": "Double_Leg_Butt_Kick"
+  },
+  "rullopiri": {
+   "nome": "Piriforme con il rullo",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "grande_gluteo",
+    "medio_gluteo"
+   ],
+   "fase": "respiro",
+   "vista": "lato",
+   "fedb": "Piriformis-SMR"
+  },
+  "rulloquad": {
+   "nome": "Quadricipiti con il rullo",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "quadricipite"
+   ],
+   "fase": "respiro",
+   "vista": "lato",
+   "fedb": "Quadriceps-SMR"
+  }
+ }
+}

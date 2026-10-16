@@ -301,7 +301,10 @@ function progressiCard(P, D) {
     <div class="t13 muted" style="line-height:1.4">Quanto sale la frequenza nella seconda metà a parità di sforzo, senza riscaldamento e defaticamento. Sotto il 5% vuol dire che reggi la durata.${b.mancano ? ` Sto leggendo le uscite passate: ne mancano ${b.mancano}, arrivano da sole nelle prossime aperture.` : ""}</div>`;
   const nuoto = `${progTesta("Passo medio in piscina", nOra === null ? "—" : fmtPace(nOra), "/100 m", n.diff, { meglioBasso: true, soglia: 1, dt: (d) => `${Math.round(Math.abs(d))}" ${d < 0 ? "più veloce" : "più lento"} di due mesi fa`, vuoto: n.pts.length ? null : "Servono nuotate in piscina da 800 m" })}
     ${progGrafico(n.pts, { c: "#0A84FF", meglioBasso: true, ref: n.css, refLbl: "CSS " + fmtPace(n.css), fmt: (v) => fmtPace(v), tip: (p) => fmtPace(p.v) + "/100 m", lbl: (p) => `${dGiorno(p.d)}${p.m ? " · " + fmtIt(p.m) + " m" : ""}` })}
-    <div class="t13 muted" style="line-height:1.4">Tutta la nuotata, recuperi compresi: conta come si muove nel tempo. La linea tratteggiata è il tuo CSS.</div>`;
+    <div class="t13 muted" style="line-height:1.4">Tutta la nuotata, recuperi compresi: conta come si muove nel tempo. La linea tratteggiata è il tuo CSS.</div>
+    ${n.swolf && n.swolf.pts.length ? `<div style="height:14px"></div>${progTesta("SWOLF · secondi + bracciate per vasca", Math.round(n.swolf.ora ?? ult(n.swolf.pts)), "", n.swolf.diff, { meglioBasso: true, soglia: 1, dt: (d) => `${Math.round(Math.abs(d))} punti ${d < 0 ? "in meno" : "in più"} di due mesi fa` })}
+    ${progGrafico(n.swolf.pts, { c: "#64D2FF", meglioBasso: true, h: 90, fmt: (v) => String(Math.round(v)), tip: (p) => `SWOLF ${p.v} · ${fmtIt(p.bv, 1)} bracciate`, lbl: (p) => `${dGiorno(p.d)} · vasca ${p.L} m` })}
+    <div class="t13 muted" style="line-height:1.4">Se scende a parità di passo, nuoti più lungo con meno bracciate: è la tecnica che migliora. Si confronta solo nella stessa vasca.</div>` : ""}`;
   const cuore = `${progTesta("FC a riposo · media della settimana", rOra === null ? "—" : Math.round(rOra), "bpm", P.rhr.diff, { meglioBasso: true, soglia: 0.9, dt: (d) => `${Math.round(Math.abs(d))} bpm ${d < 0 ? "in meno" : "in più"} di due mesi fa` })}
     ${progGrafico(P.rhr.pts, { c: "#FF375F", meglioBasso: true, h: 90, fmt: (v) => String(Math.round(v)), tip: (p) => Math.round(p.v) + " bpm", lbl: (p) => "settimana del " + dGiorno(p.d) })}
     ${progTesta("HRV · media della settimana", hOra === null ? "—" : Math.round(hOra), "ms", P.hrv.diff, { soglia: 2, dt: (d) => `${Math.round(Math.abs(d))} ms ${d > 0 ? "in più" : "in meno"} di due mesi fa` })}
@@ -599,11 +602,30 @@ function setupView(A) {
   ${first ? "" : `<div class="card list">
     ${P.avvisato ? "" : `<button class="lrow rowlink" type="button" data-act="avvisa:impostazioni"><span>Avvisa chi ti ha dato l'app che sei pronto</span><span class="chev2">›</span></button>
     <div class="sep l16"></div>`}
-    <button class="lrow rowlink" type="button" data-act="feedback:impostazioni"><span>Invia un commento a chi ti ha dato l'app</span><span class="chev2">›</span></button>
+    <button class="lrow rowlink" type="button" data-act="feedback:impostazioni"><span>${CONFIG.feedbackEmail ? "Invia un commento a chi ti ha dato l'app" : "Invia un commento"}</span><span class="chev2">›</span></button>
     <div class="sep l16"></div>
+    ${CONFIG.repository ? `<button class="lrow rowlink" type="button" data-act="segnala:impostazioni"><span>Segnala un problema su GitHub</span><span class="chev2">›</span></button>
+    <div class="sep l16"></div>` : ""}
+    ${A.tempi ? (DETS.set("diagnostica", diagnosticaHTML(A.tempi)), `<button class="lrow rowlink" type="button" data-det="diagnostica" data-dt="Diagnostica"><span>Diagnostica · tempi di apertura</span><span class="chev2">›</span></button>
+    <div class="sep l16"></div>`) : ""}
     <div class="lrow"><span class="muted">Versione</span><span class="muted">${esc(VERSIONE)}</span></div>
   </div>`}
   </div>`;
+}
+
+// ---- Diagnostica: quanto ci mette ogni fase dell'apertura (ultime aperture), per capire dove l'app è lenta
+function diagnosticaHTML(T) {
+  const durate = (f) => f.map((x, i) => [x[0], x[1] - (i ? f[i - 1][1] : 0)]);
+  const ora = durate(T.ora || []), tot = (T.ora || []).length ? T.ora[T.ora.length - 1][1] : 0;
+  const app = (T.storico || []).filter((x) => x.dove === "app").slice(-10).reverse();
+  const MED = (v) => { const s = v.slice().sort((a, b) => a - b); return s.length ? s[Math.floor(s.length / 2)] : null; };
+  const fasi = ["profilo", "dati", "analisi", "pagina", "mostrata"];
+  const med = fasi.map((f) => [f, MED(app.map((x) => { const d = durate(x.fasi).find((y) => y[0] === f); return d ? d[1] : null; }).filter((v) => v !== null))]);
+  const NOMI = { profilo: "Profilo", dati: "Dati da Intervals", analisi: "Calcoli", pagina: "Costruzione della pagina", mostrata: "Pagina sullo schermo", widget: "Widget" };
+  const riga = (a, b) => `<div class="lrow"><span>${esc(NOMI[a] || a)}</span><span class="num20" style="white-space:nowrap">${b === null || b === undefined ? "—" : fmtIt(b) + '<span class="unit"> ms</span>'}</span></div>`;
+  return `<h3>Questa apertura</h3><p class="t15 muted" style="margin:0 0 10px">Il tempo di ogni fase. Se l'app ti sembra lenta, manda un commento: i tempi sono allegati da soli.</p>
+  <div class="card list">${ora.map((x, i) => (i ? '<div class="sep l16"></div>' : "") + riga(x[0], x[1])).join("")}${ora.length ? '<div class="sep l16"></div>' : ""}${riga("Totale", tot)}</div>
+  ${app.length ? `<h3>${app.length === 1 ? "L'apertura precedente" : `Mediana delle ultime ${app.length} aperture`}</h3><div class="card list">${med.map((x, i) => (i ? '<div class="sep l16"></div>' : "") + riga(x[0], x[1])).join("")}</div>` : ""}`;
 }
 
 // ---- Il piano dell'app: stato del blocco e pulsanti
@@ -1292,6 +1314,8 @@ button.trow{border:0;background:none;font:inherit;color:inherit;width:100%;text-
 @keyframes esx{0%,38%{opacity:0}50%,88%{opacity:1}100%{opacity:0}}
 .esimg.big{width:100%;height:auto;aspect-ratio:4/3}
 .esimg.no{background:var(--fill)}.esimg.no img{display:none}
+.esvid{width:100%;aspect-ratio:1/1;border-radius:14px;overflow:hidden;background:#030304 center/cover no-repeat}.esvid video,.esvid img{width:100%;height:100%;object-fit:cover;display:block}
+.mus{gap:6px}.musr{display:flex;align-items:baseline;gap:8px;font-size:15px;line-height:1.35}.musr b{flex:none;font-weight:600}.musr span:last-child{color:var(--mut)}.musd{width:9px;height:9px;border-radius:50%;flex:none;transform:translateY(-1px)}
 .esrow{display:flex;gap:12px;align-items:center;padding:10px 12px;cursor:pointer}
 .vidb{width:36px;height:36px;border-radius:18px;border:0;background:var(--fill);color:var(--acc);display:flex;align-items:center;justify-content:center;flex:none;padding:0 0 0 3px}
 .mobfs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -1468,7 +1492,7 @@ function IC(t,x){return "<div class=icard><b>"+t+"</b><span>"+x+"</span></div>"}
 var INFO={
 prontezza:["Prontezza",
  "<p>Il numero (0–100) è la prontezza calcolata dal tuo orologio. La parola sotto è il verdetto dell'app, che unisce due controlli separati.</p>"+
- IC("Sistemico","Cuore e sistema nervoso: HRV sotto la tua media, FC a riposo più alta del solito, poco sonno o forma molto negativa lo fanno scendere a cautela o riposo.")+
+ IC("Sistemico","Cuore e sistema nervoso: HRV della settimana sotto la tua fascia normale, FC a riposo più alta del solito, poco sonno o forma molto negativa lo fanno scendere a cautela o riposo.")+
  IC("Tessuti","Muscoli e tendini: una corsa con molto dislivello o un carico molto sopra il piano nelle ultime 72 ore. Il cuore può essere pronto e le gambe no.")+
  "<p class=q>Pronto: segui il piano. Con cautela: niente intensità, la seduta si adatta. Riposo: solo mobilità e sonno.</p>"],
 impronta:["L'impronta",
@@ -1483,6 +1507,7 @@ hrv:["HRV",
  "<p>La variabilità della frequenza cardiaca: quanto cambia l'intervallo tra un battito e l'altro durante la notte, in millisecondi.</p>"+
  IC("Più alta della tua media","Sistema nervoso riposato, pronto a reggere il carico.")+
  IC("Più bassa della tua media","Stress, fatica, poco sonno o un malanno in arrivo: l'app propone di ridurre l'intensità.")+
+ IC("Conta la settimana","Il semaforo guarda la media degli ultimi 7 giorni e la confronta con la tua fascia normale dei 60 giorni prima. Una notte storta da sola accende il giallo solo se anche FC a riposo o sonno dicono lo stesso. Servono almeno 3 notti nella settimana e 20 nei 60 giorni; prima vale il confronto semplice con la media.")+
  "<p class=q>Il valore assoluto non si confronta con quello di altri: conta solo rispetto alla tua media.</p>"],
 fcriposo:["FC a riposo",
  "<p>I battiti al minuto a riposo, misurati di notte. Con l'allenamento tende a scendere nel tempo.</p><p>Se sale di 5 battiti sopra la tua media è un segnale giallo, di 8 o più è rosso: spesso arriva prima della stanchezza che senti.</p>"],
@@ -1699,14 +1724,22 @@ document.addEventListener('click',function(e){var b=e.target.closest&&e.target.c
 var MOB=${JSON.stringify(MOB)},RISC=${JSON.stringify(RISC).replace(/</g, "\\u003c")},MOBH=${JSON.stringify(mobDelGiorno(A)[0])},MOBW=${JSON.stringify(mobDelGiorno(A)[1])},SPC=${JSON.stringify(Object.fromEntries(Object.entries(SPORT).map(([k, x]) => [k, x.c])))},CHEVJ=${JSON.stringify(CHEV)},SCRIVE=${JSON.stringify(!!SCRIVE_APP(A))};
 // ---- Palestra, mobilità e riscaldamenti: esercizi con foto (Free Exercise DB, pubblico dominio) e video su YouTube
 var ESL=${JSON.stringify(ESL).replace(/</g, "\\u003c")};
+var MUSC=${JSON.stringify(MUSC).replace(/</g, "\\u003c")},VIDEO_ES=${JSON.stringify(VIDEO_ES)},VID_BASE=${JSON.stringify(String(CONFIG.repository || "").replace("https://github.com/", "https://cdn.jsdelivr.net/gh/") + "@main/11_Omini_3D/video/")};
 var ES={};ESL.forEach(function(e){ES[e[0]]={k:e[0],n:e[1],id:e[2],a:e[3],g:e[4],r:e[5],c:e[6]}});
 var ATTR_L={libero:0,elastico:1,manubri:2,palestra:3},ATTR_OK={libero:['libero'],elastico:['libero','elastico'],manubri:['libero','manubri'],palestra:['libero','elastico','manubri','palestra']},GR_FORZA={gambe:1,post:1,mono:1,spinta:1,tirata:1,polpacci:1};
 function esImg(id,n){return 'https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/'+id+'/'+n+'.jpg'}
 function esNo(i){i.parentNode.classList.add('no')}
 function esNo2(i){i.style.display='none'}
 function esFoto(e,cls){return '<div class="esimg'+(cls?' '+cls:'')+'"><img src="'+esImg(e.id,0)+'" alt="'+escH(e.n)+'" loading="lazy" onerror="esNo(this)"><img class="f2" src="'+esImg(e.id,1)+'" alt="" loading="lazy" onerror="esNo2(this)"></div>'}
+// Video 3D: la figura fa l'esercizio, i muscoli si accendono (rosso lavorano, rosa aiutano, azzurro si allungano). Senza rete torna la foto.
+function esMedia(e,cls){var f=VIDEO_ES[e.k];if(cls!=='big'||!f||!VID_BASE)return esFoto(e,cls);
+  if(f==='webp')return '<div class="esvid" data-k="'+e.k+'" style="background-image:url('+VID_BASE+e.k+'.jpg)"><img src="'+VID_BASE+e.k+'.webp" alt="'+escH(e.n)+' in 3D" onerror="esVidNo(this)"></div>';
+  return '<div class="esvid" data-k="'+e.k+'"><video src="'+VID_BASE+e.k+'.mp4" poster="'+VID_BASE+e.k+'.jpg" autoplay loop muted playsinline preload="auto" onerror="esVidNo(this)"></video></div>'}
+function esVidNo(v){var b=v.parentNode,e=ES[b.getAttribute('data-k')];if(e)b.outerHTML=esFoto(e,'big')}
+function esMuscoli(k){var m=MUSC[k];if(!m)return '';var R=[['Lavorano','#FF3B30',m[0]],['Aiutano','#FF8A80',m[1]],['Si allungano','#0A84FF',m[2]]].filter(function(r){return r[2].length});
+  return R.length?'<div class="icard mus">'+R.map(function(r){return '<div class="musr"><span class="musd" style="background:'+r[1]+'"></span><b>'+r[0]+'</b><span>'+escH(r[2].join(', '))+'</span></div>'}).join('')+'</div>':''}
 function esVideo(e){var u='https://www.youtube.com/results?search_query='+encodeURIComponent(e.n+' esercizio come si fa');if(!hudSend('apri',u))window.open(u,'_blank')}
-function esScheda(k){var e=ES[k];if(!e)return;openP(e.n,esFoto(e,'big')+'<div class="icard"><b>Come si fa</b><span>'+escH(e.c)+'</span></div><div class="t15 muted">Dose: '+escH(e.r)+'</div><button class="secondary" data-video="'+e.k+'">Guarda il video</button><div class="t13 muted">Foto: Free Exercise DB (pubblico dominio). Il video si apre su YouTube.</div>')}
+function esScheda(k){var e=ES[k];if(!e)return;var v3=!!VIDEO_ES[k];openP(e.n,esMedia(e,'big')+esMuscoli(k)+'<div class="icard"><b>Come si fa</b><span>'+escH(e.c)+'</span></div><div class="t15 muted">Dose: '+escH(e.r)+'</div><button class="secondary" data-video="'+e.k+'">'+(v3?'Altri video su YouTube':'Guarda il video')+'</button><div class="t13 muted">'+(v3?'Animazione 3D di HUD (figura MakeHuman, CC0). ':'Foto: Free Exercise DB (pubblico dominio). ')+'Il video si apre su YouTube.</div>')}
 document.addEventListener('click',function(e){var v=e.target.closest&&e.target.closest('[data-video]');if(v){e.preventDefault();e.stopPropagation();var x=ES[v.getAttribute('data-video')];if(x)esVideo(x);return}
   var s=e.target.closest&&e.target.closest('[data-es]');if(s){e.preventDefault();esScheda(s.getAttribute('data-es'))}},true);
 // Allenamenti di palestra a scelta: obiettivo, attrezzi, tempo (cambiano ogni giorno, restano uguali nella giornata)
@@ -1740,7 +1773,7 @@ function guidaMostra(){var G=GUIDA;if(!G)return;if(G.tm){clearInterval(G.tm);G.t
   if(G.i>=G.p.length){openP(G.tit,'<div class="vstack" style="gap:12px;align-items:center;padding:30px 0"><div class="t28 bold">Fatto</div><div class="t15 muted">'+G.p.length+' passi completati. Bravo.</div><button class="primary" style="align-self:stretch" id="gd-fine">Chiudi</button></div>');document.getElementById('gd-fine').addEventListener('click',function(){guidaStop();closeP()});return}
   var P=G.p[G.i],sec=G.riposo?P.rec:(G.tempo?P.sec:0),fino=Date.now()+sec*1000;
   var h=G.riposo?'<div class="label caps">Recupero</div><div class="gdt" id="gd-t">'+sec+'"</div><div class="t15 muted">Dopo: '+escH((G.p[G.i+1]||{e:{n:'fine'}}).e.n)+'</div><button class="secondary" id="gd-ok">Salta</button>'
-    :esFoto(P.e,'big')+'<div class="hstack" style="justify-content:space-between;align-items:baseline"><span class="t22 bold">'+escH(P.e.n)+'</span><span class="t13 muted">'+(G.i+1)+' di '+G.p.length+'</span></div><div class="t17 semi">'+escH(P.testo)+'</div>'+(sec?'<div class="gdt" id="gd-t">'+sec+'"</div>':'')+'<div class="t15 muted">'+escH(P.e.c)+'</div>'+
+    :esMedia(P.e,'big')+'<div class="hstack" style="justify-content:space-between;align-items:baseline"><span class="t22 bold">'+escH(P.e.n)+'</span><span class="t13 muted">'+(G.i+1)+' di '+G.p.length+'</span></div><div class="t17 semi">'+escH(P.testo)+'</div>'+(sec?'<div class="gdt" id="gd-t">'+sec+'"</div>':'')+'<div class="t15 muted">'+escH(P.e.c)+'</div>'+
       '<div class="btnrow" style="grid-template-columns:1fr 2fr"><button class="secondary" data-video="'+P.e.k+'">Video</button><button class="primary" id="gd-ok">'+(sec?'Avanti':'Fatto')+'</button></div>';
   openP(G.tit,'<div class="vstack" style="gap:12px">'+h+'<div class="pbar"><div style="width:'+Math.round(G.i/G.p.length*100)+'%;background:var(--accbg)"></div></div></div>');
   function avanti(){if(!GUIDA)return;if(!G.riposo&&P.rec&&G.i<G.p.length-1){G.riposo=true}else{G.riposo=false;G.i++}guidaMostra()}
@@ -1887,6 +1920,7 @@ function metricheAtt(A){if(A.hero)return{hero:A.hero,list:A.lista||[]};var L=[],
   if(A.dplus>20)add('DISLIVELLO',itN(A.dplus),'M');
   if(sp==='forza'&&A.kg)add('SOLLEVATI',itN(A.kg),'KG');
   if(sp==='nuoto'&&A.vasche)add('VASCHE',A.vasche,'');
+  if(sp==='nuoto'){var nuS=aNuoto(A);if(nuS)add('SWOLF',nuS.swolf,'')}
   if(A.tss)add('CARICO',A.tss,'TSS');
   if(A.kcal)add('CALORIE',itN(A.kcal),'KCAL');
   if(A.hrM)add('FC MAX',A.hrM,'BPM');
@@ -1952,6 +1986,9 @@ function aData(ds){var d=aD(ds);return GIOL[d.getDay()]+' '+d.getDate()+' '+MESL
 function aSport(sp){return ATT.sport[sp]||ATT.sport.altro}
 function aPasso(a){if(!a.m||!a.sec)return null;if(a.sp==='nuoto')return paceS(a.sec/(a.m/100));return paceS(a.sec/(a.m/1000))}
 // Le cifre di un'attività, quelle che ci sono
+// Nuoto: dalla frequenza di bracciata (Intervals la chiama cadenza) e dalla vasca. SWOLF = secondi + bracciate per vasca, più basso è meglio
+function aNuoto(a){if(!a||a.sp!=='nuoto'||!a.cad||!a.m||!a.sec)return null;var L=a.vasca||(a.vasche?a.m/a.vasche:0);if(!(L>=15&&L<=100))return null;
+  var v=a.m/a.sec,tl=L/v,bv=a.cad*tl/60;if(!(bv>3&&bv<80))return null;return{L:L,tl:tl,bv:bv,dps:v*60/a.cad,swolf:Math.round(tl+bv)}}
 function aMetriche(a,d){var L=[],s=(d&&d.s)||{};function add(l,v,u){if(v!==null&&v!==undefined&&v!==''&&v!=='—')L.push([l,v,u||''])}
   var corsaLike=a.sp==='corsa'||(a.sp==='altro'&&a.m>500);
   add('Durata',aDur(a.sec));if(a.el&&a.el-a.sec>60)add('Tempo totale',aDur(a.el));
@@ -1965,10 +2002,11 @@ function aMetriche(a,d){var L=[],s=(d&&d.s)||{};function add(l,v,u){if(v!==null&
   if(a.kcal)add('Calorie',itN(a.kcal),'kcal');
   if(a.tss!==null&&a.tss!==undefined)add('Carico',a.tss,'TSS');if(a.int)add('Intensità',Math.round(a.int),'%');if(a.trimp)add('TRIMP',Math.round(a.trimp),'');
   if(a.dplus)add('Dislivello +',itN(a.dplus),'m');if(a.dminus)add('Dislivello −',itN(a.dminus),'m');
-  if(a.cad)add(a.sp==='corsa'?'Cadenza':a.sp==='nuoto'?'Bracciate':'Cadenza',a.sp==='corsa'?Math.round(a.cad*2):Math.round(a.cad),a.sp==='corsa'?'passi/min':a.sp==='nuoto'?'/min':'rpm');
+  if(a.cad)add(a.sp==='corsa'?'Cadenza':a.sp==='nuoto'?'Frequenza bracciata':'Cadenza',a.sp==='corsa'?Math.round(a.cad*2):Math.round(a.cad),a.sp==='corsa'?'passi/min':a.sp==='nuoto'?'/min':'rpm');
   if(a.w)add('Potenza media',a.w,'W');if(a.np)add('Potenza normalizzata',a.np,'W');
   if(a.stride)add('Lunghezza passo',itN(a.stride,2),'m');if(a.gct)add('Contatto al suolo',Math.round(a.gct),'ms');if(a.vo)add('Oscillazione verticale',itN(a.vo>30?a.vo/10:a.vo,1),'cm');
   if(a.vasche)add('Vasche',a.vasche+(a.vasca?' da '+a.vasca+' m':''),'');
+  var nu=aNuoto(a);if(nu){add('Bracciate per vasca',itN(nu.bv,1),'');add('Metri per bracciata',itN(nu.dps,2),'m');add('SWOLF',nu.swolf,'')}
   if(a.kg)add('Sollevati',itN(a.kg),'kg');
   if(a.temp!==null&&a.temp!==undefined)add(a.meteo?'Temperatura':'Temp. al polso',itN(a.temp,0),'°C');
   if(s.resp){var r=s.resp.reduce(function(x,y){return x+y},0)/s.resp.length;add('Respirazione',Math.round(r),'atti/min')}

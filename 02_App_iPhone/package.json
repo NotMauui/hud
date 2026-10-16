@@ -5,7 +5,9 @@
   "scripts": {
     "build": "node costruisci.js",
     "controlla": "node costruisci.js --controlla",
-    "test": "node costruisci.js --controlla && node ../04_Generatore/test-carburante.js && node ../04_Generatore/test-calorie-adattive.js && node ../04_Generatore/test-generatore.js && node ../04_Generatore/test-soglie.js && node ../04_Generatore/test-verifiche.js"
+    "test": "node costruisci.js --controlla && node ../04_Generatore/test-carburante.js && node ../04_Generatore/test-calorie-adattive.js && node ../04_Generatore/test-hrv.js && node ../04_Generatore/test-generatore.js && node ../04_Generatore/test-soglie.js && node ../04_Generatore/test-verifiche.js"
   },
-  "devDependencies": { "@types/scriptable-ios": "^1.7.9" }
+  "devDependencies": {
+    "@types/scriptable-ios": "^1.7.9"
+  }
 }

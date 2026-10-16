@@ -12,7 +12,7 @@
 //  creato dalla configurazione al primo avvio: qui sotto ci sono solo valori generici.
 // ============================================================
 
-const VERSIONE = "1.6";
+const VERSIONE = "1.7";
 
 // ------------------------------------------------------------
 //  CONFIGURAZIONE — valori di partenza uguali per tutti
@@ -22,6 +22,7 @@ const CONFIG = {
   sport: ["nuoto", "bici", "corsa"], // gli sport della persona, dal profilo
   soglieAutomatiche: true, // le soglie stimate dalle attività vanno su Intervals da sole, tranne quelle fissate nel profilo
   soglieFissate: [],
+  repository: "https://github.com/NotMauui/hud", // dove si segnalano i problemi (Impostazioni › Segnala un problema)
   feedbackEmail: "", // dove arrivano i commenti dei tester (vuoto: la mail si apre senza destinatario)
 
   // Obiettivo: arriva dal profilo ({ nome, data, tipo, ctlGara }) oppure null.
@@ -484,6 +485,12 @@ function progressi(raw, now, dettagli, dur) {
   const bici = lunghiBici.map((a) => { const d = dettagli[a.id]; return d && d.deriva ? { d: ds(a), g: g(a), v: d.deriva.v, tipo: d.deriva.tipo, min: Math.round(a.moving_time / 60) } : null; }).filter(Boolean).sort((a, b) => a.d.localeCompare(b.d));
   const nuoto = acts.filter((a) => a.type === "Swim" && (num(a.distance) || 0) >= 800 && num(a.moving_time) && g(a) <= 180 && g(a) >= 0)
     .map((a) => ({ d: ds(a), g: g(a), v: Math.round(a.moving_time / (a.distance / 100)), m: Math.round(a.distance) })).sort((a, b) => a.d.localeCompare(b.d));
+  // SWOLF (secondi + bracciate per vasca, più basso è meglio): serve la frequenza di bracciata e la vasca
+  const swolf = acts.filter((a) => a.type === "Swim" && num(a.average_cadence) && num(a.distance) && num(a.moving_time) && g(a) <= 180 && g(a) >= 0).map((a) => {
+    const m = num(a.distance), L = num(a.pool_length) || (num(a.lengths) ? m / num(a.lengths) : 0), v = m / num(a.moving_time);
+    if (!(L >= 15 && L <= 100)) return null; const tl = L / v, bv = (num(a.average_cadence) * tl) / 60;
+    return bv > 3 && bv < 80 ? { d: ds(a), g: g(a), v: Math.round(tl + bv), bv: Math.round(bv * 10) / 10, L: Math.round(L), m: Math.round(m) } : null;
+  }).filter(Boolean).sort((a, b) => a.d.localeCompare(b.d));
   const W = (raw.wellness || []).filter((w) => w && w.id && daysBetween(parseYMD(w.id), now) <= 111 && daysBetween(parseYMD(w.id), now) >= 0);
   const sett = [];
   for (let k = 15; k >= 0; k--) { const xs = W.filter((w) => Math.floor(daysBetween(parseYMD(w.id), now) / 7) === k); if (xs.length) sett.push({ g: k * 7, d: ymd(addDays(now, -k * 7)), rhr: MED(xs.map((w) => num(w.restingHR))), hrv: MED(xs.map((w) => num(w.hrv) ?? num(w.hrvSDNN))) }); }
@@ -491,7 +498,7 @@ function progressi(raw, now, dettagli, dur) {
   return {
     corsa: dur,
     bici: { pts: bici, ...confronto(bici), mancano: lunghiBici.filter((a) => !dettagli[a.id]).length },
-    nuoto: { pts: nuoto, ...confronto(nuoto), css: toSec(CONFIG.nuoto.css) },
+    nuoto: { pts: nuoto, ...confronto(nuoto), css: toSec(CONFIG.nuoto.css), swolf: { pts: swolf, ...confronto(swolf) } },
     rhr: cuore("rhr"), hrv: cuore("hrv"),
   };
 }
@@ -687,7 +694,7 @@ function demoData(now) {
   const act = (d, type, min, load, extra = {}) => ({ start_date_local: ymd(addDays(mon, d)) + "T07:00:00", type, moving_time: min * 60, icu_training_load: load, ...extra });
   const activities = [];
   const todayIdx = daysBetween(mon, now);
-  const doneList = [act(0, "Swim", 44, 42, { distance: 1400 }), act(1, "Run", 31, 26, { distance: 5200 }), act(2, "Swim", 57, 47, { distance: 2600 })];
+  const doneList = [act(0, "Swim", 44, 42, { distance: 1400, pool_length: 25, average_cadence: 27 }), act(1, "Run", 31, 26, { distance: 5200 }), act(2, "Swim", 57, 47, { distance: 2600, pool_length: 25, average_cadence: 26.5 })];
   for (const a of doneList) if (daysBetween(mon, parseYMD(a.start_date_local)) < todayIdx) activities.push(a);
   // storico demo di 180 giorni: corse con FC e velocità, tapis in estate, nuoto e bici
   for (let i = 180; i >= 1; i--) {
@@ -706,7 +713,7 @@ function demoData(now) {
     if (wd === 2) run("Corsa facile", 40);
     if (wd === 4) run(k % 2 ? "Soglia 6×5'" : "VO2 5×3'", 60, { average_heartrate: 158, max_heartrate: i <= 40 && i > 20 ? 165 : 178, icu_intensity: 88 });
     if (wd === 0) run("Corsa lungo", 70 + (k % 4) * 10, { decoupling: 3 + ((k * 3) % 50) / 10 });
-    if (wd === 1 || wd === 3 || wd === 5) activities.push({ start_date_local: ymd(d) + "T06:30:00", type: "Swim", name: "Nuoto", moving_time: 3300, distance: 2800, icu_training_load: 45 });
+    if (wd === 1 || wd === 3 || wd === 5) activities.push({ start_date_local: ymd(d) + "T06:30:00", type: "Swim", name: "Nuoto", moving_time: 3300, distance: 2800, icu_training_load: 45, pool_length: 25, lengths: 112, average_cadence: 26 + i / 30 + (k % 3) * 0.6 });
     if (wd === 6) activities.push({ start_date_local: ymd(d) + "T09:00:00", type: "VirtualRide", name: "Bici Z2", moving_time: 6000, icu_training_load: 80 });
   }
   // diario demo: check-in degli ultimi 40 giorni
@@ -1140,6 +1147,10 @@ function stimaSoglie(raw, now, att) {
     return g;
   }).filter(Boolean);
 
+  // retta distanza–tempo dei migliori sforzi (minimi quadrati): pendenza = velocità critica, intercetta = riserva (D')
+  const retta = (P) => { const n = P.length, mt = P.reduce((s, p) => s + p.t, 0) / n, md = P.reduce((s, p) => s + p.d, 0) / n;
+    const stt = P.reduce((s, p) => s + (p.t - mt) ** 2, 0), std = P.reduce((s, p) => s + (p.t - mt) * (p.d - md), 0), sdd = P.reduce((s, p) => s + (p.d - md) ** 2, 0);
+    const v = stt ? std / stt : 0; return { v, d0: md - v * mt, r2: stt && sdd ? (std * std) / (stt * sdd) : 0 }; };
   const fcAtt = S_N(AC.max_hr) || S_N(AB.max_hr);
   const med = (v) => { const x = v.filter(Boolean).sort((p, q) => p - q); return x.length ? x[Math.floor(x.length / 2)] : null; };
   // sforzo davvero duro: lo dicono Intervals (intensità, gara), il nome, il tempo in zona 4+ o i battiti rispetto alla FC massima.
@@ -1196,10 +1207,23 @@ function stimaSoglie(raw, now, att) {
       const v = S_N(a.gap) || S_N(a.average_speed);
       return v && v > 1.8 && v < 6.5 ? { v: v * Math.pow(min(a) / 60, 0.06), a, alta: a.average_heartrate >= 0.97 * LT && min(a) >= 20 } : null;
     }).filter(Boolean).sort((x, y) => y.v - x.v);
+    // velocità critica: le migliori uscite dure intere (3–60') su durate diverse, almeno 3 e con la più lunga doppia della più corta
+    const vc = (() => {
+      const P = di("corsa", 120).filter((a) => !indoor(a) && duro(a) && min(a) >= 3 && min(a) <= 60 && S_N(a.distance)).map((a) => ({ t: S_N(a.moving_time), d: a.distance, a }));
+      if (P.length < 3 || Math.max(...P.map((p) => p.t)) < 2 * Math.min(...P.map((p) => p.t))) return null;
+      const r = retta(P); return r.v > 1.8 && r.v < 6.5 && r.d0 > 20 && r.d0 < 500 && r.r2 >= 0.98 ? { v: r.v, d0: r.d0, n: P.length } : null;
+    })();
     if (duri.length) {
       const b = duri[0];
-      passo = val(pAtt ? Math.min(b.v, pAtt * 1.08) : b.v, "attivita", b.alta ? "alta" : "media", `${Math.round(min(b.a))}' a ${S_PACE(1000 / (S_N(b.a.gap) || b.a.average_speed))}/km${S_N(b.a.gap) ? " (corretto per la pendenza)" : ""} e ${Math.round(b.a.average_heartrate)} bpm (${S_DATA(b.a)})`);
+      // conferma: un secondo sforzo entro il 4% del migliore. Senza, il valore resta sulla pagina ma su Intervals non cambia
+      const conferma = duri.length >= 2 && duri[1].v >= 0.96 * b.v;
+      passo = val(pAtt ? Math.min(b.v, pAtt * 1.08) : b.v, "attivita", b.alta ? "alta" : "media", `${Math.round(min(b.a))}' a ${S_PACE(1000 / (S_N(b.a.gap) || b.a.average_speed))}/km${S_N(b.a.gap) ? " (corretto per la pendenza)" : ""} e ${Math.round(b.a.average_heartrate)} bpm (${S_DATA(b.a)})${conferma ? "" : pAtt ? ": da confermare con un secondo sforzo simile" : ""}`);
+      passo.confermato = conferma;
       if (pAtt && passo.v <= pAtt * 1.03) passo = null; // non più veloce del valore impostato: resta quello
+    } else if (vc && (!pAtt || vc.v * 0.97 > pAtt * 1.03)) {
+      // la soglia (circa un'ora) è un po' più lenta della velocità critica
+      passo = val(pAtt ? Math.min(vc.v * 0.97, pAtt * 1.08) : vc.v * 0.97, "attivita", "media", `Velocità critica da ${vc.n} sforzi duri (${S_PACE(1000 / vc.v)}/km), portata a un'ora`);
+      passo.confermato = true;
     } else if (!pAtt) {
       const pts = di("corsa", 60).filter((a) => !indoor(a) && min(a) >= 20 && S_N(a.average_heartrate) && a.average_heartrate >= 0.7 * LT && a.average_heartrate < 0.95 * LT)
         .map((a) => ({ x: a.average_heartrate, y: S_N(a.gap) || S_N(a.average_speed) })).filter((p) => p.y && p.y > 1.8 && p.y < 6.5);
@@ -1223,6 +1247,16 @@ function stimaSoglie(raw, now, att) {
     const ev = a.paired_event_id ? ((raw && raw.events) || []).find((e) => e && e.id === a.paired_event_id) : null;
     if (/css|test/i.test((a.name || "") + " " + ((ev && ev.name) || "")) && r4 && r2 && 4 * r4.passo > 2 * r2.passo && (!css || css.data < a.start_date_local))
       css = { s: Math.round((4 * r4.passo - 2 * r2.passo) / 2), aff: "alta", perche: `Test 400 + 200 del ${S_DATA(a)}`, data: a.start_date_local };
+  }
+  if (!css) {
+    // più distanze nuotate a tutta (sedute di test, gara o "a tutta"): la retta distanza–tempo dà il CSS come pendenza
+    const best = {};
+    for (const a of nuoti) if (/css|test|gara|race|tutta|max|crono|time ?trial|\btt\b/i.test(a.name || "")) for (const g of giri(a)) if (g.m >= 100 && g.m <= 1500 && g.passo >= 50) { const t = (g.passo * g.m) / 100; if (!best[g.m] || t < best[g.m].t) best[g.m] = { t, d: g.m, a }; }
+    const P = Object.values(best);
+    if (P.length >= 3 && P.some((p) => p.d >= 400)) {
+      const r = retta(P), s100 = r.v > 0 ? 100 / r.v : 0;
+      if (s100 >= 50 && s100 <= 240 && r.d0 >= 0 && r.d0 < 80 && r.r2 >= 0.99) css = { s: Math.round(s100), aff: P.length >= 4 ? "alta" : "media", perche: `Da ${P.length} distanze nuotate a tutta (${P.map((p) => p.d).sort((x, y) => x - y).join(", ")} m)`, data: P.map((p) => p.a.start_date_local).sort().pop() };
+    }
   }
   if (!css) {
     const rip = [];
@@ -1258,7 +1292,7 @@ function stimaSoglie(raw, now, att) {
   //  tranne il passo dalla retta passo–battiti quando su Intervals manca del tutto)
   if (out.fcMax && out.fcMax.fonte === "attivita") { cambio("Run", "max_hr", fcAtt, out.fcMax.v, `FC massima ${out.fcMax.v} bpm`); cambio("Ride", "max_hr", S_N(AB.max_hr), out.fcMax.v, null); }
   if (out.corsa.lthr && out.corsa.lthr.fonte === "attivita") cambio("Run", "lthr", S_N(AC.lthr), out.corsa.lthr.v, `soglia FC di corsa ${out.corsa.lthr.v} bpm`);
-  if (out.corsa.passo && (out.corsa.passo.fonte === "attivita" || (out.corsa.passo.fonte === "stima" && !pAtt))) cambio("Run", "threshold_pace", pAtt, out.corsa.passo.v, `passo soglia ${S_PACE(1000 / out.corsa.passo.v)}/km`);
+  if (out.corsa.passo && ((out.corsa.passo.fonte === "attivita" && (out.corsa.passo.confermato || !pAtt)) || (out.corsa.passo.fonte === "stima" && !pAtt))) cambio("Run", "threshold_pace", pAtt, out.corsa.passo.v, `passo soglia ${S_PACE(1000 / out.corsa.passo.v)}/km`);
   if (out.bici.lthr && out.bici.lthr.fonte === "attivita") cambio("Ride", "lthr", S_N(AB.lthr), out.bici.lthr.v, `soglia FC in bici ${out.bici.lthr.v} bpm`);
   if (out.bici.ftp && out.bici.ftp.fonte !== "intervals") cambio("Ride", "ftp", ftpAtt, out.bici.ftp.v, `FTP ${out.bici.ftp.v} W`);
   if (out.nuoto.css && out.nuoto.css.fonte !== "intervals") cambio("Swim", "threshold_pace", cssAtt, out.nuoto.css.v, `CSS ${S_PACE(100 / out.nuoto.css.v)}/100 m`);
@@ -2830,6 +2864,17 @@ const haAvvisi = (desc) => /^\s*-\s*(?:mangia|bevi)\b/im.test(String(desc || "")
 // ------------------------------------------------------------
 //  Analisi
 // ------------------------------------------------------------
+// Tendenza dell'HRV: media di 7 giorni del ln rMSSD (almeno 3 notti) e fascia normale dai 60 giorni prima (almeno 20 notti)
+function trendHRV(wellness, oggi) {
+  const v = (w) => { const x = num(w.hrv) ?? num(w.hrvSDNN); return x !== null && x > 0 ? Math.log(x) : null; };
+  const d0 = parseYMD(oggi), fa = (w) => daysBetween(parseYMD(w.id), d0);
+  const ult = wellness.filter((w) => fa(w) >= 0 && fa(w) <= 6).map(v).filter((x) => x !== null);
+  const base = wellness.filter((w) => fa(w) >= 7 && fa(w) <= 66).map(v).filter((x) => x !== null);
+  if (ult.length < 3 || base.length < 20) return null;
+  const r7 = mean(ult), mu = mean(base), sdv = sd(base) || 0.05;
+  return { r7, mu, sdv, lo: mu - 0.5 * sdv, hi: mu + 0.5 * sdv, n7: ult.length, nBase: base.length, ms7: Math.round(Math.exp(r7)), msLo: Math.round(Math.exp(mu - 0.5 * sdv)), msHi: Math.round(Math.exp(mu + 0.5 * sdv)) };
+}
+
 function analyze(raw, now, diary) {
   completaSoglie(raw);
   const today = ymd(now);
@@ -2855,14 +2900,7 @@ function analyze(raw, now, diary) {
   const hrv = num(wToday.hrv) ?? num(wToday.hrvSDNN);
   const hrvPrev = prev.map((w) => num(w.hrv) ?? num(w.hrvSDNN)).filter((x) => x !== null);
   let hrvMean = null;
-  if (hrv !== null) {
-    sys.hasData = true;
-    if (hrvPrev.length >= 3) {
-      hrvMean = mean(hrvPrev); const s = sd(hrvPrev) || 1;
-      if (hrv < hrvMean - 2 * s) { bump(sys, "rosso"); sys.reasons.push("HRV molto bassa"); }
-      else if (hrv < hrvMean - s) { bump(sys, "giallo"); sys.reasons.push("HRV sotto la media"); }
-    }
-  }
+  if (hrv !== null) { sys.hasData = true; if (hrvPrev.length >= 3) hrvMean = mean(hrvPrev); }
   const rhr = num(wToday.restingHR);
   const rhrPrev = prev.map((w) => num(w.restingHR)).filter((x) => x !== null);
   let rhrMean = null;
@@ -2882,6 +2920,22 @@ function analyze(raw, now, diary) {
   const atl = num(wToday.atl) ?? num(wToday.icu_atl);
   const tsb = ctl !== null && atl !== null ? ctl - atl : null;
   if (tsb !== null) { sys.hasData = true; if (tsb < S.tsbRosso) { bump(sys, "rosso"); sys.reasons.push("forma troppo negativa"); } }
+  // HRV: conta la tendenza, non la singola notte (Plews, Javaloyes). Media di 7 giorni del ln rMSSD contro la tua fascia
+  // normale (60 giorni prima, ± 0,5 deviazioni standard). Una notte storta da sola accende il giallo solo se anche
+  // la FC a riposo o il sonno dicono la stessa cosa. Con meno di 20 notti nei 60 giorni vale la regola semplice di prima.
+  const altriSegnali = (rhr !== null && rhrMean !== null && rhr - rhrMean >= S.fcRiposoGiallo) || (sleepScore !== null && sleepScore < S.sonnoGiallo) || (sleepSecs !== null && sleepSecs < S.sonnoOreGiallo * 3600);
+  const hrvTrend = trendHRV(wellness, wToday.id || today);
+  if (hrv !== null && hrvTrend) {
+    const { r7, lo, hi, sdv, mu } = hrvTrend;
+    if (r7 < mu - 1.5 * sdv || (r7 < lo && altriSegnali)) { bump(sys, r7 < mu - 1.5 * sdv && altriSegnali ? "rosso" : "giallo"); sys.reasons.push("HRV della settimana sotto la tua fascia"); }
+    else if (r7 < lo) { bump(sys, "giallo"); sys.reasons.push("HRV della settimana sotto la tua fascia"); }
+    else if (r7 > hi + sdv && tsb !== null && tsb < -20) { bump(sys, "giallo"); sys.reasons.push("HRV insolitamente alta con molto carico"); }
+    else if (Math.log(hrv) < r7 - 2 * sdv && altriSegnali) { bump(sys, "giallo"); sys.reasons.push("HRV di stanotte bassa"); }
+  } else if (hrv !== null && hrvPrev.length >= 3) {
+    const s = sd(hrvPrev) || 1;
+    if (hrv < hrvMean - 2 * s) { bump(sys, "rosso"); sys.reasons.push("HRV molto bassa"); }
+    else if (hrv < hrvMean - s) { bump(sys, "giallo"); sys.reasons.push("HRV sotto la media"); }
+  }
 
   // --- Tessuti
   const tis = { state: "verde", reasons: [] };
@@ -3100,7 +3154,7 @@ function analyze(raw, now, diary) {
 
   const A = {
     now, raceDays: CONFIG.obiettivo && CONFIG.obiettivo.data ? daysBetween(now, parseYMD(CONFIG.obiettivo.data)) : null, worst, sys, tis, verdict,
-    metrics: { hrv, hrvMean, rhr, rhrMean, ctl, atl, tsb, ramp: num(wToday.rampRate) },
+    metrics: { hrv, hrvMean, hrvTrend, rhr, rhrMean, ctl, atl, tsb, ramp: num(wToday.rampRate) },
     sleep, todayEv, tomorrowEv, domani, gymToday, weeks, ladderCheck, season,
     fitness: { hist: fit, proj },
     decoupling: longRuns.length ? num(longRuns[0].decoupling) : null, weight, lastAct,
@@ -3846,7 +3900,10 @@ function progressiCard(P, D) {
     <div class="t13 muted" style="line-height:1.4">Quanto sale la frequenza nella seconda metà a parità di sforzo, senza riscaldamento e defaticamento. Sotto il 5% vuol dire che reggi la durata.${b.mancano ? ` Sto leggendo le uscite passate: ne mancano ${b.mancano}, arrivano da sole nelle prossime aperture.` : ""}</div>`;
   const nuoto = `${progTesta("Passo medio in piscina", nOra === null ? "—" : fmtPace(nOra), "/100 m", n.diff, { meglioBasso: true, soglia: 1, dt: (d) => `${Math.round(Math.abs(d))}" ${d < 0 ? "più veloce" : "più lento"} di due mesi fa`, vuoto: n.pts.length ? null : "Servono nuotate in piscina da 800 m" })}
     ${progGrafico(n.pts, { c: "#0A84FF", meglioBasso: true, ref: n.css, refLbl: "CSS " + fmtPace(n.css), fmt: (v) => fmtPace(v), tip: (p) => fmtPace(p.v) + "/100 m", lbl: (p) => `${dGiorno(p.d)}${p.m ? " · " + fmtIt(p.m) + " m" : ""}` })}
-    <div class="t13 muted" style="line-height:1.4">Tutta la nuotata, recuperi compresi: conta come si muove nel tempo. La linea tratteggiata è il tuo CSS.</div>`;
+    <div class="t13 muted" style="line-height:1.4">Tutta la nuotata, recuperi compresi: conta come si muove nel tempo. La linea tratteggiata è il tuo CSS.</div>
+    ${n.swolf && n.swolf.pts.length ? `<div style="height:14px"></div>${progTesta("SWOLF · secondi + bracciate per vasca", Math.round(n.swolf.ora ?? ult(n.swolf.pts)), "", n.swolf.diff, { meglioBasso: true, soglia: 1, dt: (d) => `${Math.round(Math.abs(d))} punti ${d < 0 ? "in meno" : "in più"} di due mesi fa` })}
+    ${progGrafico(n.swolf.pts, { c: "#64D2FF", meglioBasso: true, h: 90, fmt: (v) => String(Math.round(v)), tip: (p) => `SWOLF ${p.v} · ${fmtIt(p.bv, 1)} bracciate`, lbl: (p) => `${dGiorno(p.d)} · vasca ${p.L} m` })}
+    <div class="t13 muted" style="line-height:1.4">Se scende a parità di passo, nuoti più lungo con meno bracciate: è la tecnica che migliora. Si confronta solo nella stessa vasca.</div>` : ""}`;
   const cuore = `${progTesta("FC a riposo · media della settimana", rOra === null ? "—" : Math.round(rOra), "bpm", P.rhr.diff, { meglioBasso: true, soglia: 0.9, dt: (d) => `${Math.round(Math.abs(d))} bpm ${d < 0 ? "in meno" : "in più"} di due mesi fa` })}
     ${progGrafico(P.rhr.pts, { c: "#FF375F", meglioBasso: true, h: 90, fmt: (v) => String(Math.round(v)), tip: (p) => Math.round(p.v) + " bpm", lbl: (p) => "settimana del " + dGiorno(p.d) })}
     ${progTesta("HRV · media della settimana", hOra === null ? "—" : Math.round(hOra), "ms", P.hrv.diff, { soglia: 2, dt: (d) => `${Math.round(Math.abs(d))} ms ${d > 0 ? "in più" : "in meno"} di due mesi fa` })}
@@ -4144,11 +4201,30 @@ function setupView(A) {
   ${first ? "" : `<div class="card list">
     ${P.avvisato ? "" : `<button class="lrow rowlink" type="button" data-act="avvisa:impostazioni"><span>Avvisa chi ti ha dato l'app che sei pronto</span><span class="chev2">›</span></button>
     <div class="sep l16"></div>`}
-    <button class="lrow rowlink" type="button" data-act="feedback:impostazioni"><span>Invia un commento a chi ti ha dato l'app</span><span class="chev2">›</span></button>
+    <button class="lrow rowlink" type="button" data-act="feedback:impostazioni"><span>${CONFIG.feedbackEmail ? "Invia un commento a chi ti ha dato l'app" : "Invia un commento"}</span><span class="chev2">›</span></button>
     <div class="sep l16"></div>
+    ${CONFIG.repository ? `<button class="lrow rowlink" type="button" data-act="segnala:impostazioni"><span>Segnala un problema su GitHub</span><span class="chev2">›</span></button>
+    <div class="sep l16"></div>` : ""}
+    ${A.tempi ? (DETS.set("diagnostica", diagnosticaHTML(A.tempi)), `<button class="lrow rowlink" type="button" data-det="diagnostica" data-dt="Diagnostica"><span>Diagnostica · tempi di apertura</span><span class="chev2">›</span></button>
+    <div class="sep l16"></div>`) : ""}
     <div class="lrow"><span class="muted">Versione</span><span class="muted">${esc(VERSIONE)}</span></div>
   </div>`}
   </div>`;
+}
+
+// ---- Diagnostica: quanto ci mette ogni fase dell'apertura (ultime aperture), per capire dove l'app è lenta
+function diagnosticaHTML(T) {
+  const durate = (f) => f.map((x, i) => [x[0], x[1] - (i ? f[i - 1][1] : 0)]);
+  const ora = durate(T.ora || []), tot = (T.ora || []).length ? T.ora[T.ora.length - 1][1] : 0;
+  const app = (T.storico || []).filter((x) => x.dove === "app").slice(-10).reverse();
+  const MED = (v) => { const s = v.slice().sort((a, b) => a - b); return s.length ? s[Math.floor(s.length / 2)] : null; };
+  const fasi = ["profilo", "dati", "analisi", "pagina", "mostrata"];
+  const med = fasi.map((f) => [f, MED(app.map((x) => { const d = durate(x.fasi).find((y) => y[0] === f); return d ? d[1] : null; }).filter((v) => v !== null))]);
+  const NOMI = { profilo: "Profilo", dati: "Dati da Intervals", analisi: "Calcoli", pagina: "Costruzione della pagina", mostrata: "Pagina sullo schermo", widget: "Widget" };
+  const riga = (a, b) => `<div class="lrow"><span>${esc(NOMI[a] || a)}</span><span class="num20" style="white-space:nowrap">${b === null || b === undefined ? "—" : fmtIt(b) + '<span class="unit"> ms</span>'}</span></div>`;
+  return `<h3>Questa apertura</h3><p class="t15 muted" style="margin:0 0 10px">Il tempo di ogni fase. Se l'app ti sembra lenta, manda un commento: i tempi sono allegati da soli.</p>
+  <div class="card list">${ora.map((x, i) => (i ? '<div class="sep l16"></div>' : "") + riga(x[0], x[1])).join("")}${ora.length ? '<div class="sep l16"></div>' : ""}${riga("Totale", tot)}</div>
+  ${app.length ? `<h3>${app.length === 1 ? "L'apertura precedente" : `Mediana delle ultime ${app.length} aperture`}</h3><div class="card list">${med.map((x, i) => (i ? '<div class="sep l16"></div>' : "") + riga(x[0], x[1])).join("")}</div>` : ""}`;
 }
 
 // ---- Il piano dell'app: stato del blocco e pulsanti
@@ -4837,6 +4913,8 @@ button.trow{border:0;background:none;font:inherit;color:inherit;width:100%;text-
 @keyframes esx{0%,38%{opacity:0}50%,88%{opacity:1}100%{opacity:0}}
 .esimg.big{width:100%;height:auto;aspect-ratio:4/3}
 .esimg.no{background:var(--fill)}.esimg.no img{display:none}
+.esvid{width:100%;aspect-ratio:1/1;border-radius:14px;overflow:hidden;background:#030304 center/cover no-repeat}.esvid video,.esvid img{width:100%;height:100%;object-fit:cover;display:block}
+.mus{gap:6px}.musr{display:flex;align-items:baseline;gap:8px;font-size:15px;line-height:1.35}.musr b{flex:none;font-weight:600}.musr span:last-child{color:var(--mut)}.musd{width:9px;height:9px;border-radius:50%;flex:none;transform:translateY(-1px)}
 .esrow{display:flex;gap:12px;align-items:center;padding:10px 12px;cursor:pointer}
 .vidb{width:36px;height:36px;border-radius:18px;border:0;background:var(--fill);color:var(--acc);display:flex;align-items:center;justify-content:center;flex:none;padding:0 0 0 3px}
 .mobfs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -5013,7 +5091,7 @@ function IC(t,x){return "<div class=icard><b>"+t+"</b><span>"+x+"</span></div>"}
 var INFO={
 prontezza:["Prontezza",
  "<p>Il numero (0–100) è la prontezza calcolata dal tuo orologio. La parola sotto è il verdetto dell'app, che unisce due controlli separati.</p>"+
- IC("Sistemico","Cuore e sistema nervoso: HRV sotto la tua media, FC a riposo più alta del solito, poco sonno o forma molto negativa lo fanno scendere a cautela o riposo.")+
+ IC("Sistemico","Cuore e sistema nervoso: HRV della settimana sotto la tua fascia normale, FC a riposo più alta del solito, poco sonno o forma molto negativa lo fanno scendere a cautela o riposo.")+
  IC("Tessuti","Muscoli e tendini: una corsa con molto dislivello o un carico molto sopra il piano nelle ultime 72 ore. Il cuore può essere pronto e le gambe no.")+
  "<p class=q>Pronto: segui il piano. Con cautela: niente intensità, la seduta si adatta. Riposo: solo mobilità e sonno.</p>"],
 impronta:["L'impronta",
@@ -5028,6 +5106,7 @@ hrv:["HRV",
  "<p>La variabilità della frequenza cardiaca: quanto cambia l'intervallo tra un battito e l'altro durante la notte, in millisecondi.</p>"+
  IC("Più alta della tua media","Sistema nervoso riposato, pronto a reggere il carico.")+
  IC("Più bassa della tua media","Stress, fatica, poco sonno o un malanno in arrivo: l'app propone di ridurre l'intensità.")+
+ IC("Conta la settimana","Il semaforo guarda la media degli ultimi 7 giorni e la confronta con la tua fascia normale dei 60 giorni prima. Una notte storta da sola accende il giallo solo se anche FC a riposo o sonno dicono lo stesso. Servono almeno 3 notti nella settimana e 20 nei 60 giorni; prima vale il confronto semplice con la media.")+
  "<p class=q>Il valore assoluto non si confronta con quello di altri: conta solo rispetto alla tua media.</p>"],
 fcriposo:["FC a riposo",
  "<p>I battiti al minuto a riposo, misurati di notte. Con l'allenamento tende a scendere nel tempo.</p><p>Se sale di 5 battiti sopra la tua media è un segnale giallo, di 8 o più è rosso: spesso arriva prima della stanchezza che senti.</p>"],
@@ -5244,14 +5323,22 @@ document.addEventListener('click',function(e){var b=e.target.closest&&e.target.c
 var MOB=${JSON.stringify(MOB)},RISC=${JSON.stringify(RISC).replace(/</g, "\\u003c")},MOBH=${JSON.stringify(mobDelGiorno(A)[0])},MOBW=${JSON.stringify(mobDelGiorno(A)[1])},SPC=${JSON.stringify(Object.fromEntries(Object.entries(SPORT).map(([k, x]) => [k, x.c])))},CHEVJ=${JSON.stringify(CHEV)},SCRIVE=${JSON.stringify(!!SCRIVE_APP(A))};
 // ---- Palestra, mobilità e riscaldamenti: esercizi con foto (Free Exercise DB, pubblico dominio) e video su YouTube
 var ESL=${JSON.stringify(ESL).replace(/</g, "\\u003c")};
+var MUSC=${JSON.stringify(MUSC).replace(/</g, "\\u003c")},VIDEO_ES=${JSON.stringify(VIDEO_ES)},VID_BASE=${JSON.stringify(String(CONFIG.repository || "").replace("https://github.com/", "https://cdn.jsdelivr.net/gh/") + "@main/11_Omini_3D/video/")};
 var ES={};ESL.forEach(function(e){ES[e[0]]={k:e[0],n:e[1],id:e[2],a:e[3],g:e[4],r:e[5],c:e[6]}});
 var ATTR_L={libero:0,elastico:1,manubri:2,palestra:3},ATTR_OK={libero:['libero'],elastico:['libero','elastico'],manubri:['libero','manubri'],palestra:['libero','elastico','manubri','palestra']},GR_FORZA={gambe:1,post:1,mono:1,spinta:1,tirata:1,polpacci:1};
 function esImg(id,n){return 'https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/'+id+'/'+n+'.jpg'}
 function esNo(i){i.parentNode.classList.add('no')}
 function esNo2(i){i.style.display='none'}
 function esFoto(e,cls){return '<div class="esimg'+(cls?' '+cls:'')+'"><img src="'+esImg(e.id,0)+'" alt="'+escH(e.n)+'" loading="lazy" onerror="esNo(this)"><img class="f2" src="'+esImg(e.id,1)+'" alt="" loading="lazy" onerror="esNo2(this)"></div>'}
+// Video 3D: la figura fa l'esercizio, i muscoli si accendono (rosso lavorano, rosa aiutano, azzurro si allungano). Senza rete torna la foto.
+function esMedia(e,cls){var f=VIDEO_ES[e.k];if(cls!=='big'||!f||!VID_BASE)return esFoto(e,cls);
+  if(f==='webp')return '<div class="esvid" data-k="'+e.k+'" style="background-image:url('+VID_BASE+e.k+'.jpg)"><img src="'+VID_BASE+e.k+'.webp" alt="'+escH(e.n)+' in 3D" onerror="esVidNo(this)"></div>';
+  return '<div class="esvid" data-k="'+e.k+'"><video src="'+VID_BASE+e.k+'.mp4" poster="'+VID_BASE+e.k+'.jpg" autoplay loop muted playsinline preload="auto" onerror="esVidNo(this)"></video></div>'}
+function esVidNo(v){var b=v.parentNode,e=ES[b.getAttribute('data-k')];if(e)b.outerHTML=esFoto(e,'big')}
+function esMuscoli(k){var m=MUSC[k];if(!m)return '';var R=[['Lavorano','#FF3B30',m[0]],['Aiutano','#FF8A80',m[1]],['Si allungano','#0A84FF',m[2]]].filter(function(r){return r[2].length});
+  return R.length?'<div class="icard mus">'+R.map(function(r){return '<div class="musr"><span class="musd" style="background:'+r[1]+'"></span><b>'+r[0]+'</b><span>'+escH(r[2].join(', '))+'</span></div>'}).join('')+'</div>':''}
 function esVideo(e){var u='https://www.youtube.com/results?search_query='+encodeURIComponent(e.n+' esercizio come si fa');if(!hudSend('apri',u))window.open(u,'_blank')}
-function esScheda(k){var e=ES[k];if(!e)return;openP(e.n,esFoto(e,'big')+'<div class="icard"><b>Come si fa</b><span>'+escH(e.c)+'</span></div><div class="t15 muted">Dose: '+escH(e.r)+'</div><button class="secondary" data-video="'+e.k+'">Guarda il video</button><div class="t13 muted">Foto: Free Exercise DB (pubblico dominio). Il video si apre su YouTube.</div>')}
+function esScheda(k){var e=ES[k];if(!e)return;var v3=!!VIDEO_ES[k];openP(e.n,esMedia(e,'big')+esMuscoli(k)+'<div class="icard"><b>Come si fa</b><span>'+escH(e.c)+'</span></div><div class="t15 muted">Dose: '+escH(e.r)+'</div><button class="secondary" data-video="'+e.k+'">'+(v3?'Altri video su YouTube':'Guarda il video')+'</button><div class="t13 muted">'+(v3?'Animazione 3D di HUD (figura MakeHuman, CC0). ':'Foto: Free Exercise DB (pubblico dominio). ')+'Il video si apre su YouTube.</div>')}
 document.addEventListener('click',function(e){var v=e.target.closest&&e.target.closest('[data-video]');if(v){e.preventDefault();e.stopPropagation();var x=ES[v.getAttribute('data-video')];if(x)esVideo(x);return}
   var s=e.target.closest&&e.target.closest('[data-es]');if(s){e.preventDefault();esScheda(s.getAttribute('data-es'))}},true);
 // Allenamenti di palestra a scelta: obiettivo, attrezzi, tempo (cambiano ogni giorno, restano uguali nella giornata)
@@ -5285,7 +5372,7 @@ function guidaMostra(){var G=GUIDA;if(!G)return;if(G.tm){clearInterval(G.tm);G.t
   if(G.i>=G.p.length){openP(G.tit,'<div class="vstack" style="gap:12px;align-items:center;padding:30px 0"><div class="t28 bold">Fatto</div><div class="t15 muted">'+G.p.length+' passi completati. Bravo.</div><button class="primary" style="align-self:stretch" id="gd-fine">Chiudi</button></div>');document.getElementById('gd-fine').addEventListener('click',function(){guidaStop();closeP()});return}
   var P=G.p[G.i],sec=G.riposo?P.rec:(G.tempo?P.sec:0),fino=Date.now()+sec*1000;
   var h=G.riposo?'<div class="label caps">Recupero</div><div class="gdt" id="gd-t">'+sec+'"</div><div class="t15 muted">Dopo: '+escH((G.p[G.i+1]||{e:{n:'fine'}}).e.n)+'</div><button class="secondary" id="gd-ok">Salta</button>'
-    :esFoto(P.e,'big')+'<div class="hstack" style="justify-content:space-between;align-items:baseline"><span class="t22 bold">'+escH(P.e.n)+'</span><span class="t13 muted">'+(G.i+1)+' di '+G.p.length+'</span></div><div class="t17 semi">'+escH(P.testo)+'</div>'+(sec?'<div class="gdt" id="gd-t">'+sec+'"</div>':'')+'<div class="t15 muted">'+escH(P.e.c)+'</div>'+
+    :esMedia(P.e,'big')+'<div class="hstack" style="justify-content:space-between;align-items:baseline"><span class="t22 bold">'+escH(P.e.n)+'</span><span class="t13 muted">'+(G.i+1)+' di '+G.p.length+'</span></div><div class="t17 semi">'+escH(P.testo)+'</div>'+(sec?'<div class="gdt" id="gd-t">'+sec+'"</div>':'')+'<div class="t15 muted">'+escH(P.e.c)+'</div>'+
       '<div class="btnrow" style="grid-template-columns:1fr 2fr"><button class="secondary" data-video="'+P.e.k+'">Video</button><button class="primary" id="gd-ok">'+(sec?'Avanti':'Fatto')+'</button></div>';
   openP(G.tit,'<div class="vstack" style="gap:12px">'+h+'<div class="pbar"><div style="width:'+Math.round(G.i/G.p.length*100)+'%;background:var(--accbg)"></div></div></div>');
   function avanti(){if(!GUIDA)return;if(!G.riposo&&P.rec&&G.i<G.p.length-1){G.riposo=true}else{G.riposo=false;G.i++}guidaMostra()}
@@ -5432,6 +5519,7 @@ function metricheAtt(A){if(A.hero)return{hero:A.hero,list:A.lista||[]};var L=[],
   if(A.dplus>20)add('DISLIVELLO',itN(A.dplus),'M');
   if(sp==='forza'&&A.kg)add('SOLLEVATI',itN(A.kg),'KG');
   if(sp==='nuoto'&&A.vasche)add('VASCHE',A.vasche,'');
+  if(sp==='nuoto'){var nuS=aNuoto(A);if(nuS)add('SWOLF',nuS.swolf,'')}
   if(A.tss)add('CARICO',A.tss,'TSS');
   if(A.kcal)add('CALORIE',itN(A.kcal),'KCAL');
   if(A.hrM)add('FC MAX',A.hrM,'BPM');
@@ -5497,6 +5585,9 @@ function aData(ds){var d=aD(ds);return GIOL[d.getDay()]+' '+d.getDate()+' '+MESL
 function aSport(sp){return ATT.sport[sp]||ATT.sport.altro}
 function aPasso(a){if(!a.m||!a.sec)return null;if(a.sp==='nuoto')return paceS(a.sec/(a.m/100));return paceS(a.sec/(a.m/1000))}
 // Le cifre di un'attività, quelle che ci sono
+// Nuoto: dalla frequenza di bracciata (Intervals la chiama cadenza) e dalla vasca. SWOLF = secondi + bracciate per vasca, più basso è meglio
+function aNuoto(a){if(!a||a.sp!=='nuoto'||!a.cad||!a.m||!a.sec)return null;var L=a.vasca||(a.vasche?a.m/a.vasche:0);if(!(L>=15&&L<=100))return null;
+  var v=a.m/a.sec,tl=L/v,bv=a.cad*tl/60;if(!(bv>3&&bv<80))return null;return{L:L,tl:tl,bv:bv,dps:v*60/a.cad,swolf:Math.round(tl+bv)}}
 function aMetriche(a,d){var L=[],s=(d&&d.s)||{};function add(l,v,u){if(v!==null&&v!==undefined&&v!==''&&v!=='—')L.push([l,v,u||''])}
   var corsaLike=a.sp==='corsa'||(a.sp==='altro'&&a.m>500);
   add('Durata',aDur(a.sec));if(a.el&&a.el-a.sec>60)add('Tempo totale',aDur(a.el));
@@ -5510,10 +5601,11 @@ function aMetriche(a,d){var L=[],s=(d&&d.s)||{};function add(l,v,u){if(v!==null&
   if(a.kcal)add('Calorie',itN(a.kcal),'kcal');
   if(a.tss!==null&&a.tss!==undefined)add('Carico',a.tss,'TSS');if(a.int)add('Intensità',Math.round(a.int),'%');if(a.trimp)add('TRIMP',Math.round(a.trimp),'');
   if(a.dplus)add('Dislivello +',itN(a.dplus),'m');if(a.dminus)add('Dislivello −',itN(a.dminus),'m');
-  if(a.cad)add(a.sp==='corsa'?'Cadenza':a.sp==='nuoto'?'Bracciate':'Cadenza',a.sp==='corsa'?Math.round(a.cad*2):Math.round(a.cad),a.sp==='corsa'?'passi/min':a.sp==='nuoto'?'/min':'rpm');
+  if(a.cad)add(a.sp==='corsa'?'Cadenza':a.sp==='nuoto'?'Frequenza bracciata':'Cadenza',a.sp==='corsa'?Math.round(a.cad*2):Math.round(a.cad),a.sp==='corsa'?'passi/min':a.sp==='nuoto'?'/min':'rpm');
   if(a.w)add('Potenza media',a.w,'W');if(a.np)add('Potenza normalizzata',a.np,'W');
   if(a.stride)add('Lunghezza passo',itN(a.stride,2),'m');if(a.gct)add('Contatto al suolo',Math.round(a.gct),'ms');if(a.vo)add('Oscillazione verticale',itN(a.vo>30?a.vo/10:a.vo,1),'cm');
   if(a.vasche)add('Vasche',a.vasche+(a.vasca?' da '+a.vasca+' m':''),'');
+  var nu=aNuoto(a);if(nu){add('Bracciate per vasca',itN(nu.bv,1),'');add('Metri per bracciata',itN(nu.dps,2),'m');add('SWOLF',nu.swolf,'')}
   if(a.kg)add('Sollevati',itN(a.kg),'kg');
   if(a.temp!==null&&a.temp!==undefined)add(a.meteo?'Temperatura':'Temp. al polso',itN(a.temp,0),'°C');
   if(s.resp){var r=s.resp.reduce(function(x,y){return x+y},0)/s.resp.length;add('Respirazione',Math.round(r),'atti/min')}
@@ -6344,9 +6436,19 @@ async function shareLoop(wv, ctx) {
         const m = new Mail();
         m.toRecipients = CONFIG.feedbackEmail ? [CONFIG.feedbackEmail] : [];
         m.subject = `${CONFIG.nomeApp} · commento (versione ${VERSIONE})`;
-        m.body = `Scrivi qui cosa ti piace, cosa non funziona o cosa manca:\n\n\n\n—\nVersione ${VERSIONE} · ${PROF && PROF.nome ? PROF.nome : "tester"} · ${ymd(new Date())}`;
+        m.body = `Scrivi qui cosa ti piace, cosa non funziona o cosa manca:\n\n\n\n—\nVersione ${VERSIONE} · ${PROF && PROF.nome ? PROF.nome : "tester"} · ${ymd(new Date())}\n${infoDispositivo()}\nIn allegato il registro dell'ultima apertura e i tempi (nessuna chiave, nessun dato di salute).`;
+        try { m.addDataAttachment(Data.fromString(diagnosticaTesto()), "text/plain", "hud-diagnostica.txt"); } catch (e) {}
         await m.send();
       } catch (e) { await js(`window.__toast(${JSON.stringify(CONFIG.feedbackEmail ? "Mail non disponibile: scrivi a " + CONFIG.feedbackEmail : "Mail non disponibile su questo iPhone")})`); }
+      continue;
+    }
+    if (kind === "segnala") {
+      // Segnalazione pubblica su GitHub: solo versione, iOS, modello e tempi, mai dati personali o di salute
+      try {
+        const t = leggiTempi().slice(-3).map((x) => `${x.t.slice(0, 16)} ${x.dove}: ${x.fasi.map((f) => f[0] + " " + f[1] + " ms").join(", ")}`).join("\n");
+        const body = `**Cosa è successo**\n\n\n**Cosa ti aspettavi**\n\n\n---\nVersione ${VERSIONE} · ${infoDispositivo()}\nTempi delle ultime aperture:\n${t || "—"}`;
+        Safari.open(`${CONFIG.repository}/issues/new?title=${encodeURIComponent("")}&body=${encodeURIComponent(body)}`);
+      } catch (e) { await js(`window.__toast(${JSON.stringify("Non riesco ad aprire GitHub")})`); }
       continue;
     }
     if (kind === "photo") {
@@ -6952,6 +7054,11 @@ function diaryIO() {
   };
 }
 
+// >>> MUSCOLI (generato da 11_Omini_3D/sincronizza_app.py: non modificare a mano)
+// per ogni esercizio: [muscoli che lavorano, che aiutano, che si allungano]; VIDEO_ES = esercizi con il video 3D e il formato
+const MUSC = {"squat":[["Quadricipite","Grande gluteo"],["Adduttori","Femorali","Erettori della schiena","Soleo"],[]],"goblet":[["Quadricipite","Grande gluteo"],["Adduttori","Erettori della schiena","Retto dell'addome","Deltoide anteriore","Bicipite"],[]],"squatbil":[["Quadricipite","Grande gluteo"],["Adduttori","Femorali","Erettori della schiena","Trapezio","Retto dell'addome"],[]],"legpress":[["Quadricipite","Grande gluteo"],["Adduttori","Femorali"],[]],"affondo":[["Quadricipite","Grande gluteo"],["Medio gluteo","Adduttori","Femorali","Gastrocnemio"],["Flessori dell'anca"]],"affondoman":[["Quadricipite","Grande gluteo"],["Medio gluteo","Adduttori","Avambraccio"],["Flessori dell'anca"]],"bulgaro":[["Quadricipite","Grande gluteo"],["Medio gluteo","Adduttori"],["Flessori dell'anca"]],"stepup":[["Quadricipite","Grande gluteo"],["Medio gluteo","Gastrocnemio","Avambraccio"],[]],"stepupl":[["Grande gluteo","Quadricipite"],["Flessori dell'anca","Medio gluteo","Gastrocnemio"],[]],"rdl":[["Femorali","Grande gluteo"],["Erettori della schiena","Adduttori","Avambraccio","Trapezio"],[]],"rdl1":[["Femorali","Grande gluteo"],["Medio gluteo","Erettori della schiena","Obliqui"],[]],"ponte":[["Grande gluteo"],["Femorali","Erettori della schiena"],["Flessori dell'anca"]],"ponte1":[["Grande gluteo"],["Medio gluteo","Femorali","Obliqui"],["Flessori dell'anca"]],"hipthrust":[["Grande gluteo"],["Femorali","Quadricipite","Adduttori"],[]],"polpacci":[["Gastrocnemio","Soleo"],["Tibiale anteriore"],[]],"polpaccim":[["Gastrocnemio","Soleo"],["Avambraccio","Trapezio"],[]],"polpaccip":[["Gastrocnemio","Soleo"],["Trapezio"],[]],"legcurl":[["Femorali"],["Gastrocnemio"],[]],"mostro":[["Medio gluteo"],["Grande gluteo","Quadricipite"],[]],"adduttori":[["Adduttori"],["Flessori dell'anca","Obliqui"],[]],"swing":[["Grande gluteo","Femorali"],["Erettori della schiena","Retto dell'addome","Deltoide anteriore","Avambraccio"],[]],"squatjump":[["Quadricipite","Grande gluteo","Gastrocnemio"],["Femorali","Soleo"],[]],"skip":[["Flessori dell'anca","Gastrocnemio"],["Quadricipite","Soleo","Retto dell'addome"],[]],"balzilat":[["Medio gluteo","Quadricipite"],["Grande gluteo","Adduttori","Gastrocnemio"],[]],"plank":[["Retto dell'addome","Obliqui"],["Deltoide anteriore","Grande pettorale","Quadricipite","Dentato anteriore"],[]],"plankl":[["Obliqui","Medio gluteo"],["Retto dell'addome","Deltoide laterale","Erettori della schiena"],[]],"deadbug":[["Retto dell'addome","Obliqui"],["Flessori dell'anca"],[]],"superman":[["Erettori della schiena","Grande gluteo"],["Femorali","Deltoide posteriore","Romboidi e trapezio medio"],[]],"pallof":[["Obliqui","Retto dell'addome"],["Grande pettorale","Deltoide anteriore","Tricipite"],[]],"russian":[["Obliqui","Retto dell'addome"],["Flessori dell'anca"],[]],"mountain":[["Retto dell'addome","Flessori dell'anca"],["Deltoide anteriore","Grande pettorale","Quadricipite"],[]],"piegamenti":[["Grande pettorale","Tricipite"],["Deltoide anteriore","Dentato anteriore","Retto dell'addome"],[]],"panca":[["Grande pettorale","Tricipite"],["Deltoide anteriore"],[]],"spinte":[["Deltoide anteriore","Deltoide laterale"],["Tricipite","Trapezio","Dentato anteriore"],[]],"rematore":[["Gran dorsale","Romboidi e trapezio medio"],["Deltoide posteriore","Bicipite","Erettori della schiena","Avambraccio"],[]],"rematorebil":[["Gran dorsale","Romboidi e trapezio medio"],["Deltoide posteriore","Bicipite","Erettori della schiena","Avambraccio"],[]],"lat":[["Gran dorsale"],["Bicipite","Romboidi e trapezio medio","Deltoide posteriore","Avambraccio"],[]],"trazioni":[["Gran dorsale","Bicipite"],["Romboidi e trapezio medio","Avambraccio","Retto dell'addome"],[]],"facepull":[["Deltoide posteriore","Romboidi e trapezio medio"],["Cuffia dei rotatori","Trapezio"],[]],"rotest":[["Cuffia dei rotatori"],["Deltoide posteriore"],[]],"apertura":[["Deltoide posteriore","Romboidi e trapezio medio"],["Cuffia dei rotatori","Trapezio"],["Grande pettorale"]],"alzatepost":[["Deltoide posteriore"],["Romboidi e trapezio medio","Cuffia dei rotatori","Trapezio"],[]],"contadino":[["Avambraccio","Trapezio"],["Obliqui","Retto dell'addome","Erettori della schiena","Grande gluteo","Quadricipite"],[]],"gattomucca":[[],[],["Erettori della schiena","Retto dell'addome","Trapezio"]],"wgs":[[],["Quadricipite"],["Flessori dell'anca","Femorali","Adduttori","Grande pettorale"]],"flessori":[["Grande gluteo"],[],["Flessori dell'anca","Quadricipite"]],"caviglie":[["Tibiale anteriore"],["Gastrocnemio","Soleo"],[]],"polpaccimuro":[[],[],["Gastrocnemio","Soleo"]],"femorali":[[],[],["Femorali"]],"quad":[[],["Medio gluteo"],["Quadricipite","Flessori dell'anca"]],"bambino":[[],[],["Gran dorsale","Erettori della schiena","Grande gluteo"]],"ginpetto":[[],[],["Grande gluteo","Erettori della schiena","Femorali"]],"torsione":[[],[],["Obliqui","Erettori della schiena","Gran dorsale","Grande gluteo"]],"groiners":[[],["Deltoide anteriore","Grande pettorale"],["Adduttori","Flessori dell'anca"]],"inchworm":[["Retto dell'addome","Deltoide anteriore"],["Grande pettorale","Tricipite"],["Femorali","Gastrocnemio"]],"cerchibraccia":[["Deltoide laterale","Deltoide anteriore","Deltoide posteriore"],["Cuffia dei rotatori","Trapezio"],[]],"petto":[["Romboidi e trapezio medio","Deltoide posteriore"],[],["Grande pettorale","Deltoide anteriore"]],"cerchianca":[["Flessori dell'anca","Medio gluteo"],["Adduttori","Grande gluteo"],[]],"calciata":[["Femorali"],["Gastrocnemio","Soleo","Quadricipite"],[]],"rullopiri":[[],[],["Grande gluteo","Medio gluteo"]],"rulloquad":[[],[],["Quadricipite"]]};
+const VIDEO_ES = {"bambino": "webp", "gattomucca": "webp", "piegamenti": "webp", "plank": "webp", "polpacci": "webp", "ponte": "webp", "squat": "webp"};
+// <<< MUSCOLI
 // ------------------------------------------------------------
 //  Campana: le notifiche dell'app. Sono le stesse che arrivano sul telefono (all'ora in cui arrivano),
 //  più i record, gli avvisi scritti sull'orologio e le sedute sincronizzate. Restano 30 giorni.
@@ -7244,10 +7351,30 @@ async function collegaIntervals(wv, chiusa) {
 
 // Registro dell'ultima apertura in iCloud › Scriptable › hud-log.txt: dice dove si ferma se qualcosa va storto
 const REG = [];
+// Tempi dell'apertura, fase per fase: le ultime 20 aperture in hud-tempi.json (sul telefono), visibili in Impostazioni › Diagnostica
+const PERF = { t0: Date.now(), fasi: [] };
+function tempo(fase) { const ms = Date.now() - PERF.t0; PERF.fasi.push([fase, ms]); registro(`${fase}: ${ms} ms`); }
+const TEMPI_FILE = "hud-tempi.json";
+function leggiTempi() { try { const fm = FileManager.local(), p = fm.joinPath(fm.documentsDirectory(), TEMPI_FILE); return fm.fileExists(p) ? JSON.parse(fm.readString(p)) : []; } catch (e) { return []; } }
+function salvaTempi(dove) {
+  try {
+    const fm = FileManager.local(), p = fm.joinPath(fm.documentsDirectory(), TEMPI_FILE);
+    const L = leggiTempi(); L.push({ t: new Date().toISOString(), v: VERSIONE, dove, fasi: PERF.fasi });
+    fm.writeString(p, JSON.stringify(L.slice(-20)));
+  } catch (e) {}
+}
 function registro(m) {
   if (typeof config !== "undefined" && config.runsInWidget) return; // il widget non sovrascrive il registro dell'app
   REG.push(`${new Date().toISOString().slice(11, 19)} ${m}`);
   try { const fm = FileManager.iCloud(); fm.writeString(fm.joinPath(fm.documentsDirectory(), "hud-log.txt"), REG.join("\n") + "\n"); } catch (e) {}
+}
+
+// Versione di iOS e modello: per i commenti e le segnalazioni
+function infoDispositivo() { try { return `iOS ${Device.systemVersion()} · ${Device.model()}`; } catch (e) { return "iOS sconosciuto"; } }
+// Il testo allegato ai commenti: registro dell'ultima apertura e tempi delle ultime 20 (senza chiavi né dati di salute)
+function diagnosticaTesto() {
+  const t = leggiTempi().map((x) => `${x.t} ${x.v} ${x.dove}: ${x.fasi.map((f) => f[0] + "=" + f[1]).join(" ")}`).join("\n");
+  return `HUD ${VERSIONE} · ${infoDispositivo()}\n\nRegistro dell'ultima apertura\n${REG.join("\n")}\n\nTempi (ms dall'avvio)\n${t}`;
 }
 
 async function run() {
@@ -7269,6 +7396,7 @@ async function run() {
     return;
   }
   applicaProfilo(await leggiProfilo());
+  tempo("profilo");
   if (CONFIG.resetChiave && Keychain.contains(KEY_NAME)) Keychain.remove(KEY_NAME);
   let key = Keychain.contains(KEY_NAME) ? Keychain.get(KEY_NAME) : null;
   const interattivo = !config.runsInWidget && !config.runsWithSiri;
@@ -7351,6 +7479,7 @@ async function run() {
       apertura = { vista: "fuel", cibo: r, toast: r.voce ? `Segnato · ${fmtIt(totaleCibo([r.voce]).kcal)} kcal` : "Non ho riconosciuto cibi" };
     }
   }
+  tempo("dati");
   registro(`dati ${raw.demo ? "demo" : raw.stale ? "dalla cache" : raw.fullAt === raw.fetchedAt ? "da Intervals (completi)" : "da Intervals (solo le novità)"}: ${(raw.activities || []).length} attività`);
   DETTAGLI = key ? dettagliIO().read() : {};
   // attività appena arrivate: corse e nuotate in piscina si leggono subito, così un record si vede già a questa apertura
@@ -7375,7 +7504,7 @@ async function run() {
     } catch (e) { registro("pulizia del calendario: " + (e.message || e)); }
   }
   let A = analyze(raw, now, key ? diaryIO().read() : raw.diary);
-  registro("analisi ok");
+  tempo("analisi");
 
   // Orari del rifornimento nei lunghi su Intervals, e da lì sull'orologio (solo quando apri l'app)
   let avvisiScritti = [];
@@ -7427,9 +7556,12 @@ async function run() {
 
   if (config.runsInWidget) {
     Script.setWidget(buildWidget(A));
+    tempo("widget");
+    salvaTempi("widget");
   } else {
     let html;
-    try { html = buildHTML(A); registro(`pagina: ${html.length} caratteri`); }
+    A.tempi = { ora: PERF.fasi.slice(), storico: leggiTempi() };
+    try { html = buildHTML(A); tempo("pagina"); registro(`pagina: ${html.length} caratteri`); }
     catch (e) {
       registro(`ERRORE nella pagina: ${e && e.stack ? e.stack : e}`);
       const a = new Alert(); a.title = "Errore nell'HUD"; a.message = String(e && e.message ? e.message : e).slice(0, 400); a.addAction("OK"); await a.presentAlert();
@@ -7437,7 +7569,8 @@ async function run() {
       return;
     }
     await mostra(html);
-    registro("mostrata");
+    tempo("mostrata");
+    salvaTempi("app");
     if (apertura && (apertura.domani || apertura.att)) {
       await attesa(400);
       if (apertura.domani) await wv.evaluateJavaScript("window.__domani && window.__domani()", false).catch(() => {});

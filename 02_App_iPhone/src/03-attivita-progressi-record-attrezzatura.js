@@ -217,6 +217,12 @@ function progressi(raw, now, dettagli, dur) {
   const bici = lunghiBici.map((a) => { const d = dettagli[a.id]; return d && d.deriva ? { d: ds(a), g: g(a), v: d.deriva.v, tipo: d.deriva.tipo, min: Math.round(a.moving_time / 60) } : null; }).filter(Boolean).sort((a, b) => a.d.localeCompare(b.d));
   const nuoto = acts.filter((a) => a.type === "Swim" && (num(a.distance) || 0) >= 800 && num(a.moving_time) && g(a) <= 180 && g(a) >= 0)
     .map((a) => ({ d: ds(a), g: g(a), v: Math.round(a.moving_time / (a.distance / 100)), m: Math.round(a.distance) })).sort((a, b) => a.d.localeCompare(b.d));
+  // SWOLF (secondi + bracciate per vasca, più basso è meglio): serve la frequenza di bracciata e la vasca
+  const swolf = acts.filter((a) => a.type === "Swim" && num(a.average_cadence) && num(a.distance) && num(a.moving_time) && g(a) <= 180 && g(a) >= 0).map((a) => {
+    const m = num(a.distance), L = num(a.pool_length) || (num(a.lengths) ? m / num(a.lengths) : 0), v = m / num(a.moving_time);
+    if (!(L >= 15 && L <= 100)) return null; const tl = L / v, bv = (num(a.average_cadence) * tl) / 60;
+    return bv > 3 && bv < 80 ? { d: ds(a), g: g(a), v: Math.round(tl + bv), bv: Math.round(bv * 10) / 10, L: Math.round(L), m: Math.round(m) } : null;
+  }).filter(Boolean).sort((a, b) => a.d.localeCompare(b.d));
   const W = (raw.wellness || []).filter((w) => w && w.id && daysBetween(parseYMD(w.id), now) <= 111 && daysBetween(parseYMD(w.id), now) >= 0);
   const sett = [];
   for (let k = 15; k >= 0; k--) { const xs = W.filter((w) => Math.floor(daysBetween(parseYMD(w.id), now) / 7) === k); if (xs.length) sett.push({ g: k * 7, d: ymd(addDays(now, -k * 7)), rhr: MED(xs.map((w) => num(w.restingHR))), hrv: MED(xs.map((w) => num(w.hrv) ?? num(w.hrvSDNN))) }); }
@@ -224,7 +230,7 @@ function progressi(raw, now, dettagli, dur) {
   return {
     corsa: dur,
     bici: { pts: bici, ...confronto(bici), mancano: lunghiBici.filter((a) => !dettagli[a.id]).length },
-    nuoto: { pts: nuoto, ...confronto(nuoto), css: toSec(CONFIG.nuoto.css) },
+    nuoto: { pts: nuoto, ...confronto(nuoto), css: toSec(CONFIG.nuoto.css), swolf: { pts: swolf, ...confronto(swolf) } },
     rhr: cuore("rhr"), hrv: cuore("hrv"),
   };
 }
@@ -420,7 +426,7 @@ function demoData(now) {
   const act = (d, type, min, load, extra = {}) => ({ start_date_local: ymd(addDays(mon, d)) + "T07:00:00", type, moving_time: min * 60, icu_training_load: load, ...extra });
   const activities = [];
   const todayIdx = daysBetween(mon, now);
-  const doneList = [act(0, "Swim", 44, 42, { distance: 1400 }), act(1, "Run", 31, 26, { distance: 5200 }), act(2, "Swim", 57, 47, { distance: 2600 })];
+  const doneList = [act(0, "Swim", 44, 42, { distance: 1400, pool_length: 25, average_cadence: 27 }), act(1, "Run", 31, 26, { distance: 5200 }), act(2, "Swim", 57, 47, { distance: 2600, pool_length: 25, average_cadence: 26.5 })];
   for (const a of doneList) if (daysBetween(mon, parseYMD(a.start_date_local)) < todayIdx) activities.push(a);
   // storico demo di 180 giorni: corse con FC e velocità, tapis in estate, nuoto e bici
   for (let i = 180; i >= 1; i--) {
@@ -439,7 +445,7 @@ function demoData(now) {
     if (wd === 2) run("Corsa facile", 40);
     if (wd === 4) run(k % 2 ? "Soglia 6×5'" : "VO2 5×3'", 60, { average_heartrate: 158, max_heartrate: i <= 40 && i > 20 ? 165 : 178, icu_intensity: 88 });
     if (wd === 0) run("Corsa lungo", 70 + (k % 4) * 10, { decoupling: 3 + ((k * 3) % 50) / 10 });
-    if (wd === 1 || wd === 3 || wd === 5) activities.push({ start_date_local: ymd(d) + "T06:30:00", type: "Swim", name: "Nuoto", moving_time: 3300, distance: 2800, icu_training_load: 45 });
+    if (wd === 1 || wd === 3 || wd === 5) activities.push({ start_date_local: ymd(d) + "T06:30:00", type: "Swim", name: "Nuoto", moving_time: 3300, distance: 2800, icu_training_load: 45, pool_length: 25, lengths: 112, average_cadence: 26 + i / 30 + (k % 3) * 0.6 });
     if (wd === 6) activities.push({ start_date_local: ymd(d) + "T09:00:00", type: "VirtualRide", name: "Bici Z2", moving_time: 6000, icu_training_load: 80 });
   }
   // diario demo: check-in degli ultimi 40 giorni

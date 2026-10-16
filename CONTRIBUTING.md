@@ -19,3 +19,15 @@ Apri una *issue* con: cosa hai fatto, cosa ti aspettavi, cosa è successo, versi
 - **Nessun dato personale** nel codice, nei test o negli esempi.
 
 Contribuendo accetti che il tuo codice sia distribuito con la licenza del progetto (GNU AGPL 3.0).
+
+---
+
+## In English
+
+Thanks for helping. Issues, ideas and fixes are welcome in English or Italian.
+
+- **Report a problem:** open an issue with what you did, what you expected, what happened, the app version (Settings) and iOS version. In the app, *Settings › Report a problem on GitHub* fills these in for you. The last run's log is in iCloud Drive › Scriptable › `hud-log.txt`: **remove personal data** before attaching it, and never paste your Intervals key.
+- **Propose a change:** edit `02_App_iPhone/src/` (never `HUD-70.3.js`) or `04_Generatore/`; if you touch a block shared with the generator run `node 04_Generatore/sincronizza-app.js`; then `cd 02_App_iPhone && npm run build && npm test` — every test must pass. If you deliberately change the fuel rules, regenerate the expected results with `node 04_Generatore/test-carburante.js --salva` and explain why in the pull request.
+- **Project rules:** cautious by default (with poor or conflicting data the app lowers the load, never raises it; fuel safety floors are never lowered); data stays on the iPhone (no analytics, servers or third-party services without an open discussion first); calm tone (no streaks, badges or guilt); no personal data in code, tests or examples.
+
+By contributing you agree that your code is distributed under the project license (GNU AGPL 3.0).

@@ -290,10 +290,30 @@ async function collegaIntervals(wv, chiusa) {
 
 // Registro dell'ultima apertura in iCloud › Scriptable › hud-log.txt: dice dove si ferma se qualcosa va storto
 const REG = [];
+// Tempi dell'apertura, fase per fase: le ultime 20 aperture in hud-tempi.json (sul telefono), visibili in Impostazioni › Diagnostica
+const PERF = { t0: Date.now(), fasi: [] };
+function tempo(fase) { const ms = Date.now() - PERF.t0; PERF.fasi.push([fase, ms]); registro(`${fase}: ${ms} ms`); }
+const TEMPI_FILE = "hud-tempi.json";
+function leggiTempi() { try { const fm = FileManager.local(), p = fm.joinPath(fm.documentsDirectory(), TEMPI_FILE); return fm.fileExists(p) ? JSON.parse(fm.readString(p)) : []; } catch (e) { return []; } }
+function salvaTempi(dove) {
+  try {
+    const fm = FileManager.local(), p = fm.joinPath(fm.documentsDirectory(), TEMPI_FILE);
+    const L = leggiTempi(); L.push({ t: new Date().toISOString(), v: VERSIONE, dove, fasi: PERF.fasi });
+    fm.writeString(p, JSON.stringify(L.slice(-20)));
+  } catch (e) {}
+}
 function registro(m) {
   if (typeof config !== "undefined" && config.runsInWidget) return; // il widget non sovrascrive il registro dell'app
   REG.push(`${new Date().toISOString().slice(11, 19)} ${m}`);
   try { const fm = FileManager.iCloud(); fm.writeString(fm.joinPath(fm.documentsDirectory(), "hud-log.txt"), REG.join("\n") + "\n"); } catch (e) {}
+}
+
+// Versione di iOS e modello: per i commenti e le segnalazioni
+function infoDispositivo() { try { return `iOS ${Device.systemVersion()} · ${Device.model()}`; } catch (e) { return "iOS sconosciuto"; } }
+// Il testo allegato ai commenti: registro dell'ultima apertura e tempi delle ultime 20 (senza chiavi né dati di salute)
+function diagnosticaTesto() {
+  const t = leggiTempi().map((x) => `${x.t} ${x.v} ${x.dove}: ${x.fasi.map((f) => f[0] + "=" + f[1]).join(" ")}`).join("\n");
+  return `HUD ${VERSIONE} · ${infoDispositivo()}\n\nRegistro dell'ultima apertura\n${REG.join("\n")}\n\nTempi (ms dall'avvio)\n${t}`;
 }
 
 async function run() {
@@ -315,6 +335,7 @@ async function run() {
     return;
   }
   applicaProfilo(await leggiProfilo());
+  tempo("profilo");
   if (CONFIG.resetChiave && Keychain.contains(KEY_NAME)) Keychain.remove(KEY_NAME);
   let key = Keychain.contains(KEY_NAME) ? Keychain.get(KEY_NAME) : null;
   const interattivo = !config.runsInWidget && !config.runsWithSiri;
@@ -397,6 +418,7 @@ async function run() {
       apertura = { vista: "fuel", cibo: r, toast: r.voce ? `Segnato · ${fmtIt(totaleCibo([r.voce]).kcal)} kcal` : "Non ho riconosciuto cibi" };
     }
   }
+  tempo("dati");
   registro(`dati ${raw.demo ? "demo" : raw.stale ? "dalla cache" : raw.fullAt === raw.fetchedAt ? "da Intervals (completi)" : "da Intervals (solo le novità)"}: ${(raw.activities || []).length} attività`);
   DETTAGLI = key ? dettagliIO().read() : {};
   // attività appena arrivate: corse e nuotate in piscina si leggono subito, così un record si vede già a questa apertura
@@ -421,7 +443,7 @@ async function run() {
     } catch (e) { registro("pulizia del calendario: " + (e.message || e)); }
   }
   let A = analyze(raw, now, key ? diaryIO().read() : raw.diary);
-  registro("analisi ok");
+  tempo("analisi");
 
   // Orari del rifornimento nei lunghi su Intervals, e da lì sull'orologio (solo quando apri l'app)
   let avvisiScritti = [];
@@ -473,9 +495,12 @@ async function run() {
 
   if (config.runsInWidget) {
     Script.setWidget(buildWidget(A));
+    tempo("widget");
+    salvaTempi("widget");
   } else {
     let html;
-    try { html = buildHTML(A); registro(`pagina: ${html.length} caratteri`); }
+    A.tempi = { ora: PERF.fasi.slice(), storico: leggiTempi() };
+    try { html = buildHTML(A); tempo("pagina"); registro(`pagina: ${html.length} caratteri`); }
     catch (e) {
       registro(`ERRORE nella pagina: ${e && e.stack ? e.stack : e}`);
       const a = new Alert(); a.title = "Errore nell'HUD"; a.message = String(e && e.message ? e.message : e).slice(0, 400); a.addAction("OK"); await a.presentAlert();
@@ -483,7 +508,8 @@ async function run() {
       return;
     }
     await mostra(html);
-    registro("mostrata");
+    tempo("mostrata");
+    salvaTempi("app");
     if (apertura && (apertura.domani || apertura.att)) {
       await attesa(400);
       if (apertura.domani) await wv.evaluateJavaScript("window.__domani && window.__domani()", false).catch(() => {});

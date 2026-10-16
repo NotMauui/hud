@@ -1,61 +1,69 @@
-# HUD · l'allenamento che si scrive da solo
+# HUD · training that writes itself
 
-HUD è un'app per atleti di endurance (triathlon, corsa, nuoto, bici) che ogni mattina dice **cosa fare oggi e perché**, scrive da sola il piano a blocchi di 4 settimane e calcola **quanto mangiare** in base all'allenamento del giorno. Oggi gira su iPhone dentro [Scriptable](https://scriptable.app) e legge i dati da [Intervals.icu](https://intervals.icu).
+HUD is a free, open-source app for endurance athletes (triathlon, running, swimming, cycling). Every morning it tells you **what to do today and why**, writes your 4-week training blocks on its own and works out **how much to eat** for the day's training. It runs on iPhone inside [Scriptable](https://scriptable.app) and reads your data from [Intervals.icu](https://intervals.icu).
 
-> *English summary:* HUD is a free, open-source (AGPL-3.0) endurance-training companion for iPhone (Scriptable + Intervals.icu). It reads your readiness (HRV, resting HR, sleep), adapts today's session, generates 4-week training blocks for triathlon and single sports, and computes daily fuelling with safety floors. The UI and docs are in Italian for now; contributions in English are welcome.
+> **Italiano:** [README.it.md](README.it.md) · The app's interface is in Italian for now (see [Language](#language)).
 
-**Stato: in fase di test.** Funziona ogni giorno su iPhone, ma è un progetto giovane: aspettati cambiamenti.
+**Status: testing.** It runs every day on real iPhones, but it is a young project: expect changes.
 
-## Cosa fa
+## What it does
 
-- **Oggi** — prontezza da HRV, FC a riposo e sonno, con due semafori separati: *sistemico* (cuore e recupero) e *tessuti* (impatto della corsa). La seduta del giorno si adatta da sola se serve.
-- **Piano** — blocchi di 4 settimane (3 di carico, 1 di scarico) con periodizzazione all'indietro dalla gara, circa 80/20, libreria di sedute parametriche tradotte nelle tue zone. Le sedute vanno nel calendario di Intervals e da lì all'orologio.
-- **Carburante** — metabolismo a riposo (ten Haaf 2014), carboidrati in g/kg secondo il giorno, proteine e grassi con dei minimi, deficit in % del peso, **calorie che imparano** dalle pesate e dal cibo registrato, carico pre-gara, rifornimento in seduta (gel, acqua e sodio all'ora). **Limiti di sicurezza** che vincono su tutto.
-- **L'impronta** — il segno dell'app: ogni seduta è una fila di capsule larga quanto il tempo e alta quanto l'intensità; il contorno è il piano, il pieno quello che hai fatto.
-- Widget per Home e schermata di blocco, notifiche della sera, diario del cibo (anche con Siri), infortuni e malattia, palestra e mobilità, condivisione delle attività.
-- **Condividere** — quattro immagini per le storie (Attività, Giornata, Settimana, Gara) su fondo nero, bianco o trasparente, tutte firmate dall'impronta.
+- **Today** — readiness from HRV (7-day trend against your own baseline, not a single night), resting HR and sleep, with two separate lights: *systemic* (heart and recovery) and *tissues* (running impact). Today's session adapts itself when needed.
+- **Plan** — 4-week blocks (3 load, 1 recovery) periodised backwards from your race, roughly 80/20, with a library of parametric sessions translated into your zones. Sessions go to the Intervals calendar and from there to your watch.
+- **Thresholds** — threshold HR, threshold pace (from hard efforts or critical speed), swim CSS (400 + 200 test or several maximal distances) and FTP, estimated from your activities. A new value is written to Intervals only when a second effort confirms it.
+- **Fuel** — resting metabolism (ten Haaf 2014), carbohydrates in g/kg by day type, protein and fat with floors, deficit as % of body weight, **calories that learn** from your weigh-ins and food log (Kalman filter), carb loading before races, in-session fuelling (gels, water and sodium per hour). **Safety floors** override everything.
+- **3D exercise videos** — an anatomical figure performs the gym and mobility exercises in a loop; working muscles glow red, helpers pink, stretched muscles blue. Made with Blender from a CC0 body.
+- **Swimming** — stroke rate, strokes per length, distance per stroke and SWOLF for each swim, plus the SWOLF trend over two months.
+- **The footprint** — the app's signature: every session is a row of capsules as wide as the time and as tall as the intensity; the outline is the plan, the fill is what you did.
+- Home and Lock Screen widgets, evening notifications, food diary (Siri too), injury and illness mode, gym and mobility, activity sharing.
+- **Sharing** — four story images (Activity, Day, Week, Race) on black, white or transparent backgrounds, all signed by the footprint.
 
-## Installazione (iPhone)
+## Install (iPhone)
 
-1. Installa **Scriptable** dall'App Store.
-2. Copia il contenuto di [`02_App_iPhone/HUD-70.3.js`](02_App_iPhone/HUD-70.3.js) in un nuovo script di Scriptable.
-3. Su Intervals.icu › Settings › Developer Settings genera la tua **API Key**.
-4. Avvia lo script: incolla la chiave (resta nel Portachiavi dell'iPhone) e rispondi alle domande della configurazione.
+1. Install **Scriptable** from the App Store.
+2. Copy the contents of [`02_App_iPhone/HUD-70.3.js`](02_App_iPhone/HUD-70.3.js) into a new Scriptable script.
+3. On Intervals.icu › Settings › Developer Settings, generate your **API key**.
+4. Run the script: paste the key (it is stored in the iPhone Keychain) and answer the setup questions.
 
-La guida completa delle schede, dei widget e della condivisione è in [`docs/GUIDA.md`](docs/GUIDA.md).
+A short English guide is in [`docs/GUIDE.en.md`](docs/GUIDE.en.md); the full guide (Italian) is [`docs/GUIDA.md`](docs/GUIDA.md).
 
-## I tuoi dati
+## Your data
 
-Tutto resta sul tuo iPhone e nel tuo iCloud: l'app non ha un server, non raccoglie statistiche d'uso e non manda nulla a nessuno, tranne le chiamate a Intervals.icu con la tua chiave. I dati di Garmin che arrivano tramite Intervals restano soggetti ai termini di Garmin e di Intervals.icu.
+Everything stays on your iPhone and in your iCloud: the app has no server, collects no usage statistics and sends nothing to anyone except the calls to Intervals.icu with your own key. Garmin data reaching you through Intervals remains subject to Garmin's and Intervals.icu's terms.
 
-**Non è un dispositivo medico.** Le indicazioni su allenamento e alimentazione sono generali: se hai un medico, un allenatore o un nutrizionista, vale il loro parere.
+**Not a medical device.** Training and nutrition guidance is general: if you have a doctor, coach or dietitian, their advice wins.
 
-## Struttura del repository
+## Language
 
-| Cartella | Contenuto |
+The interface, notifications and code comments are in Italian. Translating the UI is welcome but large (the text lives inside the page templates in `02_App_iPhone/src/14-interfaccia.js` and the analysis in `12-analisi.js`): if you want to help, open an issue first so we can agree on a string table instead of scattered edits.
+
+## Repository
+
+| Folder | Contents |
 | --- | --- |
-| `02_App_iPhone` | L'app: il codice in `src/` (21 file per argomento), `costruisci.js` che li unisce in `HUD-70.3.js` |
-| `04_Generatore` | Generatore del piano, stima delle soglie, verifiche del profilo, profili di prova e tutti i test |
-| `03_Versione_PC` | Dashboard di analisi per il computer, costruita dallo stesso motore |
-| `09_Esporta_FIT` | Le sedute di nuoto come file FIT per gli orologi Garmin |
-| `01_Prodotto` | Specifica di prodotto e diagrammi |
-| `docs` | Guida d'uso |
+| `02_App_iPhone` | The app: source in `src/` (22 files by topic), `costruisci.js` joins them into `HUD-70.3.js` |
+| `04_Generatore` | Plan generator, threshold estimation, profile checks, test profiles and all the tests |
+| `03_Versione_PC` | Desktop analysis dashboard built from the same engine |
+| `09_Esporta_FIT` | Swim sessions as FIT files for Garmin watches |
+| `11_Omini_3D` | 3D exercise videos: an anatomical figure (MakeHuman, CC0) whose working muscles light up, rendered with Blender |
+| `01_Prodotto` | Product spec and diagrams |
+| `docs` | User guides |
 
-## Sviluppo
+## Development
 
-Serve Node.js 18 o più recente.
+Requires Node.js 18 or newer.
 
 ```sh
 cd 02_App_iPhone
-npm install        # solo per l'autocompletamento delle API di Scriptable in VS Code
-npm run build      # unisce src/ in HUD-70.3.js
-npm test           # Carburante, calorie adattive, generatore, soglie, verifiche
+npm install        # only for Scriptable API autocompletion in VS Code
+npm run build      # joins src/ into HUD-70.3.js
+npm test           # fuel, adaptive calories, HRV, generator, thresholds, checks
 ```
 
-Si modifica sempre `02_App_iPhone/src/`; `HUD-70.3.js` è il risultato e non va toccato a mano. I blocchi condivisi con il generatore si copiano con `node 04_Generatore/sincronizza-app.js`. Vedi [`CONTRIBUTING.md`](CONTRIBUTING.md).
+Always edit `02_App_iPhone/src/`; `HUD-70.3.js` is the build output and is never edited by hand. Blocks shared with the generator are copied with `node 04_Generatore/sincronizza-app.js`. See [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
-## Licenza
+## License
 
-HUD è software libero: puoi usarlo, studiarlo, modificarlo e ridistribuirlo secondo la **GNU Affero General Public License 3.0** ([`LICENSE`](LICENSE)). Se distribuisci una versione modificata, o la offri ad altri come servizio in rete, devi rendere disponibile il suo codice sorgente con la stessa licenza.
+HUD is free software: you can use, study, modify and redistribute it under the **GNU Affero General Public License 3.0** ([`LICENSE`](LICENSE)). If you distribute a modified version, or offer it to others as a network service, you must make its source code available under the same license.
 
-© 2026 Matteo e i contributori di HUD. Componenti e dati di terze parti: [`NOTICE.md`](NOTICE.md).
+© 2026 Matteo and the HUD contributors. Third-party components and data: [`NOTICE.md`](NOTICE.md).

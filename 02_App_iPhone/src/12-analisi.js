@@ -1,6 +1,17 @@
 // ------------------------------------------------------------
 //  Analisi
 // ------------------------------------------------------------
+// Tendenza dell'HRV: media di 7 giorni del ln rMSSD (almeno 3 notti) e fascia normale dai 60 giorni prima (almeno 20 notti)
+function trendHRV(wellness, oggi) {
+  const v = (w) => { const x = num(w.hrv) ?? num(w.hrvSDNN); return x !== null && x > 0 ? Math.log(x) : null; };
+  const d0 = parseYMD(oggi), fa = (w) => daysBetween(parseYMD(w.id), d0);
+  const ult = wellness.filter((w) => fa(w) >= 0 && fa(w) <= 6).map(v).filter((x) => x !== null);
+  const base = wellness.filter((w) => fa(w) >= 7 && fa(w) <= 66).map(v).filter((x) => x !== null);
+  if (ult.length < 3 || base.length < 20) return null;
+  const r7 = mean(ult), mu = mean(base), sdv = sd(base) || 0.05;
+  return { r7, mu, sdv, lo: mu - 0.5 * sdv, hi: mu + 0.5 * sdv, n7: ult.length, nBase: base.length, ms7: Math.round(Math.exp(r7)), msLo: Math.round(Math.exp(mu - 0.5 * sdv)), msHi: Math.round(Math.exp(mu + 0.5 * sdv)) };
+}
+
 function analyze(raw, now, diary) {
   completaSoglie(raw);
   const today = ymd(now);
@@ -26,14 +37,7 @@ function analyze(raw, now, diary) {
   const hrv = num(wToday.hrv) ?? num(wToday.hrvSDNN);
   const hrvPrev = prev.map((w) => num(w.hrv) ?? num(w.hrvSDNN)).filter((x) => x !== null);
   let hrvMean = null;
-  if (hrv !== null) {
-    sys.hasData = true;
-    if (hrvPrev.length >= 3) {
-      hrvMean = mean(hrvPrev); const s = sd(hrvPrev) || 1;
-      if (hrv < hrvMean - 2 * s) { bump(sys, "rosso"); sys.reasons.push("HRV molto bassa"); }
-      else if (hrv < hrvMean - s) { bump(sys, "giallo"); sys.reasons.push("HRV sotto la media"); }
-    }
-  }
+  if (hrv !== null) { sys.hasData = true; if (hrvPrev.length >= 3) hrvMean = mean(hrvPrev); }
   const rhr = num(wToday.restingHR);
   const rhrPrev = prev.map((w) => num(w.restingHR)).filter((x) => x !== null);
   let rhrMean = null;
@@ -53,6 +57,22 @@ function analyze(raw, now, diary) {
   const atl = num(wToday.atl) ?? num(wToday.icu_atl);
   const tsb = ctl !== null && atl !== null ? ctl - atl : null;
   if (tsb !== null) { sys.hasData = true; if (tsb < S.tsbRosso) { bump(sys, "rosso"); sys.reasons.push("forma troppo negativa"); } }
+  // HRV: conta la tendenza, non la singola notte (Plews, Javaloyes). Media di 7 giorni del ln rMSSD contro la tua fascia
+  // normale (60 giorni prima, ± 0,5 deviazioni standard). Una notte storta da sola accende il giallo solo se anche
+  // la FC a riposo o il sonno dicono la stessa cosa. Con meno di 20 notti nei 60 giorni vale la regola semplice di prima.
+  const altriSegnali = (rhr !== null && rhrMean !== null && rhr - rhrMean >= S.fcRiposoGiallo) || (sleepScore !== null && sleepScore < S.sonnoGiallo) || (sleepSecs !== null && sleepSecs < S.sonnoOreGiallo * 3600);
+  const hrvTrend = trendHRV(wellness, wToday.id || today);
+  if (hrv !== null && hrvTrend) {
+    const { r7, lo, hi, sdv, mu } = hrvTrend;
+    if (r7 < mu - 1.5 * sdv || (r7 < lo && altriSegnali)) { bump(sys, r7 < mu - 1.5 * sdv && altriSegnali ? "rosso" : "giallo"); sys.reasons.push("HRV della settimana sotto la tua fascia"); }
+    else if (r7 < lo) { bump(sys, "giallo"); sys.reasons.push("HRV della settimana sotto la tua fascia"); }
+    else if (r7 > hi + sdv && tsb !== null && tsb < -20) { bump(sys, "giallo"); sys.reasons.push("HRV insolitamente alta con molto carico"); }
+    else if (Math.log(hrv) < r7 - 2 * sdv && altriSegnali) { bump(sys, "giallo"); sys.reasons.push("HRV di stanotte bassa"); }
+  } else if (hrv !== null && hrvPrev.length >= 3) {
+    const s = sd(hrvPrev) || 1;
+    if (hrv < hrvMean - 2 * s) { bump(sys, "rosso"); sys.reasons.push("HRV molto bassa"); }
+    else if (hrv < hrvMean - s) { bump(sys, "giallo"); sys.reasons.push("HRV sotto la media"); }
+  }
 
   // --- Tessuti
   const tis = { state: "verde", reasons: [] };
@@ -271,7 +291,7 @@ function analyze(raw, now, diary) {
 
   const A = {
     now, raceDays: CONFIG.obiettivo && CONFIG.obiettivo.data ? daysBetween(now, parseYMD(CONFIG.obiettivo.data)) : null, worst, sys, tis, verdict,
-    metrics: { hrv, hrvMean, rhr, rhrMean, ctl, atl, tsb, ramp: num(wToday.rampRate) },
+    metrics: { hrv, hrvMean, hrvTrend, rhr, rhrMean, ctl, atl, tsb, ramp: num(wToday.rampRate) },
     sleep, todayEv, tomorrowEv, domani, gymToday, weeks, ladderCheck, season,
     fitness: { hist: fit, proj },
     decoupling: longRuns.length ? num(longRuns[0].decoupling) : null, weight, lastAct,

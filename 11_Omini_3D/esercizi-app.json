@@ -1,0 +1,551 @@
+[
+ {
+  "id": "squat",
+  "nome": "Squat a corpo libero",
+  "fedb": "Bodyweight_Squat",
+  "attrezzi": "libero",
+  "gruppo": "gambe",
+  "dose": "12",
+  "come": "Piedi larghi come le spalle, scendi come per sederti, ginocchia nella direzione delle punte, schiena dritta."
+ },
+ {
+  "id": "goblet",
+  "nome": "Goblet squat",
+  "fedb": "Goblet_Squat",
+  "attrezzi": "manubri",
+  "gruppo": "gambe",
+  "dose": "10",
+  "come": "Peso al petto, gomiti dentro le ginocchia in basso. Scendi lento, spingi dai talloni."
+ },
+ {
+  "id": "squatbil",
+  "nome": "Squat con bilanciere",
+  "fedb": "Barbell_Squat",
+  "attrezzi": "palestra",
+  "gruppo": "gambe",
+  "dose": "8",
+  "come": "Bilanciere sui trapezi, petto alto, scendi fino a cosce parallele. Carico che lascia 2 ripetizioni di riserva."
+ },
+ {
+  "id": "legpress",
+  "nome": "Leg press",
+  "fedb": "Leg_Press",
+  "attrezzi": "palestra",
+  "gruppo": "gambe",
+  "dose": "10",
+  "come": "Piedi a metà pedana, scendi finché la schiena resta appoggiata, non bloccare le ginocchia in alto."
+ },
+ {
+  "id": "affondo",
+  "nome": "Affondi in camminata",
+  "fedb": "Bodyweight_Walking_Lunge",
+  "attrezzi": "libero",
+  "gruppo": "mono",
+  "dose": "8 per lato",
+  "come": "Passo lungo, ginocchio dietro quasi a terra, busto dritto. Spingi con il tallone davanti."
+ },
+ {
+  "id": "affondoman",
+  "nome": "Affondo indietro con manubri",
+  "fedb": "Dumbbell_Rear_Lunge",
+  "attrezzi": "manubri",
+  "gruppo": "mono",
+  "dose": "8 per lato",
+  "come": "Fai un passo indietro, scendi in verticale, torna spingendo con la gamba davanti."
+ },
+ {
+  "id": "bulgaro",
+  "nome": "Split squat con manubri",
+  "fedb": "Split_Squat_with_Dumbbells",
+  "attrezzi": "manubri",
+  "gruppo": "mono",
+  "dose": "8 per lato",
+  "come": "Gambe a forbice, scendi dritto in basso, peso sulla gamba davanti."
+ },
+ {
+  "id": "stepup",
+  "nome": "Step-up con manubri",
+  "fedb": "Dumbbell_Step_Ups",
+  "attrezzi": "manubri",
+  "gruppo": "mono",
+  "dose": "8 per lato",
+  "come": "Sali su una panca o un gradino alto spingendo solo con la gamba sopra, scendi lento."
+ },
+ {
+  "id": "stepupl",
+  "nome": "Step-up con ginocchio alto",
+  "fedb": "Step-up_with_Knee_Raise",
+  "attrezzi": "libero",
+  "gruppo": "mono",
+  "dose": "10 per lato",
+  "come": "Sali sul gradino e porta su l’altro ginocchio, come in corsa. Scendi controllato."
+ },
+ {
+  "id": "rdl",
+  "nome": "Stacco rumeno",
+  "fedb": "Romanian_Deadlift",
+  "attrezzi": "palestra",
+  "gruppo": "post",
+  "dose": "8",
+  "come": "Ginocchia appena piegate, scendi spingendo il bacino indietro, bilanciere vicino alle gambe, schiena dritta."
+ },
+ {
+  "id": "rdl1",
+  "nome": "Stacco su una gamba",
+  "fedb": "Kettlebell_One-Legged_Deadlift",
+  "attrezzi": "manubri",
+  "gruppo": "post",
+  "dose": "8 per lato",
+  "come": "In equilibrio su una gamba, busto avanti e gamba dietro in linea. Il peso scende vicino alla gamba."
+ },
+ {
+  "id": "ponte",
+  "nome": "Ponte glutei",
+  "fedb": "Butt_Lift_Bridge",
+  "attrezzi": "libero",
+  "gruppo": "post",
+  "dose": "15",
+  "come": "Schiena a terra, piedi vicini ai glutei: alza il bacino stringendo i glutei, 2 secondi su."
+ },
+ {
+  "id": "ponte1",
+  "nome": "Ponte su una gamba",
+  "fedb": "Single_Leg_Glute_Bridge",
+  "attrezzi": "libero",
+  "gruppo": "glutei",
+  "dose": "12 per lato",
+  "come": "Come il ponte, ma su una gamba. Il bacino resta dritto, non ruota."
+ },
+ {
+  "id": "hipthrust",
+  "nome": "Hip thrust",
+  "fedb": "Barbell_Hip_Thrust",
+  "attrezzi": "palestra",
+  "gruppo": "post",
+  "dose": "10",
+  "come": "Schiena sulla panca, bilanciere sul bacino: spingi in alto fino ad allineare busto e cosce."
+ },
+ {
+  "id": "polpacci",
+  "nome": "Sollevamenti sulle punte",
+  "fedb": "Standing_Dumbbell_Calf_Raise",
+  "attrezzi": "libero",
+  "gruppo": "polpacci",
+  "dose": "15",
+  "come": "Su un gradino, sali in punta in 1 secondo e scendi in 3 sotto il gradino. Anche su una gamba sola."
+ },
+ {
+  "id": "polpaccim",
+  "nome": "Sollevamenti sulle punte con manubri",
+  "fedb": "Standing_Dumbbell_Calf_Raise",
+  "attrezzi": "manubri",
+  "gruppo": "polpacci",
+  "dose": "12",
+  "come": "Manubri in mano, su un gradino: su veloce, giù lento in 3 secondi."
+ },
+ {
+  "id": "polpaccip",
+  "nome": "Polpacci alla macchina",
+  "fedb": "Standing_Calf_Raises",
+  "attrezzi": "palestra",
+  "gruppo": "polpacci",
+  "dose": "12",
+  "come": "Spalle sotto i cuscinetti, scendi bene con i talloni, sali in punta e tieni 1 secondo."
+ },
+ {
+  "id": "legcurl",
+  "nome": "Leg curl",
+  "fedb": "Lying_Leg_Curls",
+  "attrezzi": "palestra",
+  "gruppo": "post",
+  "dose": "10",
+  "come": "Piega le ginocchia portando i talloni verso i glutei, torna giù lento."
+ },
+ {
+  "id": "mostro",
+  "nome": "Camminata laterale con elastico",
+  "fedb": "Monster_Walk",
+  "attrezzi": "elastico",
+  "gruppo": "glutei",
+  "dose": "12 passi per lato",
+  "come": "Elastico sopra le ginocchia o alle caviglie, mezzo piegamento, passi laterali senza far cedere le ginocchia."
+ },
+ {
+  "id": "adduttori",
+  "nome": "Adduttori con elastico",
+  "fedb": "Band_Hip_Adductions",
+  "attrezzi": "elastico",
+  "gruppo": "glutei",
+  "dose": "12 per lato",
+  "come": "Elastico alla caviglia, porta la gamba verso l’interno davanti all’altra, lento."
+ },
+ {
+  "id": "swing",
+  "nome": "Swing con kettlebell",
+  "fedb": "One-Arm_Kettlebell_Swings",
+  "attrezzi": "manubri",
+  "gruppo": "plio",
+  "dose": "15",
+  "come": "Spinta del bacino, non delle braccia: il peso sale fino al petto, schiena dritta."
+ },
+ {
+  "id": "squatjump",
+  "nome": "Squat jump",
+  "fedb": "Freehand_Jump_Squat",
+  "attrezzi": "libero",
+  "gruppo": "plio",
+  "dose": "8",
+  "come": "Mezzo squat e salto, atterra morbido sulle punte e riparti. Solo se senza dolori."
+ },
+ {
+  "id": "skip",
+  "nome": "Skip veloce",
+  "fedb": "Fast_Skipping",
+  "attrezzi": "libero",
+  "gruppo": "plio",
+  "dose": "2 × 20 m",
+  "come": "Passi corti e rapidi sull’avampiede, ginocchia su, braccia che lavorano."
+ },
+ {
+  "id": "balzilat",
+  "nome": "Balzi laterali",
+  "fedb": "Lateral_Bound",
+  "attrezzi": "libero",
+  "gruppo": "plio",
+  "dose": "6 per lato",
+  "come": "Salta di lato su una gamba e atterra stabile sull’altra, tieni 1 secondo."
+ },
+ {
+  "id": "plank",
+  "nome": "Plank",
+  "fedb": "Plank",
+  "attrezzi": "libero",
+  "gruppo": "core",
+  "dose": "40\"",
+  "come": "Gomiti sotto le spalle, corpo in linea, glutei e addome stretti. Respira."
+ },
+ {
+  "id": "plankl",
+  "nome": "Plank laterale",
+  "fedb": "Side_Bridge",
+  "attrezzi": "libero",
+  "gruppo": "core",
+  "dose": "30\" per lato",
+  "come": "Su un gomito, bacino alto in linea con spalle e piedi."
+ },
+ {
+  "id": "deadbug",
+  "nome": "Dead bug",
+  "fedb": "Dead_Bug",
+  "attrezzi": "libero",
+  "gruppo": "core",
+  "dose": "8 per lato",
+  "come": "Schiena incollata a terra: allunga braccio e gamba opposti, torna, cambia lato."
+ },
+ {
+  "id": "superman",
+  "nome": "Superman",
+  "fedb": "Superman",
+  "attrezzi": "libero",
+  "gruppo": "core",
+  "dose": "10",
+  "come": "A pancia in giù, alza insieme braccia e gambe di pochi centimetri, tieni 2 secondi."
+ },
+ {
+  "id": "pallof",
+  "nome": "Pallof press",
+  "fedb": "Pallof_Press",
+  "attrezzi": "palestra",
+  "gruppo": "core",
+  "dose": "10 per lato",
+  "come": "Cavo o elastico al fianco: spingi le mani avanti e non lasciarti ruotare."
+ },
+ {
+  "id": "russian",
+  "nome": "Russian twist",
+  "fedb": "Russian_Twist",
+  "attrezzi": "libero",
+  "gruppo": "core",
+  "dose": "12 per lato",
+  "come": "Seduto, busto inclinato indietro, ruota le spalle da un lato all’altro."
+ },
+ {
+  "id": "mountain",
+  "nome": "Mountain climber",
+  "fedb": "Mountain_Climbers",
+  "attrezzi": "libero",
+  "gruppo": "core",
+  "dose": "30\"",
+  "come": "In posizione di piegamento, porta le ginocchia al petto alternando, bacino basso."
+ },
+ {
+  "id": "piegamenti",
+  "nome": "Piegamenti",
+  "fedb": "Pushups",
+  "attrezzi": "libero",
+  "gruppo": "spinta",
+  "dose": "10",
+  "come": "Mani sotto le spalle, corpo in linea, petto a un pugno dal pavimento. Sulle ginocchia se serve."
+ },
+ {
+  "id": "panca",
+  "nome": "Panca piana",
+  "fedb": "Barbell_Bench_Press_-_Medium_Grip",
+  "attrezzi": "palestra",
+  "gruppo": "spinta",
+  "dose": "8",
+  "come": "Scapole strette sulla panca, il bilanciere scende a metà petto, spingi in su."
+ },
+ {
+  "id": "spinte",
+  "nome": "Spinte sopra la testa",
+  "fedb": "Dumbbell_Shoulder_Press",
+  "attrezzi": "manubri",
+  "gruppo": "spinta",
+  "dose": "10",
+  "come": "Manubri all’altezza delle spalle, spingi in alto senza inarcare la schiena."
+ },
+ {
+  "id": "rematore",
+  "nome": "Rematore con manubri",
+  "fedb": "Bent_Over_Two-Dumbbell_Row",
+  "attrezzi": "manubri",
+  "gruppo": "tirata",
+  "dose": "10",
+  "come": "Busto inclinato, schiena dritta: porta i gomiti indietro vicino ai fianchi."
+ },
+ {
+  "id": "rematorebil",
+  "nome": "Rematore con bilanciere",
+  "fedb": "Bent_Over_Barbell_Row",
+  "attrezzi": "palestra",
+  "gruppo": "tirata",
+  "dose": "8",
+  "come": "Busto a 45 gradi, tira il bilanciere verso l’ombelico, scapole strette."
+ },
+ {
+  "id": "lat",
+  "nome": "Lat machine",
+  "fedb": "Wide-Grip_Lat_Pulldown",
+  "attrezzi": "palestra",
+  "gruppo": "tirata",
+  "dose": "10",
+  "come": "Tira la barra al petto portando i gomiti in basso, petto alto, niente slanci."
+ },
+ {
+  "id": "trazioni",
+  "nome": "Trazioni",
+  "fedb": "Chin-Up",
+  "attrezzi": "libero",
+  "gruppo": "tirata",
+  "dose": "5",
+  "come": "Alla sbarra, tira il mento sopra la barra. Con l’elastico se servono aiuti."
+ },
+ {
+  "id": "facepull",
+  "nome": "Face pull",
+  "fedb": "Face_Pull",
+  "attrezzi": "palestra",
+  "gruppo": "spalle",
+  "dose": "12",
+  "come": "Corda al cavo alto: tira verso il viso aprendo i gomiti, scapole indietro."
+ },
+ {
+  "id": "rotest",
+  "nome": "Rotazione esterna con elastico",
+  "fedb": "External_Rotation_with_Band",
+  "attrezzi": "elastico",
+  "gruppo": "spalle",
+  "dose": "15 per lato",
+  "come": "Gomito attaccato al fianco a 90 gradi, ruota l’avambraccio verso l’esterno. Lento."
+ },
+ {
+  "id": "apertura",
+  "nome": "Apertura con elastico",
+  "fedb": "Band_Pull_Apart",
+  "attrezzi": "elastico",
+  "gruppo": "spalle",
+  "dose": "15",
+  "come": "Braccia tese davanti, apri l’elastico fino al petto stringendo le scapole."
+ },
+ {
+  "id": "alzatepost",
+  "nome": "Alzate posteriori",
+  "fedb": "Seated_Bent-Over_Rear_Delt_Raise",
+  "attrezzi": "manubri",
+  "gruppo": "spalle",
+  "dose": "12",
+  "come": "Seduto e piegato in avanti, apri le braccia di lato con i gomiti morbidi."
+ },
+ {
+  "id": "contadino",
+  "nome": "Camminata del contadino",
+  "fedb": "Farmers_Walk",
+  "attrezzi": "manubri",
+  "gruppo": "core",
+  "dose": "40 m",
+  "come": "Due pesi pesanti ai lati, cammina dritto con le spalle basse e l’addome stretto."
+ },
+ {
+  "id": "gattomucca",
+  "nome": "Gatto-mucca",
+  "fedb": "Cat_Stretch",
+  "attrezzi": "libero",
+  "gruppo": "mob",
+  "dose": "60\"",
+  "come": "A quattro zampe: inarca e arrotonda la schiena con il respiro, lento."
+ },
+ {
+  "id": "wgs",
+  "nome": "Affondo con rotazione",
+  "fedb": "Worlds_Greatest_Stretch",
+  "attrezzi": "libero",
+  "gruppo": "mob",
+  "dose": "5 per lato",
+  "come": "Affondo lungo, gomito verso il piede davanti, poi ruota il busto aprendo il braccio al cielo."
+ },
+ {
+  "id": "flessori",
+  "nome": "Flessori dell’anca in ginocchio",
+  "fedb": "Kneeling_Hip_Flexor",
+  "attrezzi": "libero",
+  "gruppo": "mob",
+  "dose": "45\" per lato",
+  "come": "Un ginocchio a terra, bacino in avanti e glutei stretti: senti tirare davanti all’anca."
+ },
+ {
+  "id": "caviglie",
+  "nome": "Cerchi con le caviglie",
+  "fedb": "Ankle_Circles",
+  "attrezzi": "libero",
+  "gruppo": "mob",
+  "dose": "10 per verso",
+  "come": "Disegna cerchi ampi con la punta del piede, nei due versi."
+ },
+ {
+  "id": "polpaccimuro",
+  "nome": "Polpacci al muro",
+  "fedb": "Calf_Stretch_Hands_Against_Wall",
+  "attrezzi": "libero",
+  "gruppo": "mob",
+  "dose": "45\" per lato",
+  "come": "Mani al muro, gamba dietro tesa e tallone a terra; poi ginocchio piegato per il soleo."
+ },
+ {
+  "id": "femorali",
+  "nome": "Allungamento dei femorali",
+  "fedb": "Hamstring_Stretch",
+  "attrezzi": "libero",
+  "gruppo": "mob",
+  "dose": "45\" per lato",
+  "come": "Gamba tesa, porta il busto in avanti dalla piega dell’anca, schiena lunga."
+ },
+ {
+  "id": "quad",
+  "nome": "Quadricipite in piedi",
+  "fedb": "Standing_Elevated_Quad_Stretch",
+  "attrezzi": "libero",
+  "gruppo": "mob",
+  "dose": "45\" per lato",
+  "come": "Piede dietro appoggiato in alto, ginocchio verso il basso, bacino in avanti."
+ },
+ {
+  "id": "bambino",
+  "nome": "Posizione del bambino",
+  "fedb": "Childs_Pose",
+  "attrezzi": "libero",
+  "gruppo": "mob",
+  "dose": "60\"",
+  "come": "Seduto sui talloni, braccia avanti e fronte a terra. Respira nella schiena."
+ },
+ {
+  "id": "ginpetto",
+  "nome": "Ginocchio al petto",
+  "fedb": "One_Knee_To_Chest",
+  "attrezzi": "libero",
+  "gruppo": "mob",
+  "dose": "45\" per lato",
+  "come": "Sdraiato, porta un ginocchio al petto, l’altra gamba resta lunga."
+ },
+ {
+  "id": "torsione",
+  "nome": "Torsione della schiena",
+  "fedb": "Spinal_Stretch",
+  "attrezzi": "libero",
+  "gruppo": "mob",
+  "dose": "45\" per lato",
+  "come": "Seduto o sdraiato, ruota il busto da un lato tenendo il bacino fermo."
+ },
+ {
+  "id": "groiners",
+  "nome": "Groiners",
+  "fedb": "Groiners",
+  "attrezzi": "libero",
+  "gruppo": "mob",
+  "dose": "6 per lato",
+  "come": "Da piegamento, porta un piede accanto alla mano e spingi il bacino giù, poi cambia."
+ },
+ {
+  "id": "inchworm",
+  "nome": "Inchworm",
+  "fedb": "Inchworm",
+  "attrezzi": "libero",
+  "gruppo": "mob",
+  "dose": "5",
+  "come": "Piegati e cammina con le mani fino al piegamento, poi torna con i piedi verso le mani."
+ },
+ {
+  "id": "cerchibraccia",
+  "nome": "Cerchi con le braccia",
+  "fedb": "Arm_Circles",
+  "attrezzi": "libero",
+  "gruppo": "mob",
+  "dose": "30\"",
+  "come": "Braccia tese di lato, cerchi piccoli che diventano grandi, avanti e indietro."
+ },
+ {
+  "id": "petto",
+  "nome": "Apertura del petto",
+  "fedb": "Dynamic_Chest_Stretch",
+  "attrezzi": "libero",
+  "gruppo": "mob",
+  "dose": "30\"",
+  "come": "Apri e chiudi le braccia davanti al petto, ampie e senza strappi."
+ },
+ {
+  "id": "cerchianca",
+  "nome": "Cerchi con l’anca",
+  "fedb": "Standing_Hip_Circles",
+  "attrezzi": "libero",
+  "gruppo": "mob",
+  "dose": "8 per lato",
+  "come": "In piedi, ginocchio su e disegna un cerchio grande con l’anca."
+ },
+ {
+  "id": "calciata",
+  "nome": "Calciata",
+  "fedb": "Double_Leg_Butt_Kick",
+  "attrezzi": "libero",
+  "gruppo": "plio",
+  "dose": "2 × 20 m",
+  "come": "Corsa sul posto o avanzando, talloni ai glutei, passi rapidi."
+ },
+ {
+  "id": "rullopiri",
+  "nome": "Piriforme con il rullo",
+  "fedb": "Piriformis-SMR",
+  "attrezzi": "palestra",
+  "gruppo": "mob",
+  "dose": "60\" per lato",
+  "come": "Seduto sul rullo, caviglia sul ginocchio opposto, rotola piano sul gluteo."
+ },
+ {
+  "id": "rulloquad",
+  "nome": "Quadricipiti con il rullo",
+  "fedb": "Quadriceps-SMR",
+  "attrezzi": "palestra",
+  "gruppo": "mob",
+  "dose": "60\"",
+  "come": "A pancia in giù sul rullo, rotola dall’anca al ginocchio, lento."
+ }
+]

@@ -1,0 +1,5 @@
+Questi file vengono da MakeHuman (https://github.com/makehumancommunity/makehuman, cartella makehuman/data):
+mesh di base, bersagli (targets), scheletro "default" con i pesi.
+Sono stati rilasciati in CC0 1.0 (pubblico dominio) nel settembre 2020.
+Copyright originale: Data Collection AB, Joel Palmius, Jonas Hauquier.
+Testo della licenza: https://creativecommons.org/publicdomain/zero/1.0/

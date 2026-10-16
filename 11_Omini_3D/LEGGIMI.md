@@ -1,0 +1,68 @@
+# Omini 3D · video degli esercizi con i muscoli che si accendono
+
+Una figura anatomica fa l'esercizio in loop su fondo scuro. I muscoli si colorano a tempo con lo sforzo:
+**rosso** quelli che lavorano, **rosa** quelli che aiutano, **azzurro** quelli che si allungano (mobilità).
+L'app mostra il video nella scheda dell'esercizio, con l'elenco dei muscoli sotto. Senza rete torna la foto di prima.
+
+## Cosa c'è in questa cartella
+
+| File | A cosa serve |
+| --- | --- |
+| `figura.blend` | La figura pronta: corpo, scheletro e 24 zone muscolari. Si apre in Blender. |
+| `rendi_esercizio.py` | Fa il video di uno o più esercizi. È l'unico script che serve di solito. |
+| `movimenti.py` | I movimenti, scritti come pose chiave. Qui si correggono o si aggiungono esercizi. |
+| `muscoli.json` | Per ognuno dei 61 esercizi dell'app: muscoli che lavorano, aiutano, si allungano; inquadratura. |
+| `sincronizza_app.py` | Copia nell'app la tabella dei muscoli e l'elenco dei video pronti. |
+| `crea_figura.py`, `makehuman/` | Ricostruiscono `figura.blend` da zero (servono solo se cambi corpo o zone). |
+| `crea_tabella.py` | Ricrea `muscoli.json` (la tabella è scritta lì dentro). |
+| `anteprima_zone.py`, `griglia_zone.py` | Foto di controllo delle zone muscolari. |
+| `video/` | I video finiti (`.mp4`) e le copertine (`.jpg`). |
+
+## Fare i video sul Mac
+
+Apri il Terminale e incolla (una riga alla volta):
+
+```sh
+cd ~/Desktop/Atleta reale/"HUD - Progetto App Allenamento"/11_Omini_3D
+/Applications/Blender.app/Contents/MacOS/Blender -b figura.blend -P rendi_esercizio.py -- squat
+```
+
+- Più esercizi insieme: `-- squat ponte plank gattomucca`. Tutti quelli che hanno un movimento: `-- tutti`.
+- Più grande o più pulito: `--lato 1080 --campioni 64`. Di base è 720 × 720 con 32 campioni.
+- Usa la scheda video del Mac (Metal) da sola. Su un Mac con chip M un video di 4 secondi richiede pochi minuti.
+- Escono `video/squat.mp4` (loop di 3–6 secondi, poche centinaia di KB) e `video/squat.jpg` (la copertina).
+
+Poi, per farli vedere nell'app:
+
+```sh
+python3 sincronizza_app.py . ../02_App_iPhone/src/19-mobilita-palestra.js
+cd ../02_App_iPhone && npm run build
+```
+
+`sincronizza_app.py` crea anche il loop `.webp` che l'app mostra (parte da solo anche dove un video aspetta un tocco).
+Per farlo servono ffmpeg e Pillow (`brew install ffmpeg` e `pip3 install pillow`); se mancano, l'app usa l'`.mp4`.
+
+L'app scarica i video da GitHub (tramite jsDelivr) dalla cartella `11_Omini_3D/video` del repository pubblico: arrivano sull'iPhone dopo il push.
+
+## Correggere o aggiungere un movimento
+
+1. In `movimenti.py` ogni esercizio è un elenco di pose chiave nel tempo (0 = inizio, 1 = fine, uguale all'inizio così il loop non salta).
+   Le rotazioni sono in gradi sugli assi del corpo, spiegati in cima al file. `sforzo` dice quando si accendono i muscoli.
+2. Controlla le pose in pochi secondi, con una foto per posa:
+   `/Applications/Blender.app/Contents/MacOS/Blender -b figura.blend -P rendi_esercizio.py -- squat --chiavi --motore workbench`
+3. Quando vanno bene, fai il video come sopra.
+
+Lo script mette da solo la figura a terra in ogni posa. Con `ik_piedi` / `ik_mani` piedi e mani restano fermi dove sono nella prima posa (squat, ponte, quattro zampe).
+I muscoli di ogni esercizio vengono da `muscoli.json`, non dal movimento.
+
+## Stato
+
+- **Video pronti:** squat, ponte glutei, plank, gatto-mucca, piegamenti, sollevamenti sulle punte, posizione del bambino.
+- **Da fare:** gli altri 54 esercizi della tabella. I movimenti semplici (affondi, stacchi, piegamenti, polpacci, mobilità) si scrivono come quelli già fatti.
+  Per quelli complessi (swing, balzi, skip) conviene partire da un'animazione registrata, da Mixamo o da una ripresa col telefono.
+
+## Licenze
+
+- Figura, scheletro e forme: **MakeHuman**, rilasciati in **CC0** (pubblico dominio). Il copyright originale è di Data Collection AB, Joel Palmius e Jonas Hauquier.
+- Muscoli per esercizio: punto di partenza da **Free Exercise DB** (pubblico dominio), poi rivisti a mano.
+- Zone muscolari, movimenti, script e video: parte di HUD. Il codice è AGPL-3.0, i video si possono riusare con **CC BY 4.0** citando HUD.
