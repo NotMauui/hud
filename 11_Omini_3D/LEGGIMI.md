@@ -18,12 +18,26 @@ L'app mostra il video nella scheda dell'esercizio, con l'elenco dei muscoli sott
 | `anteprima_zone.py`, `griglia_zone.py` | Foto di controllo delle zone muscolari. |
 | `video/` | I video finiti (`.mp4`) e le copertine (`.jpg`). |
 
-## Fare i video sul Mac
+## Tutti gli esercizi di palestra, qualità massima
 
-Apri il Terminale e incolla (una riga alla volta):
+Col Mac in carica, nel Terminale, dalla cartella `11_Omini_3D` (scrivi `cd `, trascina la cartella, Invio):
 
 ```sh
-cd ~/Desktop/Atleta reale/"HUD - Progetto App Allenamento"/11_Omini_3D
+sh rendi_palestra.sh
+```
+
+Fa i 44 video di palestra a 720 × 720 (quanto serve all'app; per 1080 togli `--lato 720` dallo script), 30 fotogrammi al secondo, sfocatura di movimento e luce calcolata con Cycles (64 campioni con riduzione del rumore), poi aggiorna l'app.
+Ci vogliono ore: il Terminale scrive quanto ha richiesto ogni video, così sai quanto manca. Il Mac resta sveglio da solo.
+Si può fermare con Ctrl+C e rilanciare: riparte dal primo video non ancora fatto a qualità massima.
+Alla fine scrive i comandi per pubblicare.
+
+Le qualità: `--qualita bozza` (540, veloce, per provare), `normale` (720, la base), `massima` (1080 · 30 fps · motion blur).
+
+## Fare i video sul Mac
+
+Apri il Terminale, scrivi `cd ` (con lo spazio), trascina dentro la cartella `11_Omini_3D` e premi Invio. Poi:
+
+```sh
 /Applications/Blender.app/Contents/MacOS/Blender -b figura.blend -P rendi_esercizio.py -- squat
 ```
 
@@ -57,9 +71,11 @@ I muscoli di ogni esercizio vengono da `muscoli.json`, non dal movimento.
 
 ## Stato
 
-- **Video pronti:** squat, ponte glutei, plank, gatto-mucca, piegamenti, sollevamenti sulle punte, posizione del bambino.
-- **Da fare:** gli altri 54 esercizi della tabella. I movimenti semplici (affondi, stacchi, piegamenti, polpacci, mobilità) si scrivono come quelli già fatti.
-  Per quelli complessi (swing, balzi, skip) conviene partire da un'animazione registrata, da Mixamo o da una ripresa col telefono.
+- **Movimenti scritti:** tutti i 44 esercizi di palestra, con gli attrezzi (manubri, kettlebell, bilanciere, panca, gradino, sbarra, cavi, elastici, lat machine, leg press), più gatto-mucca e posizione del bambino.
+- **Video già nell'app:** squat, ponte glutei, plank, gatto-mucca, piegamenti, sollevamenti sulle punte, posizione del bambino (qualità normale). `rendi_palestra.sh` li rifà tutti alla massima.
+- **Da fare:** gli altri 15 esercizi di mobilità.
+
+Strumenti per scrivere i movimenti (in cima a `movimenti.py`): `dir`/`dirw` dicono dove punta un segmento (braccio, coscia…) negli assi del corpo o del mondo, `ik` sposta piedi e mani tenuti dall'IK, `att` muove un attrezzo, `volo` stacca la figura da terra.
 
 ## Licenze
 

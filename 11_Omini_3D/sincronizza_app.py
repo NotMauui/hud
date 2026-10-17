@@ -20,7 +20,7 @@ for k in mp4:
     src, w = os.path.join(vd, k + ".mp4"), os.path.join(vd, k + ".webp")
     if not ff or Image is None or (os.path.exists(w) and os.path.getmtime(w) >= os.path.getmtime(src)): continue
     with tempfile.TemporaryDirectory() as tmp:
-        subprocess.run([ff, "-v", "quiet", "-i", src, "-vf", "scale=480:-2", os.path.join(tmp, "%04d.png")])
+        subprocess.run([ff, "-v", "quiet", "-i", src, "-vf", "scale=720:-2", os.path.join(tmp, "%04d.png")])
         fr = [Image.open(f).convert("RGB") for f in sorted(glob.glob(os.path.join(tmp, "*.png")))]
         if len(fr) < 2: print("video non leggibile (ancora in corso?):", k); continue
         fps = 24
