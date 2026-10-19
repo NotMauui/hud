@@ -12,7 +12,7 @@
 //  creato dalla configurazione al primo avvio: qui sotto ci sono solo valori generici.
 // ============================================================
 
-const VERSIONE = "1.9";
+const VERSIONE = "1.10";
 
 // ------------------------------------------------------------
 //  CONFIGURAZIONE — valori di partenza uguali per tutti
@@ -23,7 +23,7 @@ const CONFIG = {
   soglieAutomatiche: true, // le soglie stimate dalle attività vanno su Intervals da sole, tranne quelle fissate nel profilo
   soglieFissate: [],
   repository: "https://github.com/NotMauui/hud", // dove si segnalano i problemi (Impostazioni › Segnala un problema)
-  feedbackEmail: "", // dove arrivano i commenti dei tester (vuoto: la mail si apre senza destinatario)
+  feedbackEmail: "supporthud@gmail.com", // dove arrivano commenti, segnalazioni e gli avvisi dei tester (vuoto: la mail si apre senza destinatario)
 
   // Obiettivo: arriva dal profilo ({ nome, data, tipo, ctlGara }) oppure null.
   obiettivo: null,

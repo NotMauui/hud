@@ -276,6 +276,45 @@ async function shareLoop(wv, ctx) {
       } catch (e) { await js(`window.__toast(${JSON.stringify(CONFIG.feedbackEmail ? "Mail non disponibile: scrivi a " + CONFIG.feedbackEmail : "Mail non disponibile su questo iPhone")})`); }
       continue;
     }
+    if (kind === "archivio" || kind === "esporta") {
+      // I tuoi dati: completa l'archivio (tutto lo storico e i file originali) o esportalo in un .zip
+      const toast = (t) => js(`window.__toast(${JSON.stringify(t)})`);
+      if (!ctx.key) { await toast("Collega Intervals: l'archivio parte da lì"); continue; }
+      const fine = (S) => { const R = riassuntoArchivio(S); return R ? (R.manca ? `Archivio aggiornato: ${R.manca.toLowerCase()}` : `Archivio completo: ${R.dati}`) : "Archivio aggiornato"; };
+      if (kind === "archivio") {
+        if (ARCH_COMPLETA) { await toast("Sto già completando l'archivio"); continue; }
+        ARCH_COMPLETA = true;
+        await toast("Recupero tutto lo storico: puoi usare l'app, tienila aperta");
+        archCoda(() => completaArchivio(ctx.key, js, ctx.chiusa)).then((S) => toast(fine(S)), (e) => toast(`Archivio: ${(e && e.message) || e}`));
+        continue;
+      }
+      const riprendi = ARCH_COMPLETA; // un recupero dei file originali in corso riparte dopo l'esportazione
+      try {
+        let R = null;
+        try { R = riassuntoArchivio(await archLeggi(archFM(), "stato.json", null)); } catch (e) {}
+        if (R && !R.finito) {
+          const a = new Alert();
+          a.title = "L'archivio non è ancora completo";
+          a.message = `${R.dal ? `Ci sono i dati dal ${R.dal} a oggi. ` : ""}Gli anni più vecchi si stanno ancora recuperando da Intervals: ci vuole circa un minuto.`;
+          a.addAction("Completa e poi esporta");
+          a.addAction("Esporta adesso");
+          a.addCancelAction("Annulla");
+          const s = await a.presentAlert();
+          if (s === -1) continue;
+          if (s === 0) {
+            await toast("Recupero gli anni mancanti…");
+            ARCH_FERMA = true; await ARCH_CODA; ARCH_FERMA = false; // il recupero dei file originali si mette in pausa
+            await archCoda(() => completaArchivio(ctx.key, js, ctx.chiusa, false));
+          }
+        }
+        await toast("Preparo il file…");
+        ARCH_FERMA = true; await ARCH_CODA; ARCH_FERMA = false;
+        const r = await archCoda(() => esportaDati(new Date()));
+        await toast(r.salvato.length ? `Salvato ${r.nome}: ${fmtIt(r.conti.attivita)} attività` : "Esportazione annullata");
+        if (riprendi) archCoda(() => completaArchivio(ctx.key, js, ctx.chiusa)).then((S) => toast(fine(S)), () => {});
+      } catch (e) { await toast(`Esportazione non riuscita: ${(e && e.message) || e}`); }
+      continue;
+    }
     if (kind === "feedback") {
       try {
         const m = new Mail();

@@ -645,6 +645,7 @@ function setupView(A) {
   </div>
   <div id="f-err" class="ferr" role="alert"></div>
   <button class="primary" id="f-salva" type="button" data-first="${first ? 1 : 0}">${first ? (P.pianoApp === false ? "Inizia" : "Crea il mio piano") : "Salva le modifiche"}</button>
+  ${first ? "" : archivioCard(A)}
   ${first ? "" : `<div class="card list">
     ${P.avvisato ? "" : `<button class="lrow rowlink" type="button" data-act="avvisa:impostazioni"><span>Avvisa chi ti ha dato l'app che sei pronto</span><span class="chev2">›</span></button>
     <div class="sep l16"></div>`}
@@ -1810,7 +1811,7 @@ document.addEventListener('click',function(e){var b=e.target.closest&&e.target.c
 var MOB=${JSON.stringify(MOB)},RISC=${JSON.stringify(RISC).replace(/</g, "\\u003c")},MOBH=${JSON.stringify(mobDelGiorno(A)[0])},MOBW=${JSON.stringify(mobDelGiorno(A)[1])},SPC=${JSON.stringify(Object.fromEntries(Object.entries(SPORT).map(([k, x]) => [k, x.c])))},CHEVJ=${JSON.stringify(CHEV)},SCRIVE=${JSON.stringify(!!SCRIVE_APP(A))};
 // ---- Palestra, mobilità e riscaldamenti: esercizi con il video 3D di HUD (senza rete la foto del primo fotogramma)
 var ESL=${JSON.stringify(ESL).replace(/</g, "\\u003c")};
-var MUSC=${JSON.stringify(MUSC).replace(/</g, "\\u003c")},MOB_ZONE=${JSON.stringify(MOB_ZONE)},MOB_ZONA=${JSON.stringify(MOB_ZONA)},MOB_INFO=${JSON.stringify(MOB_INFO)},VIDEO_ES=${JSON.stringify(VIDEO_ES)},VID_BASE=${JSON.stringify(String(CONFIG.repository || "").replace("https://github.com/", "https://cdn.jsdelivr.net/gh/") + "@main/11_Omini_3D/video/")};
+var MUSC=${JSON.stringify(MUSC).replace(/</g, "\\u003c")},MOB_ZONE=${JSON.stringify(MOB_ZONE)},MOB_ZONA=${JSON.stringify(MOB_ZONA)},MOB_INFO=${JSON.stringify(MOB_INFO)},VIDEO_ES=${JSON.stringify(VIDEO_ES)},VID_BASE=${JSON.stringify(String(CONFIG.repository || "").replace("https://github.com/", "https://raw.githubusercontent.com/") + "/main/11_Omini_3D/video/")};
 var ES={};ESL.forEach(function(e){ES[e[0]]={k:e[0],n:e[1],id:e[2],a:e[3],g:e[4],r:e[5],c:e[6]}});
 // ---- Il motore della progressione (19-palestra-progressione.js), lo stesso di Scriptable
 var PROG=(function(){var CONFIG={progressione:${JSON.stringify(CONFIG.progressione)}};var parseYMD=${parseYMD.toString()},arrotonda=${arrotonda.toString()},numOk=${numOk.toString()},fmtKg=${fmtKg.toString()};
@@ -2644,6 +2645,7 @@ window.__prodotto=function(p){var b=document.getElementById('cibook');if(b){b.di
   document.querySelectorAll('[data-pg]').forEach(function(x){x.addEventListener('click',function(){g=Math.max(5,Math.min(2000,g+(+x.getAttribute('data-pg'))));tot()})});
   document.getElementById('pg-ok').addEventListener('click',function(){var o=this;if(!hudSend('ciboOFF',JSON.stringify({codice:p.codice,nome:p.nome,g:g,kcal:p.kcal,C:p.C,P:p.P,G:p.G})))toast('Funziona nell’app su iPhone');else{o.disabled=true;o.textContent='…'}})};
 window.__avvisa=function(){openP('Ultimo passo','<p>Avvisa chi ti ha dato l’app che sei pronto: con un tocco gli mando il tuo nome su Intervals, così ti aggiunge al gruppo dei tester.</p><p class="q">Poi su Intervals ti arriva un invito: tocca Accetta. Serve a migliorare il piano guardando come va su di te.</p><div class="pvbtn"><button class="secondary" type="button" onclick="closeP()">Più tardi</button><button class="primary" type="button" data-act="avvisa:piano">Avvisa</button></div>')};
+window.__archivio=function(o){if(!o)return;var d=document.getElementById('arch-dati'),m=document.getElementById('arch-manca'),c=document.getElementById('arch-completa');if(d&&o.dati)d.textContent=o.dati;if(m&&o.manca!==undefined)m.textContent=o.manca;if(c&&o.manca!==undefined)c.style.display=o.manca?'':'none'};
 window.__planError=function(msg){planBusy(false);openP('Piano non scritto','<p>'+escH(msg)+'</p><p class="q">Riprova tra poco. Se continua, manda un commento dalle Impostazioni.</p>')};
 window.__setupError=function(msg){var b=document.getElementById('f-salva');if(b){b.disabled=false;b.textContent='Riprova'}var e=document.getElementById('f-err');if(e)e.textContent=msg};
 function native(kind,url){if(!window.__inScriptable)return false;window.__q.push(kind+':'+url.split(',')[1]);return true}

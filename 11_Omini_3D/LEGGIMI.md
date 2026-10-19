@@ -68,7 +68,7 @@ cd ../02_App_iPhone && npm run build
 `sincronizza_app.py` crea anche il loop `.webp` che l'app mostra (parte da solo anche dove un video aspetta un tocco).
 Per farlo servono ffmpeg e Pillow (`brew install ffmpeg` e `pip3 install pillow`); se mancano, l'app usa l'`.mp4`.
 
-L'app scarica i video da GitHub (tramite jsDelivr) dalla cartella `11_Omini_3D/video` del repository pubblico: arrivano sull'iPhone dopo il push.
+L'app scarica i video da GitHub (raw.githubusercontent.com) dalla cartella `11_Omini_3D/video` del repository pubblico: arrivano sull'iPhone dopo il push. (Prima si usava jsDelivr, ma rifiuta i repository oltre i 50 MB e i video pesano ~160 MB.)
 
 ## Correggere o aggiungere un movimento
 

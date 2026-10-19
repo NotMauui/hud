@@ -508,6 +508,7 @@ async function run() {
   } else {
     let html;
     A.tempi = { ora: PERF.fasi.slice(), storico: leggiTempi() };
+    if (key && !raw.demo) A.archivio = riassuntoArchivio(archStatoSubito());
     try { html = buildHTML(A); tempo("pagina"); registro(`pagina: ${html.length} caratteri`); }
     catch (e) {
       registro(`ERRORE nella pagina: ${e && e.stack ? e.stack : e}`);
@@ -549,6 +550,8 @@ async function run() {
     }
     if (sera) { await attesa(nuoviRecord.length || avvisiScritti.length ? 900 : 400); await wv.evaluateJavaScript("window.__domani && window.__domani()", false).catch(() => {}); }
     if (key && !raw.stale) completaStorico(key, raw, now).catch((e) => registro("storico: " + e)); // in sottofondo, mentre guardi la pagina
+    // archivio: le novità, un anno di storico in più e qualche file originale (si ferma quando chiudi)
+    if (key && !raw.stale && !raw.demo) archCoda(async () => { await archiviaNovita(key, raw, A, now); await passoStorico(key, now, { anni: 1, fit: ARCH_FIT_APERTURA, ferma: () => chiusa }); }).catch(() => {});
     shareLoop(wv, { key, raw, now, atleta, chiusa: () => chiusa }); // non bloccante: resta in ascolto dei pulsanti della pagina
     await presenting;
   }
