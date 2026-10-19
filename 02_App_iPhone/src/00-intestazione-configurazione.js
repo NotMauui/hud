@@ -12,7 +12,7 @@
 //  creato dalla configurazione al primo avvio: qui sotto ci sono solo valori generici.
 // ============================================================
 
-const VERSIONE = "1.7";
+const VERSIONE = "1.9";
 
 // ------------------------------------------------------------
 //  CONFIGURAZIONE — valori di partenza uguali per tutti
@@ -48,6 +48,16 @@ const CONFIG = {
 
   // Palestra fuori da Intervals (0 = domenica…): con il piano dell'app è nel calendario
   palestra: {},
+  // Progressione dei carichi in palestra (regola confermata il 18/10/2026, ACSM 2009): si sale dopo due sedute
+  // in cima alla fascia con 2 ripetizioni di riserva (una sola se ne restano 3), del passo minimo dell'attrezzo
+  progressione: {
+    passi: { bilanciereGambe: 2.5, bilanciereAlto: 2.5, manubri: 2, macchina: 5, legPress: 10 }, // kg (manubri: per mano)
+    passoMaxQuota: 0.10,     // passo oltre il 10% del carico: la fascia si allarga da +2 a +4 ripetizioni
+    calo: 0.10,              // −10% dopo due sedute ferme o tutte le serie a cedimento
+    ripresaGiorni: 14, ripresaCalo: 0.15, // dopo 2 settimane senza l'esercizio si riparte −15%
+    ripMaxCorpoLibero: 20,   // corpo libero ed elastico: oltre si passa alla variante più dura
+    tempoPasso: 5, tempoMax: 60, // esercizi a tempo: +5" fino a 60"
+  },
 
   // Soglie del semaforo
   soglie: {

@@ -139,6 +139,43 @@ function totaleCibo(lista) {
   for (const e of lista || []) for (const v of e.voci || []) { t.kcal += v.kcal; t.C += v.C; t.P += v.P; t.G += v.G; }
   return t;
 }
+// Open Food Facts (dati ODbL, inseriti da chi li usa): il prodotto dal codice a barre, valori per 100 g
+async function prodottoOFF(codice) {
+  const c = String(codice || "").replace(/\D/g, "");
+  if (!/^\d{8,14}$/.test(c)) return { errore: "Il codice a barre ha da 8 a 14 cifre" };
+  try {
+    const r = new Request(`https://world.openfoodfacts.org/api/v2/product/${c}.json?fields=product_name,product_name_it,brands,nutriments,serving_quantity&lc=it`);
+    r.headers = { "User-Agent": `HUD/${VERSIONE} (${CONFIG.repository || "app personale"})`, Accept: "application/json" };
+    r.timeoutInterval = 15;
+    const j = await r.loadJSON();
+    const p = j && j.status === 1 && j.product;
+    if (!p) return { errore: "Prodotto non trovato su Open Food Facts: scrivilo a mano", codice: c };
+    const n = p.nutriments || {};
+    const kcal = num(n["energy-kcal_100g"]) ?? (num(n.energy_100g) !== null ? n.energy_100g / 4.184 : null);
+    if (kcal === null) return { errore: "Su Open Food Facts mancano le calorie di questo prodotto: scrivilo a mano", codice: c };
+    const v = (k) => Math.round((num(n[k]) || 0) * 10) / 10, porz = num(p.serving_quantity);
+    return { codice: c, nome: String(p.product_name_it || p.product_name || "Prodotto").trim().slice(0, 80) || "Prodotto", marca: String(p.brands || "").split(",")[0].trim().slice(0, 40),
+      kcal: Math.round(kcal), C: v("carbohydrates_100g"), P: v("proteins_100g"), G: v("fat_100g"), porzione: porz && porz > 0 && porz < 2000 ? Math.round(porz) : 100 };
+  } catch (e) { return { errore: "Open Food Facts non risponde: serve la rete", codice: c }; }
+}
+// Segna un prodotto confezionato (grammi scelti nella pagina) come una voce del diario del cibo
+function registraProdotto(dia, x, now) {
+  const ok = (v, max) => typeof v === "number" && isFinite(v) && v >= 0 && v <= max, g = Math.round(+x.g);
+  if (!(g > 0 && g <= 2000) || !ok(x.kcal, 950) || !ok(x.C, 100) || !ok(x.P, 100) || !ok(x.G, 100)) return null;
+  const nome = String(x.nome || "Prodotto").slice(0, 80), k = g / 100, giorno = ymd(now);
+  dia.cibo = dia.cibo || {};
+  const voce = { id: `${now.getTime().toString(36)}-${((dia.cibo[giorno] || []).length + 1)}-${Math.floor(Math.random() * 1e6).toString(36)}`, ora: `${pad(now.getHours())}:${pad(now.getMinutes())}`,
+    testo: `${nome} ${g} g`, voci: [{ n: nome, g, kcal: Math.round(x.kcal * k), C: Math.round(x.C * k), P: Math.round(x.P * k), G: Math.round(x.G * k) }], ignoti: [], codice: String(x.codice || "").replace(/\D/g, "").slice(0, 14) };
+  (dia.cibo[giorno] = dia.cibo[giorno] || []).push(voce);
+  return voce.voci[0];
+}
+// Acqua da bere: EFSA 2010 (acqua totale 2,5 l uomini, 2,0 l donne, circa l'80% dalle bevande) più mezzo litro
+// per ogni ora di allenamento di oggi; il resto del sudore si beve durante la seduta, con le dosi del Rifornimento
+function acquaDi(A) {
+  const base = PROF && PROF.corpo && PROF.corpo.sesso === "F" ? 1600 : 2000;
+  const min = (A.todayEv || []).filter((e) => e.sport !== "forza").reduce((t, e) => t + (e.done ? Math.round((num(e.done.moving_time) || 0) / 60) : e.min || 0), 0);
+  return { ml: Math.max(0, Math.min(8000, +(((A.diary || {}).acqua || {})[ymd(A.now)]) || 0)), obiettivo: Math.round((base + (500 * min) / 60) / 50) * 50, base, min };
+}
 const descriviVoci = (voci) => voci.map((v) => `${v.n} ${v.g} g`).join(", ");
 
 const nomeScript = () => { try { return typeof Script !== "undefined" && Script.name ? Script.name() || "HUD" : "HUD"; } catch (e) { return "HUD"; } };

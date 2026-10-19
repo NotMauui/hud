@@ -11,6 +11,46 @@ function dettagliIO() {
     write: (at) => { try { fm.writeString(p, JSON.stringify({ v: DET_VER, at })); } catch (e) { console.log("Dettagli non salvati: " + e); } },
   };
 }
+// ---- Curve dei migliori (come GoldenCheetah): le calcola Intervals.icu con i modelli, una volta al giorno, solo per la vista completa
+const CURVA_SEC = [5, 15, 30, 60, 120, 300, 600, 1200, 1800, 3600, 5400, 7200];
+const CURVA_M = [400, 1000, 1609, 3000, 5000, 10000, 21097, 42195];
+let CURVA_CP = null; // { cp, wp }: potenza critica e W′ per il W′bal delle uscite con la potenza
+// i valori di una curva ai punti standard (durate o distanze): il punto esatto o il più vicino entro il 10%
+function puntiCurva(xs, vs, punti) {
+  if (!Array.isArray(xs) || !Array.isArray(vs) || !xs.length) return [];
+  const out = [];
+  for (const p of punti) {
+    let best = -1, d = Infinity;
+    for (let i = 0; i < xs.length; i++) { const q = Math.abs(xs[i] - p); if (q < d && num(vs[i]) !== null && vs[i] > 0) { d = q; best = i; } }
+    if (best >= 0 && d <= p * 0.1) out.push([p, vs[best]]);
+  }
+  return out;
+}
+async function curveIntervals(key, now) {
+  const [pw, pc] = await Promise.all([
+    ivGet(key, `${BASE}/power-curves.json?type=Ride&curves=84d,1y`).catch(() => null),
+    ivGet(key, `${BASE}/pace-curves.json?type=Run&curves=84d,1y&gap=false`).catch(() => null),
+  ]);
+  const L = (J, i) => (J && Array.isArray(J.list) && J.list[i]) || null;
+  const out = { d: ymd(now), potenza: null, passo: null };
+  const p0 = L(pw, 0), p1 = L(pw, 1);
+  if (p0 && Array.isArray(p0.secs)) {
+    const M = (p0.powerModels || []).find((m) => num(m.criticalPower) && num(m.wPrime)) || null;
+    out.potenza = { p84: puntiCurva(p0.secs, p0.values, CURVA_SEC).map(([s, w]) => [s, Math.round(w)]), p1y: p1 ? puntiCurva(p1.secs, p1.values, CURVA_SEC).map(([s, w]) => [s, Math.round(w)]) : [],
+      cp: M ? Math.round(M.criticalPower) : null, wp: M ? Math.round(M.wPrime) : null, pmax: M && num(M.pMax) ? Math.round(M.pMax) : null };
+    if (out.potenza.p84.length < 3) out.potenza = null;
+  }
+  const c0 = L(pc, 0), c1 = L(pc, 1);
+  if (c0 && Array.isArray(c0.distance)) {
+    // values: secondi per coprire la distanza (se sembrano velocità in m/s si convertono)
+    const sec = (C) => { const v = (C.values || []).filter((x) => num(x) !== null && x > 0), med = v.length ? v.slice().sort((a, b) => a - b)[Math.floor(v.length / 2)] : 0; return med && med < 30 ? C.distance.map((d, i) => (C.values[i] > 0 ? d / C.values[i] : null)) : C.values; };
+    const M = (c0.paceModels || []).find((m) => num(m.criticalSpeed)) || null;
+    out.passo = { p84: puntiCurva(c0.distance, sec(c0), CURVA_M).map(([m, s]) => [m, Math.round(s)]), p1y: c1 ? puntiCurva(c1.distance, sec(c1), CURVA_M).map(([m, s]) => [m, Math.round(s)]) : [],
+      cs: M ? Math.round(M.criticalSpeed * 100) / 100 : null, dp: M && num(M.dPrime) ? Math.round(M.dPrime) : null };
+    if (out.passo.p84.length < 3) out.passo = null;
+  }
+  return out;
+}
 async function ivGet(key, url) {
   const r = new Request(url);
   r.headers = { Authorization: "Basic " + Data.fromString("API_KEY:" + key).toBase64String(), Accept: "application/json", "User-Agent": "Mozilla/5.0 (iPhone) HUD703" };
@@ -68,6 +108,17 @@ function calcolaDettaglio(a, streams, ivs) {
   out.s.alt = riduci((S.altitude || S.fixed_altitude || {}).data, N, 0);
   out.s.cad = riduci(S.cadence && S.cadence.data, N, 0, true);
   out.s.w = riduci(S.watts && S.watts.data, N, 0);
+  // W′bal: quanta energia sopra la potenza critica resta (Skiba 2012 in forma differenziale, ricarica di Froncioni e Clarke)
+  const Wt = S.watts && S.watts.data;
+  if (CURVA_CP && Wt && T && Wt.length === T.length && Wt.some((v) => v > 0)) {
+    const { cp, wp } = CURVA_CP, bal = new Array(Wt.length); let b = wp, min = wp;
+    for (let i = 0; i < Wt.length; i++) {
+      const dt = i ? Math.max(0, Math.min(10, (T[i] - T[i - 1]) || 1)) : 1, p = num(Wt[i]) || 0;
+      b = p > cp ? b - (p - cp) * dt : b + ((cp - p) * dt * (wp - b)) / wp;
+      b = Math.max(-wp, Math.min(wp, b)); bal[i] = b; if (b < min) min = b;
+    }
+    out.s.wbal = riduci(bal, N, 0); out.wbal = { min: Math.round(min), wp: Math.round(wp), cp: Math.round(cp) };
+  }
   out.s.temp = riduci(S.temp && S.temp.data, N, 1);
   out.s.resp = riduci(S.respiration && S.respiration.data, N, 1, true);
   out.s.d = riduci(S.distance && S.distance.data, N, 0);

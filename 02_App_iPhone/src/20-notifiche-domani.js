@@ -377,6 +377,7 @@ async function run() {
           raw = await fetchIntervals(key, now, null);
         } else throw err;
       }
+      if (prev && prev.curve && !raw.curve) raw.curve = prev.curve; // le curve si rileggono una volta al giorno
       cache.write(raw);
     } catch (err) {
       const old = cache.read();
@@ -398,12 +399,19 @@ async function run() {
     try { const fatti = await aggiornaSoglie(key, raw, now); if (fatti.length) { cacheIO().write(raw); raw.soglieAggiornate = fatti.filter((c) => c.testo).map((c) => c.testo); } }
     catch (e) { console.log("Soglie: " + (e.message || e)); }
   }
+  // curve dei migliori: solo per la vista completa, una volta al giorno
+  if (interattivo && key && !raw.stale && !raw.demo && PROF && PROF.vista === "completa" && (!raw.curve || raw.curve.d !== ymd(now))) {
+    try { raw.curve = await curveIntervals(key, now); cacheIO().write(raw); } catch (e) { console.log("Curve: " + (e.message || e)); }
+  }
+  CURVA_CP = raw.curve && raw.curve.potenza && raw.curve.potenza.cp && raw.curve.potenza.wp ? { cp: raw.curve.potenza.cp, wp: raw.curve.potenza.wp } : null;
   // Comandi Rapidi che aprono l'HUD con un link: ?cibo=… (quello che hai detto a Siri), ?pesi=… (Salute), ?settimana=1 (notifica)
   const qp = (typeof args !== "undefined" && args && args.queryParameters) || {};
   let apertura = null;
   if (qp.settimana) apertura = { vista: "trend", toast: "La tua settimana", condividi: "riepilogo" };
   if (qp.domani) apertura = { domani: true }; // dalla notifica della sera
   if (qp.att && /^\d{4}-\d\d-\d\d$/.test(qp.att)) apertura = { att: qp.att }; // dalla notifica di una seduta sincronizzata
+  // Comando Rapido «Codice HUD»: ?codice=… (il codice a barre inquadrato), il prodotto da Open Food Facts
+  if (key && qp.codice) apertura = { vista: "fuel", prodotto: await prodottoOFF(qp.codice), toast: "Codice letto" };
   if (key && (qp.pesi || qp.cibo)) {
     const io = diaryIO(), dia = io.read();
     if (qp.pesi) {
@@ -518,6 +526,7 @@ async function run() {
       // aperto da Siri o da un'automazione: Carburante, con il riepilogo detto a voce
       await attesa(500);
       await wv.evaluateJavaScript(`window.__apri && window.__apri(${JSON.stringify(apertura.vista)}); window.__toast && window.__toast(${JSON.stringify(apertura.toast)})`, false).catch(() => {});
+      if (apertura.prodotto) await wv.evaluateJavaScript(`window.__prodotto && window.__prodotto(${JSON.stringify(apertura.prodotto).replace(/</g, "\\u003c")})`, false).catch(() => {});
       if (apertura.condividi) await wv.evaluateJavaScript(`OPT.week=0;OPT.rec=null;setLayout(${JSON.stringify(apertura.condividi)});openSheet()`, false).catch(() => {});
       if (apertura.cibo) {
         const T = A.nutrition.cibo.tot, PN = A.nutrition.piano, r = apertura.cibo;

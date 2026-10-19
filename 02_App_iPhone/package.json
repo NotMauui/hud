@@ -3,9 +3,10 @@
   "private": true,
   "description": "HUD per Scriptable: si modifica src/, si costruisce HUD-70.3.js",
   "scripts": {
-    "build": "node costruisci.js",
+    "build": "node costruisci.js && node ../12_App_Nativa/costruisci-motore.js",
     "controlla": "node costruisci.js --controlla",
-    "test": "node costruisci.js --controlla && node ../04_Generatore/test-carburante.js && node ../04_Generatore/test-calorie-adattive.js && node ../04_Generatore/test-hrv.js && node ../04_Generatore/test-generatore.js && node ../04_Generatore/test-soglie.js && node ../04_Generatore/test-verifiche.js"
+    "test": "node costruisci.js --controlla && node ../04_Generatore/test-carburante.js && node ../04_Generatore/test-calorie-adattive.js && node ../04_Generatore/test-hrv.js && node ../04_Generatore/test-generatore.js && node ../04_Generatore/test-soglie.js && node ../04_Generatore/test-verifiche.js && node ../04_Generatore/test-palestra.js && node ../04_Generatore/test-banister.js && node ../04_Generatore/test-salute.js && node ../12_App_Nativa/costruisci-motore.js --controlla",
+    "prova-nativa": "cd ../12_App_Nativa/prova && swiftc ../HUD/Motore.swift main.swift -o \"${TMPDIR:-/tmp}/prova-motore\" && \"${TMPDIR:-/tmp}/prova-motore\" ../HUD/Motore/hud-motore.js"
   },
   "devDependencies": {
     "@types/scriptable-ios": "^1.7.9"

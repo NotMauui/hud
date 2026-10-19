@@ -69,9 +69,57 @@ async function shareLoop(wv, ctx) {
       } catch (e) { console.log("Salute: " + e); await js(`window.__toast(${JSON.stringify("Non riuscito: " + (e.message || e))})`); }
       continue;
     }
-    if (kind === "apri") {
-      // solo le ricerche dei video degli esercizi su YouTube
-      if (/^https:\/\/www\.youtube\.com\/results\?search_query=[^\s]{1,200}$/.test(b64)) { try { Safari.open(b64); } catch (e) {} }
+    if (kind === "acqua") {
+      try {
+        const x = JSON.parse(b64), dia = diaryIO().read();
+        if (/^\d{4}-\d\d-\d\d$/.test(x.d || "") && typeof x.ml === "number" && x.ml >= 0 && x.ml <= 8000) {
+          dia.acqua = dia.acqua || {}; dia.acqua[x.d] = Math.round(x.ml);
+          const lim = ymd(addDays(new Date(), -60)); for (const k of Object.keys(dia.acqua)) if (k < lim) delete dia.acqua[k];
+          diaryIO().write(dia);
+        }
+      } catch (e) { console.log("Acqua non salvata: " + e); }
+      continue;
+    }
+    if (kind === "codice") {
+      const p = await prodottoOFF(b64);
+      await js(`window.__prodotto(${JSON.stringify(p).replace(/</g, "\\u003c")})`);
+      continue;
+    }
+    if (kind === "ciboOFF") {
+      try {
+        const x = JSON.parse(b64), dia = diaryIO().read(), v = registraProdotto(dia, x, new Date());
+        if (v) { diaryIO().write(dia); await ricarica(`Segnato · ${fmtIt(v.kcal)} kcal`); } else await js(`window.__toast(${JSON.stringify("Quantità non valida")})`);
+      } catch (e) { await js(`window.__toast(${JSON.stringify("Non segnato: " + (e.message || e))})`); }
+      continue;
+    }
+    if (kind === "serie") {
+      // le serie della guida di palestra: si uniscono al diario con le stesse regole della pagina
+      try { const L = JSON.parse(b64), dia = diaryIO().read(); let n = 0; for (const v of Array.isArray(L) ? L.slice(0, 30) : []) if (registraSerie(dia, v)) n++; if (n) diaryIO().write(dia); }
+      catch (e) { console.log("Serie non salvate: " + e); }
+      continue;
+    }
+    if (kind === "zoffline") {
+      // solo con "zoffline" nel profilo: l'indirizzo del Mac nella rete di casa, poi la pagina di zoffline per Intervals
+      if (!PROF || PROF.zoffline === undefined) continue;
+      let ind = String(PROF.zoffline || "").trim();
+      if (!ind || b64 === "indirizzo") {
+        const a = new Alert();
+        a.title = "zoffline sul Mac";
+        a.message = "L'indirizzo del Mac nella rete di casa, per esempio 192.168.1.20 (Impostazioni di Sistema › Rete).";
+        a.addTextField("192.168.1.20", ind);
+        a.addAction("Salva"); a.addCancelAction("Annulla");
+        if ((await a.presentAlert()) !== 0) continue;
+        const v = String(a.textFieldValue(0) || "").trim().replace(/^https?:\/\//, "").replace(/\/.*$/, "");
+        if (!/^[A-Za-z0-9.-]{1,64}(:\d{1,5})?$/.test(v)) { await js(`window.__toast(${JSON.stringify("Indirizzo non valido")})`); continue; }
+        PROF.zoffline = v; scriviProfilo(PROF); ind = v;
+        if (b64 === "indirizzo") { await ricarica(`zoffline: ${v}`); continue; }
+      }
+      try { Safari.open(`https://${ind}/intervals/zoffline/`); } catch (e) {}
+      continue;
+    }
+    if (kind === "vista") {
+      // solo chi ha la vista nel profilo la può cambiare (Impostazioni › Vista dell'app)
+      if (PROF && PROF.vista && (b64 === "essenziale" || b64 === "completa")) { PROF.vista = b64; scriviProfilo(PROF); }
       continue;
     }
     if (kind === "gymPiano") {
@@ -159,6 +207,10 @@ async function shareLoop(wv, ctx) {
         if (!P.creato) P.creato = P.aggiornato;
         if (ctx.atleta && !P.intervals) P.intervals = ctx.atleta;
         const primaVolta = !PROF;
+        const canon = (x) => (Array.isArray(x) ? x.map(canon) : x && typeof x === "object" ? Object.keys(x).sort().reduce((o, k) => ((o[k] = canon(x[k])), o), {}) : x ?? null);
+        const CHIAVI_PIANO = ["sport", "gara", "soloPalestra", "attrezzi", "palMin", "giorni", "ore", "giornoLungo", "piscina", "piscinaGiorni", "bici", "palestra", "palestraGiorni"];
+        const cambiaPiano = !primaVolta && P.pianoApp !== false && vecchio.pianoApp !== false && !!(P.piano && P.piano.fine >= ymd(ctx.now || new Date()))
+          && CHIAVI_PIANO.some((k) => JSON.stringify(canon(vecchio[k])) !== JSON.stringify(canon(P[k])));
         let tolte = 0;
         if (P.pianoApp === false && vecchio.pianoApp !== false && ctx.key) {
           const oggi = ymd(ctx.now || new Date());
@@ -183,10 +235,11 @@ async function shareLoop(wv, ctx) {
             let conflitti = 0;
             try { conflitti = await contaConflitti(ctx.key, ctx.piano); } catch (e) {}
             await js(`window.__planPreview(${JSON.stringify(anteprimaPiano(ctx.piano, conflitti)).replace(/</g, "\\u003c")})`);
-          } catch (e) { await js(`window.__toast(${JSON.stringify("Fatto. Crea il piano dalla scheda Settimana")})`); }
-        } else await ricarica(primaVolta && P.pianoApp !== false ? "Fatto. Crea il piano dalla scheda Settimana"
+          } catch (e) { await js(`window.__toast(${JSON.stringify("Fatto. Crea il piano dalla scheda Piano")})`); }
+        } else await ricarica(primaVolta && P.pianoApp !== false ? "Fatto. Crea il piano dalla scheda Piano"
           : P.pianoApp === false && primaVolta ? "Fatto: l'app legge il tuo piano. In Impostazioni tocca Avvisa"
           : tolte ? `Impostazioni salvate: tolte ${tolte} sedute future dell'app` : "Impostazioni salvate");
+        if (cambiaPiano) await js("window.__riscrivi && window.__riscrivi(1)");
       } catch (e) { await js(`window.__setupError(${JSON.stringify("Non sono riuscito a salvare: " + (e.message || e))})`); }
       continue;
     }
@@ -201,7 +254,7 @@ async function shareLoop(wv, ctx) {
           await ricarica(`${n} sedute scritte nel calendario`);
           if (!PROF.avvisato) await js("window.__avvisa && window.__avvisa()");
         } else {
-          ctx.piano = creaPiano(PROF, ctx.raw, ctx.now, b64 === "prossimo");
+          ctx.piano = creaPiano(PROF, ctx.raw, ctx.now, ["prossimo", "domani", "lunedi"].includes(b64) ? b64 : false);
           let conflitti = 0;
           try { conflitti = await contaConflitti(ctx.key, ctx.piano); } catch (e) { console.log("Calendario non letto: " + e); }
           await js(`window.__planPreview(${JSON.stringify(anteprimaPiano(ctx.piano, conflitti)).replace(/</g, "\\u003c")})`);

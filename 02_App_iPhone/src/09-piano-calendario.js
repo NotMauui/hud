@@ -30,10 +30,15 @@ function baseGeneratore(P, raw, now) {
 }
 
 // Primo giorno del blocco: lunedì prossimo (oggi se è lunedì), oppure il giorno dopo la fine del blocco in corso
-function inizioBlocco(now, P, prossimo) {
+// modo: "prossimo" = dopo il blocco in corso; "domani" = il lunedì della settimana di domani (il generatore conta i giorni
+// da lunedì: le sedute prima di domani non si scrivono); "lunedi" = il prossimo lunedì dopo oggi (questa settimana resta);
+// altrimenti (primo piano) lunedì prossimo, oggi se è lunedì
+function inizioBlocco(now, P, modo) {
   const d = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const lunedi = ymd(d.getDay() === 1 ? d : addDays(d, (8 - d.getDay()) % 7));
-  if (prossimo && P.piano && P.piano.fine) {
+  if (modo === "domani") return ymd(mondayOf(addDays(d, 1)));
+  if (modo === "lunedi") return ymd(addDays(d, (8 - d.getDay()) % 7 || 7));
+  if ((modo === true || modo === "prossimo") && P.piano && P.piano.fine) {
     const dopo = ymd(addDays(parseYMD(P.piano.fine), 1));
     if (dopo >= ymd(d)) return dopo; // attaccato al blocco in corso, mai nel passato
   }
@@ -81,21 +86,25 @@ function pianoPalestra(P, inizio, indice) {
   return { settimane, avvisi: [] };
 }
 
-function creaPiano(P, raw, now, prossimo) {
-  const inizio = inizioBlocco(now, P, prossimo);
+function creaPiano(P, raw, now, modo) {
+  const prossimo = modo === true || modo === "prossimo";
+  const inizio = inizioBlocco(now, P, modo);
+  // da domani: si scrive da domani in poi, i giorni prima restano come sono
+  const domani = ymd(addDays(new Date(now.getFullYear(), now.getMonth(), now.getDate()), 1));
+  const dal = modo === "domani" && domani > inizio ? domani : null;
   if (P.soloPalestra) {
     const indice = P.piano ? (P.piano.indice || 0) + (prossimo ? 1 : 0) : 0;
     const piano = pianoPalestra(P, inizio, indice), w0 = piano.settimane[0];
     return { inizio, fine: ymd(addDays(parseYMD(inizio), 27)), indice, piano, livello: { ctl: 0, oreSett: 0, lungoCorsaMin: 0, lungoBiciMin: 0, rientro: null },
       palestra: { n: w0.sedute.length, min: w0.sedute[0] ? w0.sedute[0].min : 45, attrezzi: w0.sedute[0] ? w0.sedute[0].attrezzi : "manubri" },
-      timbro: Date.now().toString(36) + Math.random().toString(36).slice(2, 5) };
+      timbro: Date.now().toString(36) + Math.random().toString(36).slice(2, 5), dal };
   }
   const D = GEN.normalizza(raw);
   const prof = GEN.profiloAl(D, inizio, baseGeneratore(P, raw, now));
   const indice = P.piano ? (P.piano.indice || 0) + (prossimo ? 1 : 0) : 0;
   const piano = GEN.generaBlocco(prof, { inizio, indiceBlocco: indice });
   // timbro della scrittura: ogni versione del piano ha codici nuovi, così le vecchie si tolgono senza ambiguità
-  return { inizio, fine: ymd(addDays(parseYMD(inizio), 27)), indice, piano, livello: prof.livello, timbro: Date.now().toString(36) + Math.random().toString(36).slice(2, 5) };
+  return { inizio, fine: ymd(addDays(parseYMD(inizio), 27)), indice, piano, livello: prof.livello, timbro: Date.now().toString(36) + Math.random().toString(36).slice(2, 5), dal };
 }
 
 // Una seduta del generatore nel linguaggio dei passi di Intervals (diventa strutturata e può andare sull'orologio)
@@ -195,7 +204,7 @@ function eventiDaPiano(res, P) {
   const tipo = { corsa: "Run", nuoto: "Swim", forza: "WeightTraining" };
   const out = [];
   for (const w of res.piano.settimane) w.sedute.forEach((s, i) => {
-    if (s.sport === "gara" || !s.min) return;
+    if (s.sport === "gara" || !s.min || (res.dal && s.data < res.dal)) return;
     out.push({
       category: "WORKOUT",
       start_date_local: `${s.data}T00:00:00`,
@@ -211,12 +220,13 @@ function eventiDaPiano(res, P) {
 }
 // Anteprima per la pagina: solo quello che serve a leggere il blocco
 function anteprimaPiano(res, conflitti) {
+  const ok = (s) => s.sport !== "gara" && s.min && (!res.dal || s.data >= res.dal);
   return {
-    inizio: res.inizio, fine: res.fine, avvisi: res.piano.avvisi || [], conflitti: conflitti || 0, palestra: res.palestra || null,
+    inizio: res.inizio, fine: res.fine, dal: res.dal || null, avvisi: res.piano.avvisi || [], conflitti: conflitti || 0, palestra: res.palestra || null,
     sport: CONFIG.sport,
     livello: { ctl: res.livello.ctl, ore: res.livello.oreSett, lungo: res.livello.lungoCorsaMin, lungoBici: res.livello.lungoBiciMin, rientro: CONFIG.sport.includes("corsa") && !!(res.livello.rientro && res.livello.rientro.corsa) },
-    settimane: res.piano.settimane.map((w) => ({ n: w.n, lunedi: w.lunedi, fase: w.fase, scarico: w.scarico, minuti: w.minuti, lungo: w.lungoCorsa,
-      sedute: w.sedute.filter((s) => s.sport !== "gara" && s.min).map((s) => ({ g: s.giorno, sport: s.sport, nome: s.nome, min: s.min, q: !!s.qualita })) })),
+    settimane: res.piano.settimane.map((w) => { const ss = w.sedute.filter(ok); return { n: w.n, lunedi: w.lunedi, fase: w.fase, scarico: w.scarico, minuti: res.dal ? ss.reduce((t, s) => t + s.min, 0) : w.minuti, lungo: w.lungoCorsa,
+      sedute: ss.map((s) => ({ g: s.giorno, sport: s.sport, nome: s.nome, min: s.min, q: !!s.qualita })) }; }).filter((w) => !res.dal || w.sedute.length),
   };
 }
 
@@ -233,7 +243,7 @@ async function ivRichiesta(key, metodo, percorso, corpo, timeout) {
 }
 // Sedute già nel calendario in quelle settimane, non create dall'app
 async function contaConflitti(key, res) {
-  const ev = await ivRichiesta(key, "GET", `/events?oldest=${res.inizio}&newest=${res.fine}`);
+  const ev = await ivRichiesta(key, "GET", `/events?oldest=${res.dal || res.inizio}&newest=${res.fine}`);
   return (Array.isArray(ev) ? ev : []).filter((e) => (e.category || "WORKOUT") === "WORKOUT" && !String(e.external_id || "").startsWith("hud-")).length;
 }
 // ------------------------------------------------------------
@@ -293,7 +303,7 @@ async function pulisciCalendario(key, P, eventi, now) {
     // la scrittura corrente: la più recente registrata nel profilo, altrimenti la più recente nel calendario
     const tim = (L) => L.map(timbroDi).filter(Boolean).sort((x, y) => quandoTimbro(y) - quandoTimbro(x))[0] || null;
     const corrente = tim((P.piano && P.piano.ids) || []) || tim(app.map((e) => e.external_id));
-    if (corrente) opz = { oggi, corrente, dal: P.piano && tim(P.piano.ids || []) === corrente && P.piano.inizio ? P.piano.inizio : null };
+    if (corrente) opz = { oggi, corrente, dal: P.piano && tim(P.piano.ids || []) === corrente && P.piano.inizio ? P.piano.dal || P.piano.inizio : null };
   }
   const via = seduteDaTogliere(eventi, opz);
   if (!via.length) return [];
@@ -306,11 +316,12 @@ async function scriviPiano(key, P, res, now) {
   const ev = eventiDaPiano(res, P);
   const nuovi = ev.map((e) => e.external_id);
   // le sedute in scrittura restano tracciate anche se l'app si chiude a metà
-  P.pianoPendente = { ids: nuovi, inizio: res.inizio };
+  const primo = res.dal || res.inizio;
+  P.pianoPendente = { ids: nuovi, inizio: primo };
   scriviProfilo(P);
   await ivRichiesta(key, "POST", "/events/bulk?upsert=true", ev, 120);
-  // poi tolgo dal calendario le sedute dell'app che il piano nuovo sostituisce (dal suo primo giorno, mai prima di oggi)
-  const dal = res.inizio > oggi ? res.inizio : oggi;
+  // poi tolgo dal calendario le sedute dell'app che il piano nuovo sostituisce (dal suo primo giorno scritto, mai prima di oggi)
+  const dal = primo > oggi ? primo : oggi;
   let tolte = 0;
   try {
     const cal = await ivRichiesta(key, "GET", `/events?oldest=${dal}&newest=${ymd(addDays(parseYMD(dal), 140))}`);
@@ -318,7 +329,7 @@ async function scriviPiano(key, P, res, now) {
   } catch (e) { registro("Vecchie sedute non tolte: " + (e.message || e)); }
   if (tolte) registro(`piano riscritto: tolte ${tolte} sedute vecchie dell'app`);
   const restano = [...new Set([...((P.piano && P.piano.ids) || [])])].filter((id) => String(id).startsWith("hud-") && String(id).slice(4, 14) < dal && !nuovi.includes(id)).slice(-300);
-  P.piano = { inizio: res.inizio, fine: res.fine, indice: res.indice, ids: [...restano, ...nuovi], scritto: now.toISOString() };
+  P.piano = { inizio: res.inizio, fine: res.fine, indice: res.indice, ids: [...restano, ...nuovi], scritto: now.toISOString(), ...(res.dal ? { dal: res.dal } : {}) };
   delete P.pianoPendente;
   scriviProfilo(P);
   return ev.length;

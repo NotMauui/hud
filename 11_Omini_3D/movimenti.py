@@ -386,3 +386,8 @@ MOVIMENTI = {
                    "ik_mani": True, "poli_gomiti": (0, 1, 0),
                    "sforzo": [(0, 0.3), (0.25, 1.0), (0.5, 0.3), (0.75, 1.0), (1, 0.3)]},
 }
+
+# ================================================================ MOBILITÀ (in movimenti_mobilita.py)
+from movimenti_mobilita import MOV_MOB
+MOVIMENTI.update(MOV_MOB)
+MOBILITA = {"gattomucca", "bambino"} | set(MOV_MOB)

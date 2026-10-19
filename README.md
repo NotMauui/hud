@@ -13,6 +13,10 @@ HUD is a free, open-source app for endurance athletes (triathlon, running, swimm
 - **Thresholds** — threshold HR, threshold pace (from hard efforts or critical speed), swim CSS (400 + 200 test or several maximal distances) and FTP, estimated from your activities. A new value is written to Intervals only when a second effort confirms it.
 - **Fuel** — resting metabolism (ten Haaf 2014), carbohydrates in g/kg by day type, protein and fat with floors, deficit as % of body weight, **calories that learn** from your weigh-ins and food log (Kalman filter), carb loading before races, in-session fuelling (gels, water and sodium per hour). **Safety floors** override everything.
 - **3D exercise videos** — an anatomical figure performs the gym and mobility exercises in a loop; working muscles glow red, helpers pink, stretched muscles blue. Made with Blender from a CC0 body.
+- **Route map and 3D** — every activity's route on a real map, full screen in 2D or 3D over the terrain, with a fly-along replay. The first and last 250 m are always cut off.
+- **Gym log** — weight and reps for every set with − and +, suggested by the progression model; records (estimated 1RM) and next session's weight when you finish an exercise.
+- **Water and barcodes** — one tap per glass towards a daily target that grows with training; packaged food from its barcode via Open Food Facts.
+- **Power and pace curves** (full view) — best efforts over 84 days against the year, with CP/W′ and critical speed/D′, plus W′bal in rides with power.
 - **Swimming** — stroke rate, strokes per length, distance per stroke and SWOLF for each swim, plus the SWOLF trend over two months.
 - **The footprint** — the app's signature: every session is a row of capsules as wide as the time and as tall as the intensity; the outline is the plan, the fill is what you did.
 - Home and Lock Screen widgets, evening notifications, food diary (Siri too), injury and illness mode, gym and mobility, activity sharing.
@@ -29,7 +33,7 @@ A short English guide is in [`docs/GUIDE.en.md`](docs/GUIDE.en.md); the full gui
 
 ## Your data
 
-Everything stays on your iPhone and in your iCloud: the app has no server, collects no usage statistics and sends nothing to anyone except the calls to Intervals.icu with your own key. Garmin data reaching you through Intervals remains subject to Garmin's and Intervals.icu's terms.
+Everything stays on your iPhone and in your iCloud: the app has no server, collects no usage statistics and sends nothing to anyone except the calls to Intervals.icu with your own key and downloads of public content: exercise videos and photos, map tiles (OpenFreeMap, terrain from AWS) and, when you look up a barcode, Open Food Facts. Those services only see what is asked (the map area, the barcode), never your route or your profile. Garmin data reaching you through Intervals remains subject to Garmin's and Intervals.icu's terms.
 
 **Not a medical device.** Training and nutrition guidance is general: if you have a doctor, coach or dietitian, their advice wins.
 

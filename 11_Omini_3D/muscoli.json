@@ -721,7 +721,8 @@
    ],
    "fase": "respiro",
    "vista": "lato",
-   "fedb": "Cat_Stretch"
+   "fedb": "Cat_Stretch",
+   "zona": "toracica"
   },
   "wgs": {
    "nome": "Affondo con rotazione",
@@ -737,7 +738,8 @@
    ],
    "fase": "respiro",
    "vista": "tre_quarti",
-   "fedb": "Worlds_Greatest_Stretch"
+   "fedb": "Worlds_Greatest_Stretch",
+   "zona": "flussi"
   },
   "flessori": {
    "nome": "Flessori dell’anca in ginocchio",
@@ -751,7 +753,8 @@
    ],
    "fase": "respiro",
    "vista": "lato",
-   "fedb": "Kneeling_Hip_Flexor"
+   "fedb": "Kneeling_Hip_Flexor",
+   "zona": "anche"
   },
   "caviglie": {
    "nome": "Cerchi con le caviglie",
@@ -765,7 +768,8 @@
    "allunga": [],
    "fase": "ciclo",
    "vista": "lato",
-   "fedb": "Ankle_Circles"
+   "fedb": "Ankle_Circles",
+   "zona": "caviglie"
   },
   "polpaccimuro": {
    "nome": "Polpacci al muro",
@@ -777,7 +781,8 @@
    ],
    "fase": "respiro",
    "vista": "lato",
-   "fedb": "Calf_Stretch_Hands_Against_Wall"
+   "fedb": "Calf_Stretch_Hands_Against_Wall",
+   "zona": "caviglie"
   },
   "femorali": {
    "nome": "Allungamento dei femorali",
@@ -788,7 +793,8 @@
    ],
    "fase": "respiro",
    "vista": "lato",
-   "fedb": "Hamstring_Stretch"
+   "fedb": "Hamstring_Stretch",
+   "zona": "gambe"
   },
   "quad": {
    "nome": "Quadricipite in piedi",
@@ -802,7 +808,8 @@
    ],
    "fase": "respiro",
    "vista": "lato",
-   "fedb": "Standing_Elevated_Quad_Stretch"
+   "fedb": "Standing_Elevated_Quad_Stretch",
+   "zona": "gambe"
   },
   "bambino": {
    "nome": "Posizione del bambino",
@@ -815,7 +822,8 @@
    ],
    "fase": "respiro",
    "vista": "lato",
-   "fedb": "Childs_Pose"
+   "fedb": "Childs_Pose",
+   "zona": "lombare"
   },
   "ginpetto": {
    "nome": "Ginocchio al petto",
@@ -828,7 +836,8 @@
    ],
    "fase": "respiro",
    "vista": "lato",
-   "fedb": "One_Knee_To_Chest"
+   "fedb": "One_Knee_To_Chest",
+   "zona": "lombare"
   },
   "torsione": {
    "nome": "Torsione della schiena",
@@ -842,7 +851,8 @@
    ],
    "fase": "respiro",
    "vista": "tre_quarti",
-   "fedb": "Spinal_Stretch"
+   "fedb": "Spinal_Stretch",
+   "zona": "toracica"
   },
   "groiners": {
    "nome": "Groiners",
@@ -857,7 +867,8 @@
    ],
    "fase": "respiro",
    "vista": "tre_quarti",
-   "fedb": "Groiners"
+   "fedb": "Groiners",
+   "zona": "flussi"
   },
   "inchworm": {
    "nome": "Inchworm",
@@ -875,7 +886,8 @@
    ],
    "fase": "ciclo",
    "vista": "lato",
-   "fedb": "Inchworm"
+   "fedb": "Inchworm",
+   "zona": "flussi"
   },
   "cerchibraccia": {
    "nome": "Cerchi con le braccia",
@@ -891,7 +903,8 @@
    "allunga": [],
    "fase": "ciclo",
    "vista": "fronte",
-   "fedb": "Arm_Circles"
+   "fedb": "Arm_Circles",
+   "zona": "spalle"
   },
   "petto": {
    "nome": "Apertura del petto",
@@ -906,7 +919,8 @@
    ],
    "fase": "respiro",
    "vista": "fronte",
-   "fedb": "Dynamic_Chest_Stretch"
+   "fedb": "Dynamic_Chest_Stretch",
+   "zona": "spalle"
   },
   "cerchianca": {
    "nome": "Cerchi con l’anca",
@@ -921,7 +935,8 @@
    "allunga": [],
    "fase": "ciclo",
    "vista": "fronte",
-   "fedb": "Standing_Hip_Circles"
+   "fedb": "Standing_Hip_Circles",
+   "zona": "anche"
   },
   "calciata": {
    "nome": "Calciata",
@@ -948,7 +963,8 @@
    ],
    "fase": "respiro",
    "vista": "lato",
-   "fedb": "Piriformis-SMR"
+   "fedb": "Piriformis-SMR",
+   "zona": "rullo"
   },
   "rulloquad": {
    "nome": "Quadricipiti con il rullo",
@@ -959,7 +975,1511 @@
    ],
    "fase": "respiro",
    "vista": "lato",
-   "fedb": "Quadriceps-SMR"
+   "fedb": "Quadriceps-SMR",
+   "zona": "rullo"
+  },
+  "collocars": {
+   "nome": "Cerchi del collo",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "trapezio"
+   ],
+   "fase": "ciclo",
+   "vista": "fronte",
+   "fedb": "",
+   "zona": "collo",
+   "tipo": "attiva"
+  },
+  "mentoindietro": {
+   "nome": "Mento indietro",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "trapezio"
+   ],
+   "fase": "ciclo",
+   "vista": "lato",
+   "fedb": "",
+   "zona": "collo",
+   "tipo": "attiva"
+  },
+  "collolat": {
+   "nome": "Inclinazione laterale del collo",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "trapezio"
+   ],
+   "fase": "respiro",
+   "vista": "fronte",
+   "fedb": "",
+   "zona": "collo",
+   "tipo": "statica"
+  },
+  "elevatore": {
+   "nome": "Elevatore della scapola",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "trapezio",
+    "romboidi"
+   ],
+   "fase": "respiro",
+   "vista": "tre_quarti",
+   "fedb": "",
+   "zona": "collo",
+   "tipo": "statica"
+  },
+  "sguardo": {
+   "nome": "Sguardo oltre la spalla",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "trapezio"
+   ],
+   "fase": "ciclo",
+   "vista": "fronte",
+   "fedb": "",
+   "zona": "collo",
+   "tipo": "dinamica"
+  },
+  "collois": {
+   "nome": "Isometrie del collo",
+   "lavora": [
+    "trapezio"
+   ],
+   "aiuta": [],
+   "allunga": [],
+   "fase": "ciclo",
+   "vista": "tre_quarti",
+   "fedb": "",
+   "zona": "collo",
+   "tipo": "pnf"
+  },
+  "spallacars": {
+   "nome": "Cerchi di spalla",
+   "lavora": [
+    "deltoide_ant",
+    "deltoide_lat",
+    "deltoide_post",
+    "cuffia"
+   ],
+   "aiuta": [],
+   "allunga": [],
+   "fase": "ciclo",
+   "vista": "tre_quarti",
+   "fedb": "",
+   "zona": "spalle",
+   "tipo": "attiva"
+  },
+  "passbastone": {
+   "nome": "Passaggi con il bastone",
+   "lavora": [],
+   "aiuta": [
+    "deltoide_post",
+    "cuffia"
+   ],
+   "allunga": [
+    "pettorale",
+    "deltoide_ant"
+   ],
+   "fase": "ciclo",
+   "vista": "tre_quarti",
+   "fedb": "",
+   "zona": "spalle",
+   "tipo": "dinamica"
+  },
+  "wallslide": {
+   "nome": "Scivolamenti al muro",
+   "lavora": [
+    "trapezio",
+    "dentato"
+   ],
+   "aiuta": [
+    "cuffia"
+   ],
+   "allunga": [
+    "pettorale"
+   ],
+   "fase": "ciclo",
+   "vista": "fronte",
+   "fedb": "",
+   "zona": "spalle",
+   "tipo": "attiva"
+  },
+  "angeli": {
+   "nome": "Angeli a terra",
+   "lavora": [
+    "trapezio"
+   ],
+   "aiuta": [
+    "cuffia"
+   ],
+   "allunga": [
+    "pettorale"
+   ],
+   "fase": "ciclo",
+   "vista": "tre_quarti",
+   "fedb": "",
+   "zona": "spalle",
+   "tipo": "attiva"
+  },
+  "ytw": {
+   "nome": "Y-T-W a pancia in giù",
+   "lavora": [
+    "romboidi",
+    "deltoide_post",
+    "trapezio"
+   ],
+   "aiuta": [
+    "cuffia"
+   ],
+   "allunga": [],
+   "fase": "ciclo",
+   "vista": "tre_quarti_dietro",
+   "fedb": "",
+   "zona": "spalle",
+   "tipo": "attiva"
+  },
+  "scapolari": {
+   "nome": "Piegamenti scapolari",
+   "lavora": [
+    "dentato",
+    "romboidi"
+   ],
+   "aiuta": [
+    "pettorale"
+   ],
+   "allunga": [],
+   "fase": "ciclo",
+   "vista": "lato",
+   "fedb": "",
+   "zona": "spalle",
+   "tipo": "attiva"
+  },
+  "re9090": {
+   "nome": "Rotazione esterna 90/90 al muro",
+   "lavora": [
+    "cuffia"
+   ],
+   "aiuta": [
+    "deltoide_post"
+   ],
+   "allunga": [
+    "pettorale"
+   ],
+   "fase": "ciclo",
+   "vista": "tre_quarti",
+   "fedb": "",
+   "zona": "spalle",
+   "tipo": "attiva"
+  },
+  "sleeper": {
+   "nome": "Sleeper stretch",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "cuffia",
+    "deltoide_post"
+   ],
+   "fase": "respiro",
+   "vista": "tre_quarti",
+   "fedb": "",
+   "zona": "spalle",
+   "tipo": "statica"
+  },
+  "braccioal": {
+   "nome": "Braccio sul petto",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "deltoide_post",
+    "romboidi"
+   ],
+   "fase": "respiro",
+   "vista": "fronte",
+   "fedb": "",
+   "zona": "spalle",
+   "tipo": "statica"
+  },
+  "stipite": {
+   "nome": "Pettorale allo stipite",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "pettorale",
+    "deltoide_ant"
+   ],
+   "fase": "respiro",
+   "vista": "tre_quarti",
+   "fedb": "",
+   "zona": "spalle",
+   "tipo": "statica"
+  },
+  "tricipitesu": {
+   "nome": "Tricipite e dorsale sopra la testa",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "tricipite",
+    "gran_dorsale"
+   ],
+   "fase": "respiro",
+   "vista": "dietro",
+   "fedb": "",
+   "zona": "spalle",
+   "tipo": "statica"
+  },
+  "dorsalepanca": {
+   "nome": "Dorsale alla panca",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "gran_dorsale",
+    "tricipite",
+    "pettorale"
+   ],
+   "fase": "respiro",
+   "vista": "lato",
+   "fedb": "",
+   "zona": "spalle",
+   "tipo": "statica"
+  },
+  "cucciolo": {
+   "nome": "Il cucciolo",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "gran_dorsale",
+    "pettorale",
+    "deltoide_ant"
+   ],
+   "fase": "respiro",
+   "vista": "lato",
+   "fedb": "",
+   "zona": "spalle",
+   "tipo": "statica"
+  },
+  "appeso": {
+   "nome": "Appeso alla sbarra",
+   "lavora": [
+    "avambraccio"
+   ],
+   "aiuta": [],
+   "allunga": [
+    "gran_dorsale",
+    "pettorale"
+   ],
+   "fase": "respiro",
+   "vista": "dietro",
+   "fedb": "",
+   "zona": "spalle",
+   "tipo": "statica"
+  },
+  "libroaperto": {
+   "nome": "Libro aperto",
+   "lavora": [],
+   "aiuta": [
+    "obliqui"
+   ],
+   "allunga": [
+    "pettorale",
+    "deltoide_ant"
+   ],
+   "fase": "ciclo",
+   "vista": "tre_quarti",
+   "fedb": "",
+   "zona": "toracica",
+   "tipo": "dinamica"
+  },
+  "infilaago": {
+   "nome": "Infila l'ago",
+   "lavora": [],
+   "aiuta": [
+    "obliqui"
+   ],
+   "allunga": [
+    "romboidi",
+    "deltoide_post"
+   ],
+   "fase": "ciclo",
+   "vista": "tre_quarti",
+   "fedb": "",
+   "zona": "toracica",
+   "tipo": "dinamica"
+  },
+  "rotquad": {
+   "nome": "Rotazione a quattro zampe",
+   "lavora": [
+    "obliqui",
+    "romboidi"
+   ],
+   "aiuta": [],
+   "allunga": [],
+   "fase": "ciclo",
+   "vista": "tre_quarti",
+   "fedb": "",
+   "zona": "toracica",
+   "tipo": "attiva"
+  },
+  "estrullo": {
+   "nome": "Estensione sul rullo",
+   "lavora": [],
+   "aiuta": [
+    "erettori"
+   ],
+   "allunga": [
+    "retto_addome",
+    "pettorale"
+   ],
+   "fase": "ciclo",
+   "vista": "lato",
+   "fedb": "",
+   "zona": "toracica",
+   "tipo": "dinamica"
+  },
+  "preghiera": {
+   "nome": "Preghiera alla panca",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "gran_dorsale",
+    "tricipite"
+   ],
+   "fase": "respiro",
+   "vista": "lato",
+   "fedb": "",
+   "zona": "toracica",
+   "tipo": "statica"
+  },
+  "inclinlat": {
+   "nome": "Inclinazione laterale in piedi",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "obliqui",
+    "gran_dorsale"
+   ],
+   "fase": "respiro",
+   "vista": "fronte",
+   "fedb": "",
+   "zona": "toracica",
+   "tipo": "statica"
+  },
+  "rotbastone": {
+   "nome": "Rotazione seduto con bastone",
+   "lavora": [
+    "obliqui"
+   ],
+   "aiuta": [],
+   "allunga": [
+    "erettori"
+   ],
+   "fase": "ciclo",
+   "vista": "fronte",
+   "fedb": "",
+   "zona": "toracica",
+   "tipo": "dinamica"
+  },
+  "rotmuro": {
+   "nome": "Rotazione in piedi al muro",
+   "lavora": [],
+   "aiuta": [
+    "obliqui"
+   ],
+   "allunga": [
+    "pettorale",
+    "deltoide_ant"
+   ],
+   "fase": "ciclo",
+   "vista": "fronte",
+   "fedb": "",
+   "zona": "toracica",
+   "tipo": "dinamica"
+  },
+  "bustocars": {
+   "nome": "Cerchi del busto",
+   "lavora": [
+    "retto_addome",
+    "erettori",
+    "obliqui"
+   ],
+   "aiuta": [],
+   "allunga": [],
+   "fase": "ciclo",
+   "vista": "lato",
+   "fedb": "",
+   "zona": "toracica",
+   "tipo": "attiva"
+  },
+  "polsocars": {
+   "nome": "Cerchi del polso",
+   "lavora": [
+    "avambraccio"
+   ],
+   "aiuta": [],
+   "allunga": [],
+   "fase": "ciclo",
+   "vista": "fronte",
+   "fedb": "",
+   "zona": "polsi",
+   "tipo": "attiva"
+  },
+  "flessoripolso": {
+   "nome": "Flessori del polso a terra",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "avambraccio"
+   ],
+   "fase": "respiro",
+   "vista": "lato",
+   "fedb": "",
+   "zona": "polsi",
+   "tipo": "statica"
+  },
+  "estensoripolso": {
+   "nome": "Estensori del polso a terra",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "avambraccio"
+   ],
+   "fase": "respiro",
+   "vista": "lato",
+   "fedb": "",
+   "zona": "polsi",
+   "tipo": "statica"
+  },
+  "avambrot": {
+   "nome": "Rotazioni dell'avambraccio",
+   "lavora": [
+    "avambraccio"
+   ],
+   "aiuta": [
+    "bicipite"
+   ],
+   "allunga": [],
+   "fase": "ciclo",
+   "vista": "fronte",
+   "fedb": "",
+   "zona": "polsi",
+   "tipo": "dinamica"
+  },
+  "dondoliopalmi": {
+   "nome": "Dondolio sui palmi",
+   "lavora": [],
+   "aiuta": [
+    "deltoide_ant"
+   ],
+   "allunga": [
+    "avambraccio"
+   ],
+   "fase": "ciclo",
+   "vista": "lato",
+   "fedb": "",
+   "zona": "polsi",
+   "tipo": "dinamica"
+  },
+  "pugno": {
+   "nome": "Pugno e apertura",
+   "lavora": [
+    "avambraccio"
+   ],
+   "aiuta": [],
+   "allunga": [],
+   "fase": "ciclo",
+   "vista": "fronte",
+   "fedb": "",
+   "zona": "polsi",
+   "tipo": "dinamica"
+  },
+  "dueginocchia": {
+   "nome": "Due ginocchia al petto",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "erettori",
+    "grande_gluteo"
+   ],
+   "fase": "respiro",
+   "vista": "lato",
+   "fedb": "",
+   "zona": "lombare",
+   "tipo": "statica"
+  },
+  "bacino": {
+   "nome": "Basculamento del bacino",
+   "lavora": [
+    "retto_addome"
+   ],
+   "aiuta": [
+    "erettori"
+   ],
+   "allunga": [],
+   "fase": "ciclo",
+   "vista": "lato",
+   "fedb": "",
+   "zona": "lombare",
+   "tipo": "dinamica"
+  },
+  "tergicristallo": {
+   "nome": "Tergicristallo",
+   "lavora": [
+    "obliqui"
+   ],
+   "aiuta": [],
+   "allunga": [
+    "erettori",
+    "medio_gluteo"
+   ],
+   "fase": "ciclo",
+   "vista": "tre_quarti",
+   "fedb": "",
+   "zona": "lombare",
+   "tipo": "dinamica"
+  },
+  "torsionesup": {
+   "nome": "Torsione supina",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "grande_gluteo",
+    "medio_gluteo",
+    "obliqui",
+    "erettori"
+   ],
+   "fase": "respiro",
+   "vista": "tre_quarti",
+   "fedb": "",
+   "zona": "lombare",
+   "tipo": "statica"
+  },
+  "sfinge": {
+   "nome": "Sfinge",
+   "lavora": [],
+   "aiuta": [
+    "erettori"
+   ],
+   "allunga": [
+    "retto_addome",
+    "flessori_anca"
+   ],
+   "fase": "respiro",
+   "vista": "lato",
+   "fedb": "",
+   "zona": "lombare",
+   "tipo": "statica"
+  },
+  "estensioniterra": {
+   "nome": "Estensioni a terra",
+   "lavora": [
+    "tricipite"
+   ],
+   "aiuta": [
+    "erettori"
+   ],
+   "allunga": [
+    "retto_addome"
+   ],
+   "fase": "ciclo",
+   "vista": "lato",
+   "fedb": "",
+   "zona": "lombare",
+   "tipo": "dinamica"
+  },
+  "banana": {
+   "nome": "Banana",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "obliqui",
+    "gran_dorsale",
+    "medio_gluteo"
+   ],
+   "fase": "respiro",
+   "vista": "tre_quarti",
+   "fedb": "",
+   "zona": "lombare",
+   "tipo": "statica"
+  },
+  "birddog": {
+   "nome": "Bird dog",
+   "lavora": [
+    "erettori",
+    "grande_gluteo"
+   ],
+   "aiuta": [
+    "retto_addome",
+    "deltoide_ant"
+   ],
+   "allunga": [],
+   "fase": "ciclo",
+   "vista": "lato",
+   "fedb": "",
+   "zona": "lombare",
+   "tipo": "attiva"
+  },
+  "divano": {
+   "nome": "Divano",
+   "lavora": [
+    "grande_gluteo"
+   ],
+   "aiuta": [],
+   "allunga": [
+    "flessori_anca",
+    "quadricipite"
+   ],
+   "fase": "respiro",
+   "vista": "lato",
+   "fedb": "",
+   "zona": "anche",
+   "tipo": "statica"
+  },
+  "affondobraccio": {
+   "nome": "Affondo del corridore con braccio alto",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "flessori_anca",
+    "obliqui",
+    "gran_dorsale"
+   ],
+   "fase": "respiro",
+   "vista": "lato",
+   "fedb": "",
+   "zona": "anche",
+   "tipo": "statica"
+  },
+  "marciapsoas": {
+   "nome": "Marcia del psoas",
+   "lavora": [
+    "flessori_anca",
+    "retto_addome"
+   ],
+   "aiuta": [],
+   "allunga": [],
+   "fase": "ciclo",
+   "vista": "lato",
+   "fedb": "",
+   "zona": "anche",
+   "tipo": "attiva"
+  },
+  "novanta": {
+   "nome": "90/90",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "grande_gluteo",
+    "medio_gluteo",
+    "adduttori"
+   ],
+   "fase": "respiro",
+   "vista": "tre_quarti",
+   "fedb": "",
+   "zona": "anche",
+   "tipo": "statica"
+  },
+  "novantapass": {
+   "nome": "Passaggi 90/90",
+   "lavora": [
+    "medio_gluteo",
+    "flessori_anca"
+   ],
+   "aiuta": [],
+   "allunga": [
+    "grande_gluteo"
+   ],
+   "fase": "ciclo",
+   "vista": "tre_quarti",
+   "fedb": "",
+   "zona": "anche",
+   "tipo": "attiva"
+  },
+  "ancacars": {
+   "nome": "Cerchi dell'anca a quattro zampe",
+   "lavora": [
+    "medio_gluteo",
+    "flessori_anca",
+    "grande_gluteo"
+   ],
+   "aiuta": [],
+   "allunga": [],
+   "fase": "ciclo",
+   "vista": "tre_quarti",
+   "fedb": "",
+   "zona": "anche",
+   "tipo": "attiva"
+  },
+  "idrante": {
+   "nome": "Idrante",
+   "lavora": [
+    "medio_gluteo"
+   ],
+   "aiuta": [
+    "grande_gluteo"
+   ],
+   "allunga": [
+    "adduttori"
+   ],
+   "fase": "ciclo",
+   "vista": "tre_quarti_dietro",
+   "fedb": "",
+   "zona": "anche",
+   "tipo": "attiva"
+  },
+  "aeroplano": {
+   "nome": "Aeroplano",
+   "lavora": [
+    "medio_gluteo",
+    "grande_gluteo"
+   ],
+   "aiuta": [
+    "femorali"
+   ],
+   "allunga": [],
+   "fase": "ciclo",
+   "vista": "tre_quarti",
+   "fedb": "",
+   "zona": "anche",
+   "tipo": "attiva"
+  },
+  "shinbox": {
+   "nome": "Shin box",
+   "lavora": [
+    "grande_gluteo",
+    "medio_gluteo"
+   ],
+   "aiuta": [
+    "quadricipite"
+   ],
+   "allunga": [
+    "flessori_anca"
+   ],
+   "fase": "ciclo",
+   "vista": "tre_quarti",
+   "fedb": "",
+   "zona": "anche",
+   "tipo": "attiva"
+  },
+  "swingav": {
+   "nome": "Oscillazioni avanti-dietro",
+   "lavora": [
+    "flessori_anca"
+   ],
+   "aiuta": [
+    "grande_gluteo"
+   ],
+   "allunga": [
+    "femorali"
+   ],
+   "fase": "ciclo",
+   "vista": "lato",
+   "fedb": "",
+   "zona": "anche",
+   "tipo": "dinamica"
+  },
+  "swinglat": {
+   "nome": "Oscillazioni laterali",
+   "lavora": [
+    "medio_gluteo",
+    "adduttori"
+   ],
+   "aiuta": [],
+   "allunga": [],
+   "fase": "ciclo",
+   "vista": "fronte",
+   "fedb": "",
+   "zona": "anche",
+   "tipo": "dinamica"
+  },
+  "squatprof": {
+   "nome": "Squat profondo tenuto",
+   "lavora": [],
+   "aiuta": [
+    "quadricipite"
+   ],
+   "allunga": [
+    "adduttori",
+    "grande_gluteo",
+    "soleo"
+   ],
+   "fase": "respiro",
+   "vista": "tre_quarti",
+   "fedb": "",
+   "zona": "anche",
+   "tipo": "statica"
+  },
+  "cossack": {
+   "nome": "Cossack",
+   "lavora": [
+    "quadricipite",
+    "grande_gluteo"
+   ],
+   "aiuta": [],
+   "allunga": [
+    "adduttori"
+   ],
+   "fase": "ciclo",
+   "vista": "fronte",
+   "fedb": "",
+   "zona": "anche",
+   "tipo": "dinamica"
+  },
+  "farfalla": {
+   "nome": "Farfalla",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "adduttori"
+   ],
+   "fase": "respiro",
+   "vista": "fronte",
+   "fedb": "",
+   "zona": "anche",
+   "tipo": "statica"
+  },
+  "rana": {
+   "nome": "Rana",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "adduttori"
+   ],
+   "fase": "respiro",
+   "vista": "dietro",
+   "fedb": "",
+   "zona": "anche",
+   "tipo": "statica"
+  },
+  "gambev": {
+   "nome": "Gambe a V al muro",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "adduttori",
+    "femorali"
+   ],
+   "fase": "respiro",
+   "vista": "tre_quarti",
+   "fedb": "",
+   "zona": "anche",
+   "tipo": "statica"
+  },
+  "piccione": {
+   "nome": "Piccione",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "grande_gluteo",
+    "medio_gluteo",
+    "flessori_anca"
+   ],
+   "fase": "respiro",
+   "vista": "tre_quarti",
+   "fedb": "",
+   "zona": "glutei",
+   "tipo": "statica"
+  },
+  "fig4sup": {
+   "nome": "Figura 4 supina",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "grande_gluteo",
+    "medio_gluteo"
+   ],
+   "fase": "respiro",
+   "vista": "tre_quarti",
+   "fedb": "",
+   "zona": "glutei",
+   "tipo": "statica"
+  },
+  "fig4sed": {
+   "nome": "Figura 4 seduto",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "grande_gluteo",
+    "medio_gluteo",
+    "erettori"
+   ],
+   "fase": "respiro",
+   "vista": "tre_quarti",
+   "fedb": "",
+   "zona": "glutei",
+   "tipo": "statica"
+  },
+  "fig4piedi": {
+   "nome": "Figura 4 in piedi",
+   "lavora": [
+    "quadricipite"
+   ],
+   "aiuta": [],
+   "allunga": [
+    "grande_gluteo",
+    "medio_gluteo"
+   ],
+   "fase": "respiro",
+   "vista": "tre_quarti",
+   "fedb": "",
+   "zona": "glutei",
+   "tipo": "statica"
+  },
+  "ginspalla": {
+   "nome": "Ginocchio alla spalla opposta",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "grande_gluteo",
+    "medio_gluteo"
+   ],
+   "fase": "respiro",
+   "vista": "tre_quarti",
+   "fedb": "",
+   "zona": "glutei",
+   "tipo": "statica"
+  },
+  "mediogluteo": {
+   "nome": "Medio gluteo incrociato",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "medio_gluteo"
+   ],
+   "fase": "respiro",
+   "vista": "fronte",
+   "fedb": "",
+   "zona": "glutei",
+   "tipo": "statica"
+  },
+  "torsioneinc": {
+   "nome": "Torsione seduta a gamba incrociata",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "grande_gluteo",
+    "medio_gluteo",
+    "obliqui",
+    "erettori"
+   ],
+   "fase": "respiro",
+   "vista": "fronte",
+   "fedb": "",
+   "zona": "glutei",
+   "tipo": "statica"
+  },
+  "cinghia": {
+   "nome": "Femorali con la cinghia",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "femorali",
+    "gastrocnemio"
+   ],
+   "fase": "ciclo",
+   "vista": "tre_quarti",
+   "fedb": "",
+   "zona": "gambe",
+   "tipo": "pnf"
+  },
+  "spazzata": {
+   "nome": "Spazzata dei femorali",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "femorali"
+   ],
+   "fase": "ciclo",
+   "vista": "lato",
+   "fedb": "",
+   "zona": "gambe",
+   "tipo": "dinamica"
+  },
+  "soldatino": {
+   "nome": "Soldatino",
+   "lavora": [
+    "flessori_anca"
+   ],
+   "aiuta": [],
+   "allunga": [
+    "femorali"
+   ],
+   "fase": "ciclo",
+   "vista": "lato",
+   "fedb": "",
+   "zona": "gambe",
+   "tipo": "dinamica"
+  },
+  "quadfianco": {
+   "nome": "Quadricipite sul fianco",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "quadricipite",
+    "flessori_anca"
+   ],
+   "fase": "respiro",
+   "vista": "tre_quarti",
+   "fedb": "",
+   "zona": "gambe",
+   "tipo": "statica"
+  },
+  "talloni": {
+   "nome": "Seduto sui talloni",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "quadricipite",
+    "tibiale"
+   ],
+   "fase": "respiro",
+   "vista": "lato",
+   "fedb": "",
+   "zona": "gambe",
+   "tipo": "statica"
+  },
+  "pike": {
+   "nome": "Busto sulle gambe tese",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "femorali",
+    "gastrocnemio",
+    "erettori"
+   ],
+   "fase": "respiro",
+   "vista": "lato",
+   "fedb": "",
+   "zona": "gambe",
+   "tipo": "statica"
+  },
+  "femgradino": {
+   "nome": "Femorale su un gradino",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "femorali",
+    "gastrocnemio"
+   ],
+   "fase": "respiro",
+   "vista": "lato",
+   "fedb": "",
+   "zona": "gambe",
+   "tipo": "statica"
+  },
+  "itband": {
+   "nome": "Banda ileotibiale incrociata",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "medio_gluteo",
+    "obliqui"
+   ],
+   "fase": "respiro",
+   "vista": "fronte",
+   "fedb": "",
+   "zona": "gambe",
+   "tipo": "statica"
+  },
+  "ginocchiocerchi": {
+   "nome": "Cerchi del ginocchio",
+   "lavora": [
+    "quadricipite"
+   ],
+   "aiuta": [
+    "gastrocnemio"
+   ],
+   "allunga": [],
+   "fase": "ciclo",
+   "vista": "tre_quarti",
+   "fedb": "",
+   "zona": "gambe",
+   "tipo": "dinamica"
+  },
+  "ginmuro": {
+   "nome": "Ginocchio al muro",
+   "lavora": [
+    "tibiale"
+   ],
+   "aiuta": [],
+   "allunga": [
+    "soleo",
+    "gastrocnemio"
+   ],
+   "fase": "ciclo",
+   "vista": "lato",
+   "fedb": "",
+   "zona": "caviglie",
+   "tipo": "dinamica"
+  },
+  "dondolio": {
+   "nome": "Affondo con dondolio",
+   "lavora": [
+    "tibiale"
+   ],
+   "aiuta": [],
+   "allunga": [
+    "soleo"
+   ],
+   "fase": "ciclo",
+   "vista": "lato",
+   "fedb": "",
+   "zona": "caviglie",
+   "tipo": "dinamica"
+  },
+  "polpgradino": {
+   "nome": "Polpaccio al gradino",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "gastrocnemio",
+    "soleo"
+   ],
+   "fase": "respiro",
+   "vista": "lato",
+   "fedb": "",
+   "zona": "caviglie",
+   "tipo": "statica"
+  },
+  "solgradino": {
+   "nome": "Soleo al gradino",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "soleo"
+   ],
+   "fase": "respiro",
+   "vista": "lato",
+   "fedb": "",
+   "zona": "caviglie",
+   "tipo": "statica"
+  },
+  "tibiale": {
+   "nome": "Tibiale in ginocchio",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "tibiale",
+    "quadricipite"
+   ],
+   "fase": "respiro",
+   "vista": "lato",
+   "fedb": "",
+   "zona": "caviglie",
+   "tipo": "statica"
+  },
+  "alfabeto": {
+   "nome": "Alfabeto con il piede",
+   "lavora": [
+    "tibiale",
+    "gastrocnemio"
+   ],
+   "aiuta": [],
+   "allunga": [],
+   "fase": "ciclo",
+   "vista": "lato",
+   "fedb": "",
+   "zona": "caviglie",
+   "tipo": "attiva"
+  },
+  "alluce": {
+   "nome": "Alluce al muro",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "gastrocnemio"
+   ],
+   "fase": "respiro",
+   "vista": "lato",
+   "fedb": "",
+   "zona": "caviglie",
+   "tipo": "statica"
+  },
+  "piedecorto": {
+   "nome": "Piede corto",
+   "lavora": [
+    "tibiale"
+   ],
+   "aiuta": [],
+   "allunga": [],
+   "fase": "ciclo",
+   "vista": "tre_quarti",
+   "fedb": "",
+   "zona": "caviglie",
+   "tipo": "attiva"
+  },
+  "taccopunta": {
+   "nome": "Cammino su talloni e punte",
+   "lavora": [
+    "tibiale",
+    "gastrocnemio",
+    "soleo"
+   ],
+   "aiuta": [],
+   "allunga": [],
+   "fase": "ciclo",
+   "vista": "lato",
+   "fedb": "",
+   "zona": "caviglie",
+   "tipo": "dinamica"
+  },
+  "inversione": {
+   "nome": "Caviglia dentro-fuori con elastico",
+   "lavora": [
+    "tibiale"
+   ],
+   "aiuta": [
+    "soleo"
+   ],
+   "allunga": [],
+   "fase": "ciclo",
+   "vista": "tre_quarti",
+   "fedb": "",
+   "zona": "caviglie",
+   "tipo": "attiva"
+  },
+  "salutosole": {
+   "nome": "Saluto al sole",
+   "lavora": [],
+   "aiuta": [
+    "deltoide_ant",
+    "tricipite"
+   ],
+   "allunga": [
+    "femorali",
+    "gastrocnemio",
+    "retto_addome"
+   ],
+   "fase": "ciclo",
+   "vista": "lato",
+   "fedb": "",
+   "zona": "flussi",
+   "tipo": "dinamica"
+  },
+  "canecobra": {
+   "nome": "Cane e cobra",
+   "lavora": [],
+   "aiuta": [
+    "deltoide_ant",
+    "tricipite"
+   ],
+   "allunga": [
+    "femorali",
+    "gastrocnemio",
+    "retto_addome"
+   ],
+   "fase": "ciclo",
+   "vista": "lato",
+   "fedb": "",
+   "zona": "flussi",
+   "tipo": "dinamica"
+  },
+  "canepedala": {
+   "nome": "Cane con pedalata",
+   "lavora": [],
+   "aiuta": [
+    "deltoide_ant"
+   ],
+   "allunga": [
+    "gastrocnemio",
+    "soleo",
+    "femorali"
+   ],
+   "fase": "ciclo",
+   "vista": "lato",
+   "fedb": "",
+   "zona": "flussi",
+   "tipo": "dinamica"
+  },
+  "scorpione": {
+   "nome": "Scorpione",
+   "lavora": [
+    "grande_gluteo"
+   ],
+   "aiuta": [],
+   "allunga": [
+    "flessori_anca",
+    "obliqui"
+   ],
+   "fase": "ciclo",
+   "vista": "tre_quarti_dietro",
+   "fedb": "",
+   "zona": "flussi",
+   "tipo": "dinamica"
+  },
+  "squatalzati": {
+   "nome": "Squat e alzati",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "femorali",
+    "adduttori"
+   ],
+   "fase": "ciclo",
+   "vista": "tre_quarti",
+   "fedb": "",
+   "zona": "flussi",
+   "tipo": "dinamica"
+  },
+  "afflatrot": {
+   "nome": "Affondo laterale con rotazione",
+   "lavora": [
+    "quadricipite",
+    "grande_gluteo"
+   ],
+   "aiuta": [
+    "obliqui"
+   ],
+   "allunga": [
+    "adduttori"
+   ],
+   "fase": "ciclo",
+   "vista": "fronte",
+   "fedb": "",
+   "zona": "flussi",
+   "tipo": "dinamica"
+  },
+  "orso": {
+   "nome": "Camminata dell'orso",
+   "lavora": [
+    "retto_addome",
+    "deltoide_ant",
+    "quadricipite"
+   ],
+   "aiuta": [
+    "obliqui"
+   ],
+   "allunga": [],
+   "fase": "ciclo",
+   "vista": "lato",
+   "fedb": "",
+   "zona": "flussi",
+   "tipo": "attiva"
+  },
+  "rullopolp": {
+   "nome": "Polpacci con il rullo",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "gastrocnemio",
+    "soleo"
+   ],
+   "fase": "respiro",
+   "vista": "lato",
+   "fedb": "",
+   "zona": "rullo",
+   "tipo": "rullo"
+  },
+  "rullofem": {
+   "nome": "Femorali con il rullo",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "femorali"
+   ],
+   "fase": "respiro",
+   "vista": "lato",
+   "fedb": "",
+   "zona": "rullo",
+   "tipo": "rullo"
+  },
+  "rulloadd": {
+   "nome": "Adduttori con il rullo",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "adduttori"
+   ],
+   "fase": "respiro",
+   "vista": "tre_quarti",
+   "fedb": "",
+   "zona": "rullo",
+   "tipo": "rullo"
+  },
+  "rullolat": {
+   "nome": "Lato della coscia con il rullo",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "medio_gluteo",
+    "quadricipite"
+   ],
+   "fase": "respiro",
+   "vista": "fronte",
+   "fedb": "",
+   "zona": "rullo",
+   "tipo": "rullo"
+  },
+  "rulloschiena": {
+   "nome": "Schiena alta con il rullo",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "romboidi",
+    "erettori",
+    "trapezio"
+   ],
+   "fase": "respiro",
+   "vista": "lato",
+   "fedb": "",
+   "zona": "rullo",
+   "tipo": "rullo"
+  },
+  "rullodorsale": {
+   "nome": "Gran dorsale con il rullo",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "gran_dorsale"
+   ],
+   "fase": "respiro",
+   "vista": "fronte",
+   "fedb": "",
+   "zona": "rullo",
+   "tipo": "rullo"
+  },
+  "pallinapiede": {
+   "nome": "Pianta del piede con la pallina",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "soleo"
+   ],
+   "fase": "respiro",
+   "vista": "tre_quarti",
+   "fedb": "",
+   "zona": "rullo",
+   "tipo": "rullo"
+  },
+  "pallinapetto": {
+   "nome": "Pettorale con la pallina al muro",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "pettorale",
+    "deltoide_ant"
+   ],
+   "fase": "respiro",
+   "vista": "tre_quarti",
+   "fedb": "",
+   "zona": "rullo",
+   "tipo": "rullo"
+  },
+  "pallinaspalla": {
+   "nome": "Spalla dietro con la pallina",
+   "lavora": [],
+   "aiuta": [],
+   "allunga": [
+    "cuffia",
+    "deltoide_post"
+   ],
+   "fase": "respiro",
+   "vista": "tre_quarti_dietro",
+   "fedb": "",
+   "zona": "rullo",
+   "tipo": "rullo"
   }
  }
 }

@@ -12,6 +12,10 @@ HUD è un'app per atleti di endurance (triathlon, corsa, nuoto, bici) che ogni m
 - **Piano** — blocchi di 4 settimane (3 di carico, 1 di scarico) con periodizzazione all'indietro dalla gara, circa 80/20, libreria di sedute parametriche tradotte nelle tue zone. Le sedute vanno nel calendario di Intervals e da lì all'orologio.
 - **Carburante** — metabolismo a riposo (ten Haaf 2014), carboidrati in g/kg secondo il giorno, proteine e grassi con dei minimi, deficit in % del peso, **calorie che imparano** dalle pesate e dal cibo registrato, carico pre-gara, rifornimento in seduta (gel, acqua e sodio all'ora). **Limiti di sicurezza** che vincono su tutto.
 - **Video 3D degli esercizi** — una figura anatomica fa gli esercizi di palestra e mobilità in loop: i muscoli che lavorano si accendono di rosso, quelli che aiutano di rosa, quelli che si allungano di azzurro.
+- **Il percorso su mappa e in 3D** — il giro di ogni attività su una cartina vera, a tutto schermo in 2D o in 3D sul rilievo, con «Ripercorri» che vola lungo il percorso. I primi e gli ultimi 250 m sono sempre tolti.
+- **Diario della palestra** — chili e ripetizioni per ogni serie con − e +, proposti dalla progressione; record (1RM stimato) e peso della prossima volta a fine esercizio.
+- **Acqua e codici a barre** — un tocco per bicchiere verso un obiettivo che sale con l'allenamento; i cibi confezionati dal codice a barre con Open Food Facts.
+- **Curve di potenza e di passo** (vista completa) — i migliori sforzi di 84 giorni contro l'anno, con CP e W′, velocità critica e D′, più il W′bal nelle uscite con la potenza.
 - **L'impronta** — il segno dell'app: ogni seduta è una fila di capsule larga quanto il tempo e alta quanto l'intensità; il contorno è il piano, il pieno quello che hai fatto.
 - Widget per Home e schermata di blocco, notifiche della sera, diario del cibo (anche con Siri), infortuni e malattia, palestra e mobilità, condivisione delle attività.
 - **Condividere** — quattro immagini per le storie (Attività, Giornata, Settimana, Gara) su fondo nero, bianco o trasparente, tutte firmate dall'impronta.
@@ -27,7 +31,7 @@ La guida completa delle schede, dei widget e della condivisione è in [`docs/GUI
 
 ## I tuoi dati
 
-Tutto resta sul tuo iPhone e nel tuo iCloud: l'app non ha un server, non raccoglie statistiche d'uso e non manda nulla a nessuno, tranne le chiamate a Intervals.icu con la tua chiave. I dati di Garmin che arrivano tramite Intervals restano soggetti ai termini di Garmin e di Intervals.icu.
+Tutto resta sul tuo iPhone e nel tuo iCloud: l'app non ha un server, non raccoglie statistiche d'uso e non manda nulla a nessuno, tranne le chiamate a Intervals.icu con la tua chiave e il download di contenuti pubblici: video e foto degli esercizi, le cartine (OpenFreeMap, rilievo da AWS) e, se cerchi un codice a barre, Open Food Facts. A questi servizi arriva solo ciò che chiedi (la zona della cartina, il codice), mai il tuo percorso né il tuo profilo. I dati di Garmin che arrivano tramite Intervals restano soggetti ai termini di Garmin e di Intervals.icu.
 
 **Non è un dispositivo medico.** Le indicazioni su allenamento e alimentazione sono generali: se hai un medico, un allenatore o un nutrizionista, vale il loro parere.
 

@@ -1,5 +1,18 @@
 # Novità
 
+## 1.9 · ottobre 2026
+- Il percorso su una cartina vera, a tutto schermo, in 2D o in 3D sul rilievo, e «Ripercorri» che fa volare la vista lungo il giro (MapLibre GL, OpenFreeMap, OpenStreetMap, rilievo Terrain Tiles). Restano tolti i primi e gli ultimi 250 m.
+- Palestra: chili e ripetizioni per ogni serie con − e +, proposti dalla progressione; record (1RM stimato) e peso della prossima volta a fine esercizio. Nella vista completa anche le ripetizioni in riserva.
+- Acqua: un tocco per bicchiere, obiettivo dall'EFSA più mezzo litro per ora di allenamento.
+- Codice a barre: calorie e macro da Open Food Facts, con i grammi scelti da te; un Comando Rapido lo legge con la fotocamera.
+- Vista completa: curve di potenza e di passo (84 giorni contro l'anno, CP e W′, velocità critica e D′) e grafico W′bal nelle attività con la potenza.
+- zoffline: con `"zoffline"` nel profilo, le sedute di bici indoor aprono la pagina di zoffline per Intervals.
+
+## 1.8 · ottobre 2026
+- Vista essenziale per tutti: ogni scheda mostra solo i numeri che servono a decidere. La vista completa resta con `"vista": "completa"` nel profilo.
+- Riscrivi il piano quando vuoi, da domani o da lunedì, con l'anteprima; l'app lo propone se cambiano ore, giorni, sport o gara.
+- Palestra senza ricerche su YouTube: tutti gli esercizi hanno il video 3D di HUD.
+
 ## 1.7 · ottobre 2026
 - HRV letta come tendenza di 7 giorni contro la tua fascia normale (non la singola notte).
 - Soglie: il passo cambia su Intervals solo con una conferma; velocità critica dalle prove brevi; CSS da più distanze.

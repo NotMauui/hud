@@ -10,8 +10,10 @@ L'app mostra il video nella scheda dell'esercizio, con l'elenco dei muscoli sott
 | --- | --- |
 | `figura.blend` | La figura pronta: corpo, scheletro e 24 zone muscolari. Si apre in Blender. |
 | `rendi_esercizio.py` | Fa il video di uno o più esercizi. È l'unico script che serve di solito. |
-| `movimenti.py` | I movimenti, scritti come pose chiave. Qui si correggono o si aggiungono esercizi. |
-| `muscoli.json` | Per ognuno dei 61 esercizi dell'app: muscoli che lavorano, aiutano, si allungano; inquadratura. |
+| `movimenti.py` | I movimenti di palestra, scritti come pose chiave. Qui si correggono o si aggiungono esercizi. |
+| `movimenti_mobilita.py` | I 118 movimenti di mobilità (collo, spalle, schiena, anche, gambe, caviglie, flussi, rullo). |
+| `rendi_mobilita.sh` | Fa tutti i video di mobilità e aggiorna l'app (2-3 notti, riprende da dove era rimasto). |
+| `muscoli.json` | Per ognuno dei 162 esercizi dell'app: muscoli che lavorano, aiutano, si allungano; inquadratura. |
 | `sincronizza_app.py` | Copia nell'app la tabella dei muscoli e l'elenco dei video pronti. |
 | `crea_figura.py`, `makehuman/` | Ricostruiscono `figura.blend` da zero (servono solo se cambi corpo o zone). |
 | `crea_tabella.py` | Ricrea `muscoli.json` (la tabella è scritta lì dentro). |
@@ -33,6 +35,16 @@ Alla fine scrive i comandi per pubblicare.
 
 Le qualità: `--qualita bozza` (540, veloce, per provare), `normale` (720, la base), `massima` (1080 · 30 fps · motion blur).
 
+## Tutti gli esercizi di mobilità
+
+```sh
+sh rendi_mobilita.sh
+```
+
+Fa i 118 video di mobilità a 720 × 720, 24 fotogrammi al secondo, 32 campioni. Sono tanti e più lunghi di quelli di palestra:
+conta 2-3 notti. La mattina si ferma con Ctrl+C, la sera si rilancia lo stesso comando e riparte dal primo video mancante.
+Gli attrezzi nuovi (muro, stipite della porta, bastone, rullo a terra, pallina, cinghia, elastico) li crea lo script.
+
 ## Fare i video sul Mac
 
 Apri il Terminale, scrivi `cd ` (con lo spazio), trascina dentro la cartella `11_Omini_3D` e premi Invio. Poi:
@@ -41,7 +53,7 @@ Apri il Terminale, scrivi `cd ` (con lo spazio), trascina dentro la cartella `11
 /Applications/Blender.app/Contents/MacOS/Blender -b figura.blend -P rendi_esercizio.py -- squat
 ```
 
-- Più esercizi insieme: `-- squat ponte plank gattomucca`. Tutti quelli che hanno un movimento: `-- tutti`.
+- Più esercizi insieme: `-- squat ponte plank gattomucca`. Tutti: `-- tutti`; solo palestra: `-- palestra`; solo mobilità: `-- mobilita`.
 - Più grande o più pulito: `--lato 1080 --campioni 64`. Di base è 720 × 720 con 32 campioni.
 - Usa la scheda video del Mac (Metal) da sola. Su un Mac con chip M un video di 4 secondi richiede pochi minuti.
 - Escono `video/squat.mp4` (loop di 3–6 secondi, poche centinaia di KB) e `video/squat.jpg` (la copertina).
@@ -73,7 +85,7 @@ I muscoli di ogni esercizio vengono da `muscoli.json`, non dal movimento.
 
 - **Movimenti scritti:** tutti i 44 esercizi di palestra, con gli attrezzi (manubri, kettlebell, bilanciere, panca, gradino, sbarra, cavi, elastici, lat machine, leg press), più gatto-mucca e posizione del bambino.
 - **Video già nell'app:** squat, ponte glutei, plank, gatto-mucca, piegamenti, sollevamenti sulle punte, posizione del bambino (qualità normale). `rendi_palestra.sh` li rifà tutti alla massima.
-- **Da fare:** gli altri 15 esercizi di mobilità.
+- **Mobilità:** tutti i 118 esercizi hanno il movimento (`movimenti_mobilita.py`); i video si fanno con `rendi_mobilita.sh`.
 
 Strumenti per scrivere i movimenti (in cima a `movimenti.py`): `dir`/`dirw` dicono dove punta un segmento (braccio, coscia…) negli assi del corpo o del mondo, `ik` sposta piedi e mani tenuti dall'IK, `att` muove un attrezzo, `volo` stacca la figura da terra.
 

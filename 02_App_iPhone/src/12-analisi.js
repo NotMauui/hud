@@ -296,7 +296,7 @@ function analyze(raw, now, diary) {
     fitness: { hist: fit, proj },
     decoupling: longRuns.length ? num(longRuns[0].decoupling) : null, weight, lastAct,
     nutrition: { kcal, kcalActive, kcalEst, carbo, meals, chips, dayType, todayMin, proteine: nut.proteine, grassi: nut.grassi, modo: nut.modo, consumi: nut.consumi, base: nut.base, deficit: nut.deficit, piano, trend, rif, np, longToday, cibo: { lista: (dia.cibo || {})[today] || [], tot: totaleCibo((dia.cibo || {})[today] || []) } },
-    durOf, fetchedAt: raw.fetchedAt, demo: !!raw.demo, stale: !!raw.stale,
+    durOf, fetchedAt: raw.fetchedAt, demo: !!raw.demo, stale: !!raw.stale, curve: raw.curve || null,
     checks: (() => { try { return raw.demo ? [] : verificaProfilo(raw, CONFIG, now); } catch (e) { return []; } })(),
     prof: PROF, needSetup: !PROF && !raw.demo, atleta: raw.atleta || (PROF && PROF.intervals) || null,
     soglie: (() => { try { return raw.demo ? null : stimaSoglie(raw, now, attualiDa(raw)); } catch (e) { return null; } })(),

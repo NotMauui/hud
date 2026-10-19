@@ -35,9 +35,10 @@ if SOLO_FOTO: args.remove("--foto")
 CHIAVI = "--chiavi" in args  # una foto per ogni posa chiave, per correggere i movimenti
 if CHIAVI: args.remove("--chiavi")
 TAB = json.load(open(os.path.join(QUI, "muscoli.json"), encoding="utf-8"))
-MOBILITA = {"gattomucca", "bambino"}
+MOBILITA = set(getattr(movimenti, "MOBILITA", {"gattomucca", "bambino"}))
+GRUPPI = {"palestra": [k for k in movimenti.MOVIMENTI if k not in MOBILITA], "mobilita": [k for k in movimenti.MOVIMENTI if k in MOBILITA]}
 ESERCIZI = (list(movimenti.MOVIMENTI) if (not args or args == ["tutti"]) else
-            [k for k in movimenti.MOVIMENTI if k not in MOBILITA] if args == ["palestra"] else args)
+            GRUPPI[args[0]] if len(args) == 1 and args[0] in GRUPPI else args)
 
 # colori (stile anatomico: corpo chiaro su fondo scuro, rosso dove si lavora)
 GRIGIO = (0.30, 0.31, 0.34, 1); ROSSO = (0.90, 0.03, 0.02, 1); ROSA = (0.95, 0.38, 0.32, 1); AZZURRO = (0.0, 0.62, 1.0, 1)
@@ -174,6 +175,9 @@ def MET(): return mat_attrezzo("HUD_Metallo", (0.32, 0.33, 0.35, 1), 1.0, 0.32)
 def GOMMA(): return mat_attrezzo("HUD_Gomma", (0.025, 0.025, 0.028, 1), 0.0, 0.62)
 def IMBOT(): return mat_attrezzo("HUD_Imbottitura", (0.05, 0.05, 0.055, 1), 0.0, 0.55)
 def ELAST(): return mat_attrezzo("HUD_Elastico", (0.10, 0.10, 0.11, 1), 0.0, 0.5)
+def MURO(): return mat_attrezzo("HUD_Muro", (0.035, 0.035, 0.04, 1), 0.0, 0.8)
+def LEGNO(): return mat_attrezzo("HUD_Legno", (0.20, 0.12, 0.06, 1), 0.0, 0.5)
+def PALLA(): return mat_attrezzo("HUD_Palla", (0.30, 0.05, 0.04, 1), 0.0, 0.45)
 
 def _unisci(parti, nome, mat=None):
     """Unisce più oggetti in uno (un attrezzo = un oggetto)."""
@@ -298,18 +302,49 @@ def crea_attrezzi(mv):
         elif t == "gradino":
             if "sotto" in a:  # sotto un piede della prima posa: alto quanto serve perché il piede appoggi
                 aggiorna(); f = mondo(a["sotto"]); h = max(0.1, min_z_osso(a["sotto"]))
-                d = a.get("dim", (0.5, 0.4, 0.40)); A[nome] = crea_gradino(nome, (f.x + a.get("dx", 0), f.y + a.get("dy", 0), 0), (d[0], d[1], h))
+                d = a.get("dim", (0.5, 0.4, 0.40)); A[nome] = crea_gradino(nome, ((0 if a.get("x0") else f.x) + a.get("dx", 0), f.y + a.get("dy", 0), 0), (d[0], d[1], h))
             else: A[nome] = crea_gradino(nome, a["pos"], a.get("dim", (0.5, 0.4, 0.40)))
         elif t == "sbarra": A[nome] = crea_sbarra(nome, a.get("alto", 2.3), a.get("y", 0.0))
         elif t == "colonna": A[nome] = crea_colonna(nome, a["punto"])
         elif t == "scatola":
             A[nome] = _unisci([scatola(a["dim"], (0, 0, 0), {"imbottitura": IMBOT(), "metallo": MET(), "gomma": GOMMA()}[a.get("mat", "imbottitura")], 0.01)], nome)
+        elif t == "rullo" and "sotto" in a:  # rullo a terra sotto un osso della prima posa: tocca il pavimento e il corpo
+            aggiorna(); f = mondo(a["sotto"][0], a["sotto"][1] if len(a["sotto"]) > 1 else "head")
+            h = min_z_osso(a.get("osso_z", a["sotto"][0])); r = max(0.04, min(0.09, h / 2 + a.get("piu", 0)))
+            o = _unisci([cil(r, a.get("lungo", 0.5), (0, 0, 0), "X", IMBOT())], nome)
+            o.location = (f.x if not a.get("x0") else 0, f.y, r); o.location += Vector(a.get("scosta", (0, 0, 0)))
+            if "rot" in a: o.rotation_mode = "XYZ"; o.rotation_euler = rot_corpo(a["rot"]).to_euler()
+            A[nome] = o; aggiorna(); continue
         elif t == "rullo": A[nome] = _unisci([cil(a.get("r", 0.05), a.get("lungo", 0.5), (0, 0, 0), "X", IMBOT())], nome)
+        elif t == "bastone": A[nome] = _unisci([cil(0.013, a.get("lungo", 1.4), (0, 0, 0), "X", LEGNO())], nome)
+        elif t == "pallina":
+            bpy.ops.mesh.primitive_uv_sphere_add(radius=a.get("r", 0.035), location=(0, 0, 0), segments=32, ring_count=16)
+            b = bpy.context.object; b.data.materials.append(PALLA()); A[nome] = _unisci([b], nome)
+        elif t in ("muro", "stipite"):
+            # muro: parete verticale. "y" (davanti/dietro, parete larga in X) oppure "x" (di lato, parete larga in Y).
+            # "presso": [osso, head/tail, scosto] mette la parete dove sta quell'osso nella prima posa, spostata dello scosto
+            aggiorna(); q = Vector((0, 0, 0))
+            if "presso" in a: q = mondo(a["presso"][0], a["presso"][1]) + Vector(a["presso"][2] if len(a["presso"]) > 2 else (0, 0, 0))
+            asse = "x" if "x" in a or a.get("asse") == "x" else "y"
+            if "y" in a: q.y = a["y"]
+            if "x" in a: q.x = a["x"]
+            c = a.get("centro", 0.0); larg = a.get("largo", 2.4)
+            if t == "muro":
+                dim = (larg, 0.10, 2.5) if asse == "y" else (0.10, larg, 2.5)
+                o = _unisci([scatola(dim, (0, 0, 1.25), MURO(), 0.005)], nome)
+                o.location = (c, q.y, 0) if asse == "y" else (q.x, c, 0)
+            else:  # stipite: due montanti e l'architrave, la figura passa in mezzo
+                lp = a.get("luce", 0.85)
+                parti = [scatola((0.10, 0.14, 2.1), (sx * (lp / 2 + 0.05), 0, 1.05), LEGNO(), 0.005) for sx in (-1, 1)] + [scatola((lp + 0.2, 0.14, 0.10), (0, 0, 2.15), LEGNO(), 0.005)]
+                o = _unisci(parti, nome); o.location = (c, q.y, 0)
+            if a.get("inquadra", False) is False: o["no_inquadra"] = 1
+            A[nome] = o; aggiorna(); continue
         o = A.get(nome)
-        if o is not None and t not in ("panca", "gradino", "sbarra", "colonna"):
+        if o is not None and t not in ("panca", "gradino", "sbarra", "colonna", "muro", "stipite"):
             if "presso" in a:  # vicino a un osso della prima posa: [osso, "head"/"tail", (dx, dy, dz)], "x0": centrato
                 aggiorna(); q = mondo(a["presso"][0], a["presso"][1]) + Vector(a["presso"][2] if len(a["presso"]) > 2 else (0, 0, 0))
                 if a.get("x0"): q.x = 0
+                if "z" in a: q.z = a["z"]
                 o.location = q
             if "pos" in a: o.location = a["pos"]
             if "rot" in a: o.rotation_mode = "XYZ"; o.rotation_euler = rot_corpo(a["rot"]).to_euler()
@@ -577,7 +612,9 @@ def esercizio(eid):
         sc.frame_set(f); dg = bpy.context.evaluated_depsgraph_get(); ev = corpo.evaluated_get(dg)
         m = ev.to_mesh(); pts += [ev.matrix_world @ m.vertices[i].co for i in range(0, len(m.vertices), 25)]; ev.to_mesh_clear()
     for o in A.values():
-        if o.type == "MESH" and mv.get("inquadra_attrezzi", True): pts += [o.matrix_world @ Vector(c) for c in o.bound_box]
+        if o.type == "MESH" and mv.get("inquadra_attrezzi", True) and not o.get("no_inquadra"): pts += [o.matrix_world @ Vector(c) for c in o.bound_box]
+    if "inquadra_da" in mv: pts = [p for p in pts if p.z >= mv["inquadra_da"]]  # solo la parte alta (esercizi del collo)
+    if "inquadra_fino" in mv: pts = [p for p in pts if p.z <= mv["inquadra_fino"]]  # solo la parte bassa (piedi)
     lo = Vector((min(p.x for p in pts), min(p.y for p in pts), min(p.z for p in pts)))
     hi = Vector((max(p.x for p in pts), max(p.y for p in pts), max(p.z for p in pts)))
     centro = (lo + hi) / 2; diag = (hi - lo).length

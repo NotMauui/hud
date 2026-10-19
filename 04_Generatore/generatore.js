@@ -170,6 +170,30 @@ function discipline(profilo) {
 }
 const parziale = (profilo) => Array.isArray((profilo.sport || {}).discipline) && discipline(profilo).length < 3;
 
+// Modello a impulsi di Banister (Banister 1975) con i parametri fissi di Intervals: fitness (CTL) su 42 giorni,
+// fatica (ATL) su 7, forma = CTL − ATL. Dati i valori di partenza e i carichi giornalieri (TSS), dà i valori
+// a fine di ogni giorno. La forma del giorno dopo è quella di fine giornata (come su Intervals).
+function prevediForma(ctl0, atl0, carichi, tauCtl = 42, tauAtl = 7) {
+  let ctl = ctl0, atl = atl0 ?? ctl0;
+  const giorni = [];
+  for (const c of carichi) {
+    const load = +c || 0;
+    ctl += (load - ctl) / tauCtl; atl += (load - atl) / tauAtl;
+    giorni.push({ ctl, atl, tsb: ctl - atl });
+  }
+  return { giorni, fine: { ctl, atl, tsb: ctl - atl } };
+}
+
+// La forma prevista il giorno della gara: carichi = { "AAAA-MM-GG": TSS } dei giorni da «da» (oggi) alla vigilia;
+// i giorni senza carico contano 0. Senza gara, o con la gara già passata, non c'è previsione (null).
+function formaAllaGara(ctl0, atl0, carichi, da, gara) {
+  if (!da || !gara || !/^\d{4}-\d\d-\d\d$/.test(gara) || gara <= da) return null;
+  const serie = [], g0 = parseYMD(da), n = Math.round((parseYMD(gara) - g0) / DAY);
+  for (let i = 0; i < n; i++) serie.push((carichi || {})[ymd(addDays(g0, i))] || 0);
+  const r = prevediForma(ctl0, atl0, serie).fine;
+  return { gara, giorni: n, ctl: +r.ctl.toFixed(1), atl: +r.atl.toFixed(1), tsb: +r.tsb.toFixed(1) };
+}
+
 function generaBlocco(profilo, opzioni = {}) {
   const oggi = parseYMD(profilo.oggi);
   const inizio = opzioni.inizio ? parseYMD(opzioni.inizio) : nextMonday(oggi);
@@ -504,10 +528,7 @@ function costruisci(profilo, inizio, gara, tipo, split, baseMin, opzioni) {
     // ricalcolo carico e fitness giorno per giorno
     for (const s of sedute) if (s.sport !== "gara") { const ifk = s.qualita ? (s.tipo === "vo2" ? "vo2" : s.tipo === "tempo" ? "tempo" : "soglia") : s.sport === "forza" ? "forza" : s.tipo === "lungo" ? "lungo" : "facile"; s.carico = Math.round((s.min / 60) * REGOLE.IF[ifk] ** 2 * 100); }
     const ctl0 = ctl;
-    for (let g = 0; g < 7; g++) {
-      const load = sedute.filter((s) => s.giorno === g).reduce((t, s) => t + s.carico, 0);
-      ctl += (load - ctl) / 42; atl += (load - atl) / 7;
-    }
+    ({ ctl, atl } = prevediForma(ctl, atl, [0, 1, 2, 3, 4, 5, 6].map((g) => sedute.filter((s) => s.giorno === g).reduce((t, s) => t + s.carico, 0))).fine);
     const vol = sedute.reduce((t, s) => t + s.min, 0);
     sedute.sort((a, b) => a.giorno - b.giorno || (b.qualita - a.qualita));
     settimane.push({
@@ -526,4 +547,4 @@ function costruisci(profilo, inizio, gara, tipo, split, baseMin, opzioni) {
 
 // <<< GENERATORE
 
-if (typeof module !== "undefined") module.exports = { generaBlocco, REGOLE, seduta, faseDi, discipline, ymd, parseYMD, addDays, GIORNI };
+if (typeof module !== "undefined") module.exports = { generaBlocco, prevediForma, formaAllaGara, REGOLE, seduta, faseDi, discipline, ymd, parseYMD, addDays, GIORNI };
